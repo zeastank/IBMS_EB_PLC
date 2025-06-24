@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_CurrentTime" Id="{046edf5d-f138-4d66-a903-c153b324f3d9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_CurrentTime
+VAR_INPUT
+	fbTime   : FB_LocalSystemTime := ( bEnable := TRUE, dwCycle := 1 );
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	currH : WORD;
+	currM : WORD;
+	currD : WORD;
+	CurrDate: WORD;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbTime();
+currH := fbTime.systemTime.wHour;
+currM := fbTime.systemTime.wMinute;
+currD := fbTime.systemTime.wDayOfWeek;
+CurrDate := fbTime.systemTime.wDay;]]></ST>
+    </Implementation>
+    <LineIds Name="FB_CurrentTime">
+      <LineId Id="9" Count="0" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="64" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

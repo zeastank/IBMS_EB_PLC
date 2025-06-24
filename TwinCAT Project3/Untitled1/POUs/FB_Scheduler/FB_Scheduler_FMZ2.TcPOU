@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_Scheduler_FMZ2" Id="{ffadb118-ca04-4290-8091-1982ad84d281}" SpecialFunc="None">
+    <Declaration><![CDATA[
+      FUNCTION_BLOCK FB_Scheduler_FMZ2
+      VAR_INPUT
+          currH : WORD;
+          currM : WORD;
+          currD : WORD;
+      END_VAR
+      VAR_IN_OUT
+          FB_Bacnet : FB_BACnet_DAIKIN_MasterStation_III_No_1;
+      END_VAR
+      VAR
+          i : INT;
+          bUnitTriggered : BOOL := FALSE; // New flag to track execution
+          prevMinute : WORD := 0;        // New variable to track the previous minute
+      END_VAR
+      VAR PERSISTENT
+          //scheduler var
+          bEnSchedFMZ2_ : BOOL := FALSE;
+          wSchedWDHourStartFMZ2_ : WORD; 
+          wSchedWDMinStartFMZ2_ : WORD; 
+          wSchedWEHourStartFMZ2_ : WORD; 
+          wSchedWEMinStartFMZ2_ : WORD;
+          wSchedWDHourEndFMZ2_ : WORD;
+          wSchedWDMinEndFMZ2_ : WORD;
+          wSchedWEHourEndFMZ2_ : WORD;
+          wSchedWEMinEndFMZ2_ : WORD;
+          //unit var
+          bUnitFMZ2_ : ARRAY [1..8] OF BOOL;
+      END_VAR
+    ]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+        // Reset trigger flag at minute change or at the exact scheduled time
+        IF currM <> prevMinute OR 
+           (currH = wSchedWDHourStartFMZ2_ AND currM = wSchedWDMinStartFMZ2_) OR 
+           (currH = wSchedWDHourEndFMZ2_ AND currM = wSchedWDMinEndFMZ2_) THEN
+            bUnitTriggered := FALSE;
+            prevMinute := currM;
+        END_IF
+
+        // Unit Schedule Enable
+        IF bEnSchedFMZ2_ THEN
+            // Weekday schedule
+            IF currD >= 1 AND currD <= 5 THEN
+                IF (wSchedWDHourStartFMZ2_ <> wSchedWDHourEndFMZ2_ OR wSchedWDMinStartFMZ2_ <> wSchedWDMinEndFMZ2_) THEN
+                    // Schedule Unit ON
+                    IF wSchedWDHourStartFMZ2_ = currH AND wSchedWDMinStartFMZ2_ = currM AND NOT bUnitTriggered THEN
+                        bUnitTriggered := TRUE;
+                        FOR i := 1 TO 8 DO
+                            // Send command unit ON
+                            IF bUnitFMZ2_[i] THEN 
+                                CASE i OF
+                                    1: FB_Bacnet.StartStopCommand_096.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_096.bVal := TRUE;
+                                    2: FB_Bacnet.StartStopCommand_097.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_097.bVal := TRUE;
+                                    3: FB_Bacnet.StartStopCommand_098.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_098.bVal := TRUE;
+                                    4: FB_Bacnet.StartStopCommand_099.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_099.bVal := TRUE;
+                                    5: FB_Bacnet.StartStopCommand_100.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_100.bVal := TRUE;
+                                    6: FB_Bacnet.StartStopCommand_101.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_101.bVal := TRUE;
+                                    7: FB_Bacnet.StartStopCommand_102.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_102.bVal := TRUE;
+                                    8: FB_Bacnet.StartStopCommand_103.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_103.bVal := TRUE;
+                                END_CASE
+                            END_IF
+                        END_FOR
+                    END_IF
+                    // Schedule Unit OFF
+                    IF wSchedWDHourEndFMZ2_ = currH AND wSchedWDMinEndFMZ2_ = currM AND NOT bUnitTriggered THEN
+                        bUnitTriggered := TRUE;
+                        FOR i := 1 TO 8 DO
+                            // Send command unit OFF
+                            IF bUnitFMZ2_[i] THEN 
+                                CASE i OF
+                                    1: FB_Bacnet.StartStopCommand_096.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_096.bVal := FALSE;
+                                    2: FB_Bacnet.StartStopCommand_097.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_097.bVal := FALSE;
+                                    3: FB_Bacnet.StartStopCommand_098.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_098.bVal := FALSE;
+                                    4: FB_Bacnet.StartStopCommand_099.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_099.bVal := FALSE;
+                                    5: FB_Bacnet.StartStopCommand_100.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_100.bVal := FALSE;
+                                    6: FB_Bacnet.StartStopCommand_101.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_101.bVal := FALSE;
+                                    7: FB_Bacnet.StartStopCommand_102.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_102.bVal := FALSE;
+                                    8: FB_Bacnet.StartStopCommand_103.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_103.bVal := FALSE;
+                                END_CASE
+                            END_IF
+                        END_FOR
+                    END_IF
+                END_IF
+            END_IF
+
+            // Weekend schedule
+            IF currD = 0 OR currD = 6 THEN
+                IF (wSchedWEHourStartFMZ2_ <> wSchedWEHourEndFMZ2_ OR wSchedWEMinStartFMZ2_ <> wSchedWEMinEndFMZ2_) THEN
+                    // Schedule Unit ON
+                    IF wSchedWEHourStartFMZ2_ = currH AND wSchedWEMinStartFMZ2_ = currM AND NOT bUnitTriggered THEN
+                        bUnitTriggered := TRUE;
+                        FOR i := 1 TO 8 DO
+                            // Send command unit ON
+                            IF bUnitFMZ2_[i] THEN 
+                                CASE i OF
+                                    1: FB_Bacnet.StartStopCommand_096.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_096.bVal := TRUE;
+                                    2: FB_Bacnet.StartStopCommand_097.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_097.bVal := TRUE;
+                                    3: FB_Bacnet.StartStopCommand_098.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_098.bVal := TRUE;
+                                    4: FB_Bacnet.StartStopCommand_099.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_099.bVal := TRUE;
+                                    5: FB_Bacnet.StartStopCommand_100.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_100.bVal := TRUE;
+                                    6: FB_Bacnet.StartStopCommand_101.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_101.bVal := TRUE;
+                                    7: FB_Bacnet.StartStopCommand_102.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_102.bVal := TRUE;
+                                    8: FB_Bacnet.StartStopCommand_103.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_103.bVal := TRUE;
+                                END_CASE
+                            END_IF
+                        END_FOR
+                    END_IF
+                    // Schedule Unit OFF
+                    IF wSchedWEHourEndFMZ2_ = currH AND wSchedWEMinEndFMZ2_ = currM AND NOT bUnitTriggered THEN
+                        bUnitTriggered := TRUE;
+                        FOR i := 1 TO 8 DO
+                            // Send command unit OFF
+                            IF bUnitFMZ2_[i] THEN 
+                                CASE i OF
+                                    1: FB_Bacnet.StartStopCommand_096.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_096.bVal := FALSE;
+                                    2: FB_Bacnet.StartStopCommand_097.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_097.bVal := FALSE;
+                                    3: FB_Bacnet.StartStopCommand_098.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_098.bVal := FALSE;
+                                    4: FB_Bacnet.StartStopCommand_099.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_099.bVal := FALSE;
+                                    5: FB_Bacnet.StartStopCommand_100.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_100.bVal := FALSE;
+                                    6: FB_Bacnet.StartStopCommand_101.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_101.bVal := FALSE;
+                                    7: FB_Bacnet.StartStopCommand_102.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_102.bVal := FALSE;
+                                    8: FB_Bacnet.StartStopCommand_103.bEnWrite := TRUE;
+                                       FB_Bacnet.StartStopCommand_103.bVal := FALSE;
+                                END_CASE
+                            END_IF
+                        END_FOR
+                    END_IF
+                END_IF
+            END_IF
+        END_IF
+      ]]></ST>
+    </Implementation>
+    <LineIds Name="FB_Scheduler_FMZ2">
+      <LineId Id="9" Count="0" />
+      <LineId Id="4" Count="4" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="10" Count="174" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <DUT Name="AC_Unit_Status" Id="{5bfc5a03-a285-435e-add7-3e57241cc05e}">
+    <Declaration><![CDATA[TYPE AC_Unit_Status :
+STRUCT
+	bPresVal : BOOL;  // Stores ON/OFF state
+    sUnitName : STRING(20);  // Stores unit name
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

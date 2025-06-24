@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_SchedulerAllControl" Id="{6e198c4e-c8c8-4b1e-a3b8-9ce48545d359}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SchedulerAllControl
+VAR_INPUT
+    bEnableAll : BOOL;   // Toggle all schedulers
+END_VAR
+VAR_IN_OUT
+    FB_Scheduler_F10 : FB_Scheduler_F10;
+    FB_Scheduler_F11 : FB_Scheduler_F11; // Extend as needed
+    FB_Scheduler_F12 : FB_Scheduler_F12;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="FB_SchedulerAllControl">
+      <LineId Id="82" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

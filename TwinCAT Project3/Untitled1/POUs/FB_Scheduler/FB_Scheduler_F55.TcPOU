@@ -1,0 +1,448 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_Scheduler_F55" Id="{15960076-f128-43ea-a86f-2c432feb56c2}" SpecialFunc="None">
+    <Declaration><![CDATA[
+      FUNCTION_BLOCK FB_Scheduler_F55
+      VAR_INPUT
+          currH : WORD;
+          currM : WORD;
+          currD : WORD;
+      END_VAR
+      VAR_IN_OUT
+          FB_Bacnet : FB_BACnet_DAIKIN_MasterStation_III_No_10;
+      END_VAR
+      VAR
+          i : INT;
+          bUnitTriggered : BOOL := FALSE; // New flag to track execution
+          prevMinute : WORD := 0;        // New variable to track the previous minute
+      END_VAR
+      VAR PERSISTENT
+          //scheduler var
+          bEnSchedF55_ : BOOL := FALSE;
+          wSchedWDHourStartF55_ : WORD; 
+          wSchedWDMinStartF55_ : WORD; 
+          wSchedWEHourStartF55_ : WORD; 
+          wSchedWEMinStartF55_ : WORD;
+          wSchedWDHourEndF55_ : WORD;
+          wSchedWDMinEndF55_ : WORD;
+          wSchedWEHourEndF55_ : WORD;
+          wSchedWEMinEndF55_ : WORD;
+          //unit var
+          bUnitF55_ : ARRAY [1..21] OF BOOL;
+      END_VAR
+    ]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+        // Reset trigger flag at minute change or at the exact scheduled time
+        IF currM <> prevMinute OR 
+           (currH = wSchedWDHourStartF55_ AND currM = wSchedWDMinStartF55_) OR 
+           (currH = wSchedWDHourEndF55_ AND currM = wSchedWDMinEndF55_) THEN
+            bUnitTriggered := FALSE;
+            prevMinute := currM;
+        END_IF
+
+        // Unit Schedule Enable
+        IF bEnSchedF55_ THEN
+            // Weekday schedule
+            IF currD >= 1 AND currD <= 5 THEN
+                IF (wSchedWDHourStartF55_ <> wSchedWDHourEndF55_ OR wSchedWDMinStartF55_ <> wSchedWDMinEndF55_) THEN
+                    // Schedule Unit ON
+                    IF wSchedWDHourStartF55_ = currH AND wSchedWDMinStartF55_ = currM AND NOT bUnitTriggered THEN
+                        bUnitTriggered := TRUE;
+                        FOR i := 1 TO 21 DO
+                            //send command unit ON
+                            IF bUnitF55_[i] = TRUE THEN 
+                                CASE i OF
+                                    1: 
+                                        
+                                        FB_Bacnet.StartStopCommand_214.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_214.bVal := TRUE;
+                                    2: 
+                                        
+                                        FB_Bacnet.StartStopCommand_215.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_215.bVal := TRUE;
+                                    3: 
+                                        
+                                        FB_Bacnet.StartStopCommand_216.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_216.bVal := TRUE;
+                                    4: 
+                                        
+                                        FB_Bacnet.StartStopCommand_217.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_217.bVal := TRUE;
+                                    5: 
+                                        
+                                        FB_Bacnet.StartStopCommand_218.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_218.bVal := TRUE;
+                                    6: 
+                                        
+                                        FB_Bacnet.StartStopCommand_219.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_219.bVal := TRUE;
+                                    7: 
+                                        
+                                        FB_Bacnet.StartStopCommand_220.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_220.bVal := TRUE;
+                                    8: 
+                                        
+                                        FB_Bacnet.StartStopCommand_221.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_221.bVal := TRUE;
+                                    9: 
+                                        
+                                        FB_Bacnet.StartStopCommand_222.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_222.bVal := TRUE;
+                                    10: 
+                                        
+                                        FB_Bacnet.StartStopCommand_223.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_223.bVal := TRUE;
+                                    11: 
+                                        
+                                        FB_Bacnet.StartStopCommand_224.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_224.bVal := TRUE;
+                                    12: 
+                                        
+                                        FB_Bacnet.StartStopCommand_225.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_225.bVal := TRUE;
+                                    13: 
+                                        
+                                        FB_Bacnet.StartStopCommand_226.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_226.bVal := TRUE;
+                                    14: 
+                                        
+                                        FB_Bacnet.StartStopCommand_227.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_227.bVal := TRUE;
+                                    15: 
+                                        
+                                        FB_Bacnet.StartStopCommand_228.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_228.bVal := TRUE;
+                                    16: 
+                                        
+                                        FB_Bacnet.StartStopCommand_229.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_229.bVal := TRUE;
+                                    17: 
+                                        
+                                        FB_Bacnet.StartStopCommand_230.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_230.bVal := TRUE;
+                                    18: 
+                                        
+                                        FB_Bacnet.StartStopCommand_231.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_231.bVal := TRUE;
+                                    19: 
+                                        
+                                        FB_Bacnet.StartStopCommand_232.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_232.bVal := TRUE;
+                                    20: 
+                                        
+                                        FB_Bacnet.StartStopCommand_233.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_233.bVal := TRUE;
+                                    21: 
+                                        
+                                        FB_Bacnet.StartStopCommand_238.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_238.bVal := TRUE;
+                                END_CASE
+                            END_IF
+                        END_FOR
+                    END_IF
+                    // Schedule Unit OFF
+                    IF wSchedWDHourEndF55_ = currH AND wSchedWDMinEndF55_ = currM AND NOT bUnitTriggered THEN
+                        bUnitTriggered := TRUE;
+                        FOR i := 1 TO 21 DO
+                            //send command unit OFF
+                            IF bUnitF55_[i] = TRUE THEN 
+                                CASE i OF
+                                    1: 
+                                        
+                                        FB_Bacnet.StartStopCommand_214.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_214.bVal := FALSE;
+                                    2: 
+                                        
+                                        FB_Bacnet.StartStopCommand_215.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_215.bVal := FALSE;
+                                    3: 
+                                        
+                                        FB_Bacnet.StartStopCommand_216.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_216.bVal := FALSE;
+                                    4: 
+                                        
+                                        FB_Bacnet.StartStopCommand_217.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_217.bVal := FALSE;
+                                    5: 
+                                        
+                                        FB_Bacnet.StartStopCommand_218.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_218.bVal := FALSE;
+                                    6: 
+                                        
+                                        FB_Bacnet.StartStopCommand_219.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_219.bVal := FALSE;
+                                    7: 
+                                        
+                                        FB_Bacnet.StartStopCommand_220.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_220.bVal := FALSE;
+                                    8: 
+                                        
+                                        FB_Bacnet.StartStopCommand_221.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_221.bVal := FALSE;
+                                    9: 
+                                        
+                                        FB_Bacnet.StartStopCommand_222.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_222.bVal := FALSE;
+                                    10: 
+                                        
+                                        FB_Bacnet.StartStopCommand_223.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_223.bVal := FALSE;
+                                    11: 
+                                        
+                                        FB_Bacnet.StartStopCommand_224.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_224.bVal := FALSE;
+                                    12: 
+                                        
+                                        FB_Bacnet.StartStopCommand_225.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_225.bVal := FALSE;
+                                    13: 
+                                        
+                                        FB_Bacnet.StartStopCommand_226.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_226.bVal := FALSE;
+                                    14: 
+                                        
+                                        FB_Bacnet.StartStopCommand_227.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_227.bVal := FALSE;
+                                    15: 
+                                        
+                                        FB_Bacnet.StartStopCommand_228.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_228.bVal := FALSE;
+                                    16: 
+                                        
+                                        FB_Bacnet.StartStopCommand_229.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_229.bVal := FALSE;
+                                    17: 
+                                        
+                                        FB_Bacnet.StartStopCommand_230.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_230.bVal := FALSE;
+                                    18: 
+                                        
+                                        FB_Bacnet.StartStopCommand_231.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_231.bVal := FALSE;
+                                    19: 
+                                        
+                                        FB_Bacnet.StartStopCommand_232.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_232.bVal := FALSE;
+                                    20: 
+                                        
+                                        FB_Bacnet.StartStopCommand_233.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_233.bVal := FALSE;
+                                    21: 
+                                        
+                                        FB_Bacnet.StartStopCommand_238.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_238.bVal := FALSE;
+                                END_CASE
+                            END_IF
+                        END_FOR
+                    END_IF
+                END_IF
+            END_IF
+
+            // Weekend schedule
+            IF currD = 0 OR currD = 6 THEN
+                IF (wSchedWEHourStartF55_ <> wSchedWEHourEndF55_ OR wSchedWEMinStartF55_ <> wSchedWEMinEndF55_) THEN
+                    // Schedule Unit ON
+                    IF wSchedWEHourStartF55_ = currH AND wSchedWEMinStartF55_ = currM AND NOT bUnitTriggered THEN
+                        bUnitTriggered := TRUE;
+                        FOR i := 1 TO 21 DO
+                            //send command unit ON
+                            IF bUnitF55_[i] = TRUE THEN 
+                                CASE i OF
+                                    1: 
+                                        
+                                        FB_Bacnet.StartStopCommand_214.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_214.bVal := TRUE;
+                                    2: 
+                                        
+                                        FB_Bacnet.StartStopCommand_215.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_215.bVal := TRUE;
+                                    3: 
+                                        
+                                        FB_Bacnet.StartStopCommand_216.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_216.bVal := TRUE;
+                                    4: 
+                                        
+                                        FB_Bacnet.StartStopCommand_217.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_217.bVal := TRUE;
+                                    5: 
+                                        
+                                        FB_Bacnet.StartStopCommand_218.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_218.bVal := TRUE;
+                                    6: 
+                                        
+                                        FB_Bacnet.StartStopCommand_219.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_219.bVal := TRUE;
+                                    7: 
+                                        
+                                        FB_Bacnet.StartStopCommand_220.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_220.bVal := TRUE;
+                                    8: 
+                                        
+                                        FB_Bacnet.StartStopCommand_221.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_221.bVal := TRUE;
+                                    9: 
+                                        
+                                        FB_Bacnet.StartStopCommand_222.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_222.bVal := TRUE;
+                                    10: 
+                                        
+                                        FB_Bacnet.StartStopCommand_223.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_223.bVal := TRUE;
+                                    11: 
+                                        
+                                        FB_Bacnet.StartStopCommand_224.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_224.bVal := TRUE;
+                                    12: 
+                                        
+                                        FB_Bacnet.StartStopCommand_225.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_225.bVal := TRUE;
+                                    13: 
+                                        
+                                        FB_Bacnet.StartStopCommand_226.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_226.bVal := TRUE;
+                                    14: 
+                                        
+                                        FB_Bacnet.StartStopCommand_227.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_227.bVal := TRUE;
+                                    15: 
+                                        
+                                        FB_Bacnet.StartStopCommand_228.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_228.bVal := TRUE;
+                                    16: 
+                                        
+                                        FB_Bacnet.StartStopCommand_229.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_229.bVal := TRUE;
+                                    17: 
+                                        
+                                        FB_Bacnet.StartStopCommand_230.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_230.bVal := TRUE;
+                                    18: 
+                                        
+                                        FB_Bacnet.StartStopCommand_231.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_231.bVal := TRUE;
+                                    19: 
+                                        
+                                        FB_Bacnet.StartStopCommand_232.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_232.bVal := TRUE;
+                                    20: 
+                                        
+                                        FB_Bacnet.StartStopCommand_233.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_233.bVal := TRUE;
+                                    21: 
+                                        
+                                        FB_Bacnet.StartStopCommand_238.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_238.bVal := TRUE;
+                                END_CASE
+                            END_IF
+                        END_FOR        
+                    END_IF
+                    // Schedule Unit OFF
+                    IF wSchedWEHourEndF55_ = currH AND wSchedWEMinEndF55_ = currM AND NOT bUnitTriggered THEN
+                        bUnitTriggered := TRUE;
+                        FOR i := 1 TO 21 DO
+                            //send command unit OFF
+                            IF bUnitF55_[i] = TRUE THEN 
+                                CASE i OF
+                                    1: 
+                                        
+                                        FB_Bacnet.StartStopCommand_214.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_214.bVal := FALSE;
+                                    2: 
+                                        
+                                        FB_Bacnet.StartStopCommand_215.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_215.bVal := FALSE;
+                                    3: 
+                                        
+                                        FB_Bacnet.StartStopCommand_216.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_216.bVal := FALSE;
+                                    4: 
+                                        
+                                        FB_Bacnet.StartStopCommand_217.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_217.bVal := FALSE;
+                                    5: 
+                                        
+                                        FB_Bacnet.StartStopCommand_218.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_218.bVal := FALSE;
+                                    6: 
+                                        
+                                        FB_Bacnet.StartStopCommand_219.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_219.bVal := FALSE;
+                                    7: 
+                                        
+                                        FB_Bacnet.StartStopCommand_220.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_220.bVal := FALSE;
+                                    8: 
+                                        
+                                        FB_Bacnet.StartStopCommand_221.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_221.bVal := FALSE;
+                                    9: 
+                                        
+                                        FB_Bacnet.StartStopCommand_222.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_222.bVal := FALSE;
+                                    10: 
+                                        
+                                        FB_Bacnet.StartStopCommand_223.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_223.bVal := FALSE;
+                                    11: 
+                                        
+                                        FB_Bacnet.StartStopCommand_224.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_224.bVal := FALSE;
+                                    12: 
+                                        
+                                        FB_Bacnet.StartStopCommand_225.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_225.bVal := FALSE;
+                                    13: 
+                                        
+                                        FB_Bacnet.StartStopCommand_226.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_226.bVal := FALSE;
+                                    14: 
+                                        
+                                        FB_Bacnet.StartStopCommand_227.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_227.bVal := FALSE;
+                                    15: 
+                                        
+                                        FB_Bacnet.StartStopCommand_228.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_228.bVal := FALSE;
+                                    16: 
+                                        
+                                        FB_Bacnet.StartStopCommand_229.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_229.bVal := FALSE;
+                                    17: 
+                                        
+                                        FB_Bacnet.StartStopCommand_230.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_230.bVal := FALSE;
+                                    18: 
+                                        
+                                        FB_Bacnet.StartStopCommand_231.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_231.bVal := FALSE;
+                                    19: 
+                                        
+                                        FB_Bacnet.StartStopCommand_232.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_232.bVal := FALSE;
+                                    20: 
+                                        
+                                        FB_Bacnet.StartStopCommand_233.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_233.bVal := FALSE;
+                                    21: 
+                                        
+                                        FB_Bacnet.StartStopCommand_238.bEnWrite := TRUE;
+                                        FB_Bacnet.StartStopCommand_238.bVal := FALSE;
+                                END_CASE
+                            END_IF
+                        END_FOR
+                    END_IF
+                END_IF
+            END_IF
+        END_IF
+      ]]></ST>
+    </Implementation>
+    <LineIds Name="FB_Scheduler_F55">
+      <LineId Id="9" Count="0" />
+      <LineId Id="4" Count="4" />
+      <LineId Id="393" Count="0" />
+      <LineId Id="10" Count="382" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

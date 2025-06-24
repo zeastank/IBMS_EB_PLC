@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <GVL Name="GVL" Id="{25f83289-7743-4d6d-8289-af1b084d827d}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	HolidayDays : ARRAY[1..31] OF BYTE; // Store day numbers (1-31)
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

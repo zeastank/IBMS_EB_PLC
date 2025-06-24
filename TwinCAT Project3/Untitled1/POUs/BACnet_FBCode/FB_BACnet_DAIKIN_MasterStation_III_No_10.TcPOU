@@ -1,0 +1,7868 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_BACnet_DAIKIN_MasterStation_III_No_10" Id="{3918e4d6-2e08-41fb-977c-1d1d550de316}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Usage : 
+fbDAIKIN_MasterStation_III_No_10 : FB_BACnet_DAIKIN_MasterStation_III_No_10 :=(Client:=(nDeviceInstance := 10)); 
+*)
+FUNCTION_BLOCK  FB_BACnet_DAIKIN_MasterStation_III_No_10
+VAR_INPUT CONSTANT
+	Client : FB_BACnet_Client := (tReadCycleTime:=T#10S,nMaxParallelRequests:=20);
+	DAIKIN_MasterStation_III_No_10: FB_BACnetRM_Device := (Client:=Client);
+	StartStopCommand_000: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=1);
+	StartStopStatus_000: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2);
+	Alarm_000: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3);
+	MalfunctionCode_000: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=4);
+	
+	
+	
+	
+	RoomTemp_000: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=9);
+	TempAdjust_000: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=10);
+	FilterSign_000: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=11);
+	FilterSignReset_000: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=12);
+	RemoteControlStart_000: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=13);
+	
+	RemoteControlTempAdjust_000: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_001: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=257);
+	StartStopStatus_001: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=258);
+	Alarm_001: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=259);
+	MalfunctionCode_001: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=260);
+	
+	
+	
+	
+	RoomTemp_001: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=265);
+	TempAdjust_001: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=266);
+	FilterSign_001: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=267);
+	FilterSignReset_001: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=268);
+	RemoteControlStart_001: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=269);
+	
+	RemoteControlTempAdjust_001: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=272);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_002: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=513);
+	StartStopStatus_002: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=514);
+	Alarm_002: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=515);
+	MalfunctionCode_002: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=516);
+	
+	
+	
+	
+	RoomTemp_002: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=521);
+	TempAdjust_002: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=522);
+	FilterSign_002: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=523);
+	FilterSignReset_002: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=524);
+	RemoteControlStart_002: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=525);
+	
+	RemoteControlTempAdjust_002: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=528);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_003: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=769);
+	StartStopStatus_003: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=770);
+	Alarm_003: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=771);
+	MalfunctionCode_003: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=772);
+	
+	
+	
+	
+	RoomTemp_003: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=777);
+	TempAdjust_003: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=778);
+	FilterSign_003: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=779);
+	FilterSignReset_003: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=780);
+	RemoteControlStart_003: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=781);
+	
+	RemoteControlTempAdjust_003: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=784);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_004: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=1025);
+	StartStopStatus_004: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1026);
+	Alarm_004: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1027);
+	MalfunctionCode_004: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=1028);
+	
+	
+	
+	
+	RoomTemp_004: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=1033);
+	TempAdjust_004: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=1034);
+	FilterSign_004: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1035);
+	FilterSignReset_004: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1036);
+	RemoteControlStart_004: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1037);
+	
+	RemoteControlTempAdjust_004: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1040);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_005: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=1281);
+	StartStopStatus_005: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1282);
+	Alarm_005: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1283);
+	MalfunctionCode_005: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=1284);
+	
+	
+	
+	
+	RoomTemp_005: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=1289);
+	TempAdjust_005: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=1290);
+	FilterSign_005: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1291);
+	FilterSignReset_005: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1292);
+	RemoteControlStart_005: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1293);
+	
+	RemoteControlTempAdjust_005: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1296);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_006: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=1537);
+	StartStopStatus_006: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1538);
+	Alarm_006: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1539);
+	MalfunctionCode_006: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=1540);
+	
+	
+	
+	
+	RoomTemp_006: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=1545);
+	TempAdjust_006: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=1546);
+	FilterSign_006: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1547);
+	FilterSignReset_006: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1548);
+	RemoteControlStart_006: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1549);
+	
+	RemoteControlTempAdjust_006: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1552);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_007: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=1793);
+	StartStopStatus_007: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1794);
+	Alarm_007: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1795);
+	MalfunctionCode_007: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=1796);
+	
+	
+	
+	
+	RoomTemp_007: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=1801);
+	TempAdjust_007: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=1802);
+	FilterSign_007: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=1803);
+	FilterSignReset_007: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1804);
+	RemoteControlStart_007: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1805);
+	
+	RemoteControlTempAdjust_007: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=1808);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_008: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=2049);
+	StartStopStatus_008: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2050);
+	Alarm_008: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2051);
+	MalfunctionCode_008: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=2052);
+	
+	
+	
+	
+	RoomTemp_008: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=2057);
+	TempAdjust_008: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=2058);
+	FilterSign_008: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2059);
+	FilterSignReset_008: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2060);
+	RemoteControlStart_008: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2061);
+	
+	RemoteControlTempAdjust_008: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2064);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_009: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=2305);
+	StartStopStatus_009: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2306);
+	Alarm_009: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2307);
+	MalfunctionCode_009: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=2308);
+	
+	
+	
+	
+	RoomTemp_009: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=2313);
+	TempAdjust_009: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=2314);
+	FilterSign_009: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2315);
+	FilterSignReset_009: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2316);
+	RemoteControlStart_009: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2317);
+	
+	RemoteControlTempAdjust_009: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2320);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_010: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=2561);
+	StartStopStatus_010: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2562);
+	Alarm_010: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2563);
+	MalfunctionCode_010: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=2564);
+	
+	
+	
+	
+	RoomTemp_010: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=2569);
+	TempAdjust_010: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=2570);
+	FilterSign_010: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2571);
+	FilterSignReset_010: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2572);
+	RemoteControlStart_010: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2573);
+	
+	RemoteControlTempAdjust_010: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2576);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_011: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=2817);
+	StartStopStatus_011: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2818);
+	Alarm_011: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2819);
+	MalfunctionCode_011: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=2820);
+	
+	
+	
+	
+	RoomTemp_011: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=2825);
+	TempAdjust_011: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=2826);
+	FilterSign_011: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=2827);
+	FilterSignReset_011: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2828);
+	RemoteControlStart_011: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2829);
+	
+	RemoteControlTempAdjust_011: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=2832);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_012: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=3073);
+	StartStopStatus_012: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3074);
+	Alarm_012: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3075);
+	MalfunctionCode_012: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=3076);
+	
+	
+	
+	
+	RoomTemp_012: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=3081);
+	TempAdjust_012: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=3082);
+	FilterSign_012: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3083);
+	FilterSignReset_012: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3084);
+	RemoteControlStart_012: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3085);
+	
+	RemoteControlTempAdjust_012: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3088);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_013: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=3329);
+	StartStopStatus_013: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3330);
+	Alarm_013: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3331);
+	MalfunctionCode_013: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=3332);
+	
+	
+	
+	
+	RoomTemp_013: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=3337);
+	TempAdjust_013: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=3338);
+	FilterSign_013: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3339);
+	FilterSignReset_013: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3340);
+	RemoteControlStart_013: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3341);
+	
+	RemoteControlTempAdjust_013: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3344);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_014: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=3585);
+	StartStopStatus_014: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3586);
+	Alarm_014: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3587);
+	MalfunctionCode_014: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=3588);
+	
+	
+	
+	
+	RoomTemp_014: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=3593);
+	TempAdjust_014: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=3594);
+	FilterSign_014: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3595);
+	FilterSignReset_014: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3596);
+	RemoteControlStart_014: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3597);
+	
+	RemoteControlTempAdjust_014: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3600);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_015: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=3841);
+	StartStopStatus_015: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3842);
+	Alarm_015: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3843);
+	MalfunctionCode_015: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=3844);
+	
+	
+	
+	
+	RoomTemp_015: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=3849);
+	TempAdjust_015: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=3850);
+	FilterSign_015: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=3851);
+	FilterSignReset_015: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3852);
+	RemoteControlStart_015: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3853);
+	
+	RemoteControlTempAdjust_015: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=3856);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_016: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=4097);
+	StartStopStatus_016: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4098);
+	Alarm_016: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4099);
+	MalfunctionCode_016: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=4100);
+	
+	
+	
+	
+	RoomTemp_016: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=4105);
+	TempAdjust_016: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=4106);
+	FilterSign_016: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4107);
+	FilterSignReset_016: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4108);
+	RemoteControlStart_016: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4109);
+	
+	RemoteControlTempAdjust_016: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4112);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_017: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=4353);
+	StartStopStatus_017: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4354);
+	Alarm_017: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4355);
+	MalfunctionCode_017: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=4356);
+	
+	
+	
+	
+	RoomTemp_017: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=4361);
+	TempAdjust_017: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=4362);
+	FilterSign_017: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4363);
+	FilterSignReset_017: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4364);
+	RemoteControlStart_017: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4365);
+	
+	RemoteControlTempAdjust_017: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4368);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_018: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=4609);
+	StartStopStatus_018: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4610);
+	Alarm_018: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4611);
+	MalfunctionCode_018: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=4612);
+	
+	
+	
+	
+	RoomTemp_018: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=4617);
+	TempAdjust_018: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=4618);
+	FilterSign_018: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4619);
+	FilterSignReset_018: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4620);
+	RemoteControlStart_018: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4621);
+	
+	RemoteControlTempAdjust_018: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4624);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_019: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=4865);
+	StartStopStatus_019: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4866);
+	Alarm_019: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4867);
+	MalfunctionCode_019: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=4868);
+	
+	
+	
+	
+	RoomTemp_019: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=4873);
+	TempAdjust_019: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=4874);
+	FilterSign_019: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=4875);
+	FilterSignReset_019: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4876);
+	RemoteControlStart_019: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4877);
+	
+	RemoteControlTempAdjust_019: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=4880);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_020: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=5121);
+	StartStopStatus_020: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=5122);
+	Alarm_020: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=5123);
+	MalfunctionCode_020: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=5124);
+	
+	
+	
+	
+	RoomTemp_020: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=5129);
+	TempAdjust_020: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=5130);
+	FilterSign_020: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=5131);
+	FilterSignReset_020: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=5132);
+	RemoteControlStart_020: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=5133);
+	
+	RemoteControlTempAdjust_020: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=5136);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_021: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=5377);
+	StartStopStatus_021: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=5378);
+	Alarm_021: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=5379);
+	MalfunctionCode_021: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=5380);
+	
+	
+	
+	
+	RoomTemp_021: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=5385);
+	TempAdjust_021: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=5386);
+	FilterSign_021: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=5387);
+	FilterSignReset_021: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=5388);
+	RemoteControlStart_021: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=5389);
+	
+	RemoteControlTempAdjust_021: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=5392);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_048: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=12289);
+	StartStopStatus_048: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=12290);
+	Alarm_048: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=12291);
+	MalfunctionCode_048: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=12292);
+	
+	
+	
+	
+	RoomTemp_048: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=12297);
+	TempAdjust_048: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=12298);
+	FilterSign_048: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=12299);
+	FilterSignReset_048: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=12300);
+	RemoteControlStart_048: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=12301);
+	
+	RemoteControlTempAdjust_048: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=12304);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_049: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=12545);
+	StartStopStatus_049: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=12546);
+	Alarm_049: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=12547);
+	MalfunctionCode_049: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=12548);
+	
+	
+	
+	
+	RoomTemp_049: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=12553);
+	TempAdjust_049: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=12554);
+	FilterSign_049: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=12555);
+	FilterSignReset_049: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=12556);
+	RemoteControlStart_049: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=12557);
+	
+	RemoteControlTempAdjust_049: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=12560);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_064: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=16385);
+	StartStopStatus_064: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=16386);
+	Alarm_064: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=16387);
+	MalfunctionCode_064: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=16388);
+	
+	
+	
+	
+	RoomTemp_064: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=16393);
+	TempAdjust_064: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=16394);
+	FilterSign_064: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=16395);
+	FilterSignReset_064: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16396);
+	RemoteControlStart_064: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16397);
+	
+	RemoteControlTempAdjust_064: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16400);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_065: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=16641);
+	StartStopStatus_065: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=16642);
+	Alarm_065: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=16643);
+	MalfunctionCode_065: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=16644);
+	
+	
+	
+	
+	RoomTemp_065: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=16649);
+	TempAdjust_065: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=16650);
+	FilterSign_065: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=16651);
+	FilterSignReset_065: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16652);
+	RemoteControlStart_065: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16653);
+	
+	RemoteControlTempAdjust_065: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16656);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_066: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=16897);
+	StartStopStatus_066: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=16898);
+	Alarm_066: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=16899);
+	MalfunctionCode_066: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=16900);
+	
+	
+	
+	
+	RoomTemp_066: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=16905);
+	TempAdjust_066: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=16906);
+	FilterSign_066: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=16907);
+	FilterSignReset_066: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16908);
+	RemoteControlStart_066: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16909);
+	
+	RemoteControlTempAdjust_066: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16912);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_067: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=17153);
+	StartStopStatus_067: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17154);
+	Alarm_067: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17155);
+	MalfunctionCode_067: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=17156);
+	
+	
+	
+	
+	RoomTemp_067: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=17161);
+	TempAdjust_067: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=17162);
+	FilterSign_067: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17163);
+	FilterSignReset_067: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17164);
+	RemoteControlStart_067: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17165);
+	
+	RemoteControlTempAdjust_067: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17168);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_068: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=17409);
+	StartStopStatus_068: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17410);
+	Alarm_068: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17411);
+	MalfunctionCode_068: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=17412);
+	
+	
+	
+	
+	RoomTemp_068: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=17417);
+	TempAdjust_068: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=17418);
+	FilterSign_068: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17419);
+	FilterSignReset_068: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17420);
+	RemoteControlStart_068: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17421);
+	
+	RemoteControlTempAdjust_068: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17424);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_069: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=17665);
+	StartStopStatus_069: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17666);
+	Alarm_069: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17667);
+	MalfunctionCode_069: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=17668);
+	
+	
+	
+	
+	RoomTemp_069: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=17673);
+	TempAdjust_069: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=17674);
+	FilterSign_069: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17675);
+	FilterSignReset_069: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17676);
+	RemoteControlStart_069: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17677);
+	
+	RemoteControlTempAdjust_069: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17680);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_070: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=17921);
+	StartStopStatus_070: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17922);
+	Alarm_070: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17923);
+	MalfunctionCode_070: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=17924);
+	
+	
+	
+	
+	RoomTemp_070: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=17929);
+	TempAdjust_070: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=17930);
+	FilterSign_070: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=17931);
+	FilterSignReset_070: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17932);
+	RemoteControlStart_070: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17933);
+	
+	RemoteControlTempAdjust_070: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17936);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_071: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=18177);
+	StartStopStatus_071: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18178);
+	Alarm_071: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18179);
+	MalfunctionCode_071: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=18180);
+	
+	
+	
+	
+	RoomTemp_071: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=18185);
+	TempAdjust_071: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=18186);
+	FilterSign_071: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18187);
+	FilterSignReset_071: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18188);
+	RemoteControlStart_071: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18189);
+	
+	RemoteControlTempAdjust_071: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18192);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_072: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=18433);
+	StartStopStatus_072: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18434);
+	Alarm_072: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18435);
+	MalfunctionCode_072: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=18436);
+	
+	
+	
+	
+	RoomTemp_072: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=18441);
+	TempAdjust_072: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=18442);
+	FilterSign_072: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18443);
+	FilterSignReset_072: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18444);
+	RemoteControlStart_072: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18445);
+	
+	RemoteControlTempAdjust_072: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18448);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_073: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=18689);
+	StartStopStatus_073: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18690);
+	Alarm_073: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18691);
+	MalfunctionCode_073: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=18692);
+	
+	
+	
+	
+	RoomTemp_073: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=18697);
+	TempAdjust_073: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=18698);
+	FilterSign_073: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18699);
+	FilterSignReset_073: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18700);
+	RemoteControlStart_073: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18701);
+	
+	RemoteControlTempAdjust_073: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18704);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_074: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=18945);
+	StartStopStatus_074: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18946);
+	Alarm_074: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18947);
+	MalfunctionCode_074: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=18948);
+	
+	
+	
+	
+	RoomTemp_074: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=18953);
+	TempAdjust_074: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=18954);
+	FilterSign_074: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=18955);
+	FilterSignReset_074: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18956);
+	RemoteControlStart_074: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18957);
+	
+	RemoteControlTempAdjust_074: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=18960);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_075: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=19201);
+	StartStopStatus_075: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19202);
+	Alarm_075: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19203);
+	MalfunctionCode_075: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=19204);
+	
+	
+	
+	
+	RoomTemp_075: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=19209);
+	TempAdjust_075: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=19210);
+	FilterSign_075: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19211);
+	FilterSignReset_075: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19212);
+	RemoteControlStart_075: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19213);
+	
+	RemoteControlTempAdjust_075: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19216);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_076: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=19457);
+	StartStopStatus_076: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19458);
+	Alarm_076: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19459);
+	MalfunctionCode_076: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=19460);
+	
+	
+	
+	
+	RoomTemp_076: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=19465);
+	TempAdjust_076: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=19466);
+	FilterSign_076: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19467);
+	FilterSignReset_076: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19468);
+	RemoteControlStart_076: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19469);
+	
+	RemoteControlTempAdjust_076: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19472);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_077: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=19713);
+	StartStopStatus_077: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19714);
+	Alarm_077: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19715);
+	MalfunctionCode_077: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=19716);
+	
+	
+	
+	
+	RoomTemp_077: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=19721);
+	TempAdjust_077: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=19722);
+	FilterSign_077: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19723);
+	FilterSignReset_077: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19724);
+	RemoteControlStart_077: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19725);
+	
+	RemoteControlTempAdjust_077: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19728);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_078: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=19969);
+	StartStopStatus_078: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19970);
+	Alarm_078: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19971);
+	MalfunctionCode_078: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=19972);
+	
+	
+	
+	
+	RoomTemp_078: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=19977);
+	TempAdjust_078: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=19978);
+	FilterSign_078: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=19979);
+	FilterSignReset_078: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19980);
+	RemoteControlStart_078: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19981);
+	
+	RemoteControlTempAdjust_078: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=19984);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_079: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=20225);
+	StartStopStatus_079: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20226);
+	Alarm_079: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20227);
+	MalfunctionCode_079: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=20228);
+	
+	
+	
+	
+	RoomTemp_079: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=20233);
+	TempAdjust_079: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=20234);
+	FilterSign_079: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20235);
+	FilterSignReset_079: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=20236);
+	RemoteControlStart_079: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=20237);
+	
+	RemoteControlTempAdjust_079: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=20240);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_080: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=20481);
+	StartStopStatus_080: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20482);
+	Alarm_080: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20483);
+	MalfunctionCode_080: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=20484);
+	
+	
+	
+	
+	RoomTemp_080: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=20489);
+	TempAdjust_080: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=20490);
+	FilterSign_080: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20491);
+	FilterSignReset_080: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=20492);
+	RemoteControlStart_080: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=20493);
+	
+	RemoteControlTempAdjust_080: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=20496);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_081: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=20737);
+	StartStopStatus_081: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20738);
+	Alarm_081: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20739);
+	MalfunctionCode_081: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=20740);
+	
+	
+	
+	
+	RoomTemp_081: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=20745);
+	TempAdjust_081: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=20746);
+	FilterSign_081: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20747);
+	FilterSignReset_081: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=20748);
+	RemoteControlStart_081: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=20749);
+	
+	RemoteControlTempAdjust_081: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=20752);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_082: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=20993);
+	StartStopStatus_082: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20994);
+	Alarm_082: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=20995);
+	MalfunctionCode_082: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=20996);
+	
+	
+	
+	
+	RoomTemp_082: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=21001);
+	TempAdjust_082: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=21002);
+	FilterSign_082: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=21003);
+	FilterSignReset_082: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21004);
+	RemoteControlStart_082: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21005);
+	
+	RemoteControlTempAdjust_082: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21008);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_083: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=21249);
+	StartStopStatus_083: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=21250);
+	Alarm_083: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=21251);
+	MalfunctionCode_083: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=21252);
+	
+	
+	
+	
+	RoomTemp_083: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=21257);
+	TempAdjust_083: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=21258);
+	FilterSign_083: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=21259);
+	FilterSignReset_083: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21260);
+	RemoteControlStart_083: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21261);
+	
+	RemoteControlTempAdjust_083: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21264);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_084: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=21505);
+	StartStopStatus_084: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=21506);
+	Alarm_084: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=21507);
+	MalfunctionCode_084: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=21508);
+	
+	
+	
+	
+	RoomTemp_084: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=21513);
+	TempAdjust_084: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=21514);
+	FilterSign_084: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=21515);
+	FilterSignReset_084: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21516);
+	RemoteControlStart_084: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21517);
+	
+	RemoteControlTempAdjust_084: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21520);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_085: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=21761);
+	StartStopStatus_085: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=21762);
+	Alarm_085: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=21763);
+	MalfunctionCode_085: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=21764);
+	
+	
+	
+	
+	RoomTemp_085: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=21769);
+	TempAdjust_085: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=21770);
+	FilterSign_085: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=21771);
+	FilterSignReset_085: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21772);
+	RemoteControlStart_085: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21773);
+	
+	RemoteControlTempAdjust_085: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21776);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_096: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=24577);
+	StartStopStatus_096: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=24578);
+	Alarm_096: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=24579);
+	MalfunctionCode_096: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=24580);
+	
+	
+	
+	
+	RoomTemp_096: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=24585);
+	TempAdjust_096: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=24586);
+	FilterSign_096: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=24587);
+	FilterSignReset_096: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=24588);
+	RemoteControlStart_096: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=24589);
+	
+	RemoteControlTempAdjust_096: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=24592);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_097: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=24833);
+	StartStopStatus_097: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=24834);
+	Alarm_097: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=24835);
+	MalfunctionCode_097: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=24836);
+	
+	
+	
+	
+	RoomTemp_097: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=24841);
+	TempAdjust_097: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=24842);
+	FilterSign_097: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=24843);
+	FilterSignReset_097: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=24844);
+	RemoteControlStart_097: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=24845);
+	
+	RemoteControlTempAdjust_097: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=24848);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_112: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=28673);
+	StartStopStatus_112: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=28674);
+	Alarm_112: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=28675);
+	MalfunctionCode_112: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=28676);
+	
+	
+	
+	
+	RoomTemp_112: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=28681);
+	TempAdjust_112: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=28682);
+	FilterSign_112: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=28683);
+	FilterSignReset_112: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=28684);
+	RemoteControlStart_112: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=28685);
+	
+	RemoteControlTempAdjust_112: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=28688);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_128: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=32769);
+	StartStopStatus_128: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=32770);
+	Alarm_128: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=32771);
+	MalfunctionCode_128: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=32772);
+	
+	
+	
+	
+	RoomTemp_128: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=32777);
+	TempAdjust_128: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=32778);
+	FilterSign_128: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=32779);
+	FilterSignReset_128: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=32780);
+	RemoteControlStart_128: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=32781);
+	
+	RemoteControlTempAdjust_128: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=32784);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_129: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=33025);
+	StartStopStatus_129: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33026);
+	Alarm_129: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33027);
+	MalfunctionCode_129: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=33028);
+	
+	
+	
+	
+	RoomTemp_129: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=33033);
+	TempAdjust_129: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=33034);
+	FilterSign_129: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33035);
+	FilterSignReset_129: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33036);
+	RemoteControlStart_129: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33037);
+	
+	RemoteControlTempAdjust_129: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33040);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_130: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=33281);
+	StartStopStatus_130: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33282);
+	Alarm_130: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33283);
+	MalfunctionCode_130: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=33284);
+	
+	
+	
+	
+	RoomTemp_130: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=33289);
+	TempAdjust_130: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=33290);
+	FilterSign_130: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33291);
+	FilterSignReset_130: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33292);
+	RemoteControlStart_130: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33293);
+	
+	RemoteControlTempAdjust_130: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33296);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_131: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=33537);
+	StartStopStatus_131: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33538);
+	Alarm_131: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33539);
+	MalfunctionCode_131: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=33540);
+	
+	
+	
+	
+	RoomTemp_131: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=33545);
+	TempAdjust_131: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=33546);
+	FilterSign_131: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33547);
+	FilterSignReset_131: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33548);
+	RemoteControlStart_131: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33549);
+	
+	RemoteControlTempAdjust_131: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33552);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_132: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=33793);
+	StartStopStatus_132: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33794);
+	Alarm_132: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33795);
+	MalfunctionCode_132: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=33796);
+	
+	
+	
+	
+	RoomTemp_132: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=33801);
+	TempAdjust_132: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=33802);
+	FilterSign_132: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=33803);
+	FilterSignReset_132: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33804);
+	RemoteControlStart_132: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33805);
+	
+	RemoteControlTempAdjust_132: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=33808);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_133: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=34049);
+	StartStopStatus_133: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34050);
+	Alarm_133: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34051);
+	MalfunctionCode_133: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=34052);
+	
+	
+	
+	
+	RoomTemp_133: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=34057);
+	TempAdjust_133: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=34058);
+	FilterSign_133: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34059);
+	FilterSignReset_133: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34060);
+	RemoteControlStart_133: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34061);
+	
+	RemoteControlTempAdjust_133: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34064);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_134: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=34305);
+	StartStopStatus_134: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34306);
+	Alarm_134: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34307);
+	MalfunctionCode_134: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=34308);
+	
+	
+	
+	
+	RoomTemp_134: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=34313);
+	TempAdjust_134: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=34314);
+	FilterSign_134: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34315);
+	FilterSignReset_134: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34316);
+	RemoteControlStart_134: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34317);
+	
+	RemoteControlTempAdjust_134: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34320);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_135: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=34561);
+	StartStopStatus_135: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34562);
+	Alarm_135: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34563);
+	MalfunctionCode_135: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=34564);
+	
+	
+	
+	
+	RoomTemp_135: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=34569);
+	TempAdjust_135: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=34570);
+	FilterSign_135: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34571);
+	FilterSignReset_135: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34572);
+	RemoteControlStart_135: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34573);
+	
+	RemoteControlTempAdjust_135: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34576);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_136: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=34817);
+	StartStopStatus_136: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34818);
+	Alarm_136: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34819);
+	MalfunctionCode_136: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=34820);
+	
+	
+	
+	
+	RoomTemp_136: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=34825);
+	TempAdjust_136: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=34826);
+	FilterSign_136: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=34827);
+	FilterSignReset_136: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34828);
+	RemoteControlStart_136: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34829);
+	
+	RemoteControlTempAdjust_136: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=34832);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_137: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=35073);
+	StartStopStatus_137: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35074);
+	Alarm_137: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35075);
+	MalfunctionCode_137: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=35076);
+	
+	
+	
+	
+	RoomTemp_137: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=35081);
+	TempAdjust_137: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=35082);
+	FilterSign_137: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35083);
+	FilterSignReset_137: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35084);
+	RemoteControlStart_137: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35085);
+	
+	RemoteControlTempAdjust_137: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35088);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_138: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=35329);
+	StartStopStatus_138: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35330);
+	Alarm_138: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35331);
+	MalfunctionCode_138: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=35332);
+	
+	
+	
+	
+	RoomTemp_138: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=35337);
+	TempAdjust_138: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=35338);
+	FilterSign_138: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35339);
+	FilterSignReset_138: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35340);
+	RemoteControlStart_138: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35341);
+	
+	RemoteControlTempAdjust_138: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35344);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_139: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=35585);
+	StartStopStatus_139: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35586);
+	Alarm_139: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35587);
+	MalfunctionCode_139: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=35588);
+	
+	
+	
+	
+	RoomTemp_139: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=35593);
+	TempAdjust_139: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=35594);
+	FilterSign_139: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35595);
+	FilterSignReset_139: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35596);
+	RemoteControlStart_139: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35597);
+	
+	RemoteControlTempAdjust_139: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35600);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_140: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=35841);
+	StartStopStatus_140: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35842);
+	Alarm_140: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35843);
+	MalfunctionCode_140: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=35844);
+	
+	
+	
+	
+	RoomTemp_140: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=35849);
+	TempAdjust_140: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=35850);
+	FilterSign_140: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=35851);
+	FilterSignReset_140: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35852);
+	RemoteControlStart_140: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35853);
+	
+	RemoteControlTempAdjust_140: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=35856);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_141: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=36097);
+	StartStopStatus_141: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36098);
+	Alarm_141: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36099);
+	MalfunctionCode_141: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=36100);
+	
+	
+	
+	
+	RoomTemp_141: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=36105);
+	TempAdjust_141: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=36106);
+	FilterSign_141: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36107);
+	FilterSignReset_141: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36108);
+	RemoteControlStart_141: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36109);
+	
+	RemoteControlTempAdjust_141: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36112);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_142: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=36353);
+	StartStopStatus_142: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36354);
+	Alarm_142: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36355);
+	MalfunctionCode_142: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=36356);
+	
+	
+	
+	
+	RoomTemp_142: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=36361);
+	TempAdjust_142: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=36362);
+	FilterSign_142: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36363);
+	FilterSignReset_142: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36364);
+	RemoteControlStart_142: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36365);
+	
+	RemoteControlTempAdjust_142: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36368);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_143: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=36609);
+	StartStopStatus_143: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36610);
+	Alarm_143: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36611);
+	MalfunctionCode_143: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=36612);
+	
+	
+	
+	
+	RoomTemp_143: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=36617);
+	TempAdjust_143: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=36618);
+	FilterSign_143: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36619);
+	FilterSignReset_143: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36620);
+	RemoteControlStart_143: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36621);
+	
+	RemoteControlTempAdjust_143: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36624);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_144: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=36865);
+	StartStopStatus_144: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36866);
+	Alarm_144: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36867);
+	MalfunctionCode_144: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=36868);
+	
+	
+	
+	
+	RoomTemp_144: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=36873);
+	TempAdjust_144: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=36874);
+	FilterSign_144: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=36875);
+	FilterSignReset_144: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36876);
+	RemoteControlStart_144: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36877);
+	
+	RemoteControlTempAdjust_144: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=36880);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_145: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=37121);
+	StartStopStatus_145: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37122);
+	Alarm_145: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37123);
+	MalfunctionCode_145: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=37124);
+	
+	
+	
+	
+	RoomTemp_145: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=37129);
+	TempAdjust_145: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=37130);
+	FilterSign_145: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37131);
+	FilterSignReset_145: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37132);
+	RemoteControlStart_145: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37133);
+	
+	RemoteControlTempAdjust_145: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37136);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_146: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=37377);
+	StartStopStatus_146: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37378);
+	Alarm_146: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37379);
+	MalfunctionCode_146: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=37380);
+	
+	
+	
+	
+	RoomTemp_146: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=37385);
+	TempAdjust_146: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=37386);
+	FilterSign_146: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37387);
+	FilterSignReset_146: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37388);
+	RemoteControlStart_146: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37389);
+	
+	RemoteControlTempAdjust_146: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37392);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_147: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=37633);
+	StartStopStatus_147: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37634);
+	Alarm_147: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37635);
+	MalfunctionCode_147: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=37636);
+	
+	
+	
+	
+	RoomTemp_147: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=37641);
+	TempAdjust_147: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=37642);
+	FilterSign_147: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37643);
+	FilterSignReset_147: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37644);
+	RemoteControlStart_147: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37645);
+	
+	RemoteControlTempAdjust_147: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37648);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_148: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=37889);
+	StartStopStatus_148: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37890);
+	Alarm_148: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37891);
+	MalfunctionCode_148: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=37892);
+	
+	
+	
+	
+	RoomTemp_148: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=37897);
+	TempAdjust_148: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=37898);
+	FilterSign_148: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=37899);
+	FilterSignReset_148: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37900);
+	RemoteControlStart_148: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37901);
+	
+	RemoteControlTempAdjust_148: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=37904);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_149: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=38145);
+	StartStopStatus_149: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38146);
+	Alarm_149: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38147);
+	MalfunctionCode_149: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=38148);
+	
+	
+	
+	
+	RoomTemp_149: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=38153);
+	TempAdjust_149: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=38154);
+	FilterSign_149: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38155);
+	FilterSignReset_149: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38156);
+	RemoteControlStart_149: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38157);
+	
+	RemoteControlTempAdjust_149: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38160);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_150: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=38401);
+	StartStopStatus_150: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38402);
+	Alarm_150: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38403);
+	MalfunctionCode_150: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=38404);
+	
+	
+	
+	
+	RoomTemp_150: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=38409);
+	TempAdjust_150: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=38410);
+	FilterSign_150: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38411);
+	FilterSignReset_150: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38412);
+	RemoteControlStart_150: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38413);
+	
+	RemoteControlTempAdjust_150: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38416);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_151: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=38657);
+	StartStopStatus_151: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38658);
+	Alarm_151: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38659);
+	MalfunctionCode_151: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=38660);
+	
+	
+	
+	
+	RoomTemp_151: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=38665);
+	TempAdjust_151: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=38666);
+	FilterSign_151: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38667);
+	FilterSignReset_151: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38668);
+	RemoteControlStart_151: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38669);
+	
+	RemoteControlTempAdjust_151: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38672);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_152: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=38913);
+	StartStopStatus_152: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38914);
+	Alarm_152: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38915);
+	MalfunctionCode_152: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=38916);
+	
+	
+	
+	
+	RoomTemp_152: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=38921);
+	TempAdjust_152: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=38922);
+	FilterSign_152: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=38923);
+	FilterSignReset_152: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38924);
+	RemoteControlStart_152: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38925);
+	
+	RemoteControlTempAdjust_152: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=38928);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_153: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=39169);
+	StartStopStatus_153: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39170);
+	Alarm_153: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39171);
+	MalfunctionCode_153: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=39172);
+	
+	
+	
+	
+	RoomTemp_153: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=39177);
+	TempAdjust_153: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=39178);
+	FilterSign_153: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39179);
+	FilterSignReset_153: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39180);
+	RemoteControlStart_153: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39181);
+	
+	RemoteControlTempAdjust_153: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39184);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_154: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=39425);
+	StartStopStatus_154: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39426);
+	Alarm_154: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39427);
+	MalfunctionCode_154: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=39428);
+	
+	
+	
+	
+	RoomTemp_154: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=39433);
+	TempAdjust_154: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=39434);
+	FilterSign_154: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39435);
+	FilterSignReset_154: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39436);
+	RemoteControlStart_154: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39437);
+	
+	RemoteControlTempAdjust_154: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39440);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_155: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=39681);
+	StartStopStatus_155: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39682);
+	Alarm_155: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39683);
+	MalfunctionCode_155: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=39684);
+	
+	
+	
+	
+	RoomTemp_155: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=39689);
+	TempAdjust_155: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=39690);
+	FilterSign_155: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39691);
+	FilterSignReset_155: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39692);
+	RemoteControlStart_155: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39693);
+	
+	RemoteControlTempAdjust_155: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39696);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_156: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=39937);
+	StartStopStatus_156: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39938);
+	Alarm_156: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39939);
+	MalfunctionCode_156: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=39940);
+	
+	
+	
+	
+	RoomTemp_156: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=39945);
+	TempAdjust_156: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=39946);
+	FilterSign_156: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=39947);
+	FilterSignReset_156: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39948);
+	RemoteControlStart_156: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39949);
+	
+	RemoteControlTempAdjust_156: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=39952);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_157: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=40193);
+	StartStopStatus_157: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40194);
+	Alarm_157: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40195);
+	MalfunctionCode_157: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=40196);
+	
+	
+	
+	
+	RoomTemp_157: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=40201);
+	TempAdjust_157: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=40202);
+	FilterSign_157: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40203);
+	FilterSignReset_157: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40204);
+	RemoteControlStart_157: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40205);
+	
+	RemoteControlTempAdjust_157: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40208);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_158: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=40449);
+	StartStopStatus_158: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40450);
+	Alarm_158: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40451);
+	MalfunctionCode_158: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=40452);
+	
+	
+	
+	
+	RoomTemp_158: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=40457);
+	TempAdjust_158: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=40458);
+	FilterSign_158: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40459);
+	FilterSignReset_158: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40460);
+	RemoteControlStart_158: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40461);
+	
+	RemoteControlTempAdjust_158: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40464);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_159: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=40705);
+	StartStopStatus_159: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40706);
+	Alarm_159: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40707);
+	MalfunctionCode_159: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=40708);
+	
+	
+	
+	
+	RoomTemp_159: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=40713);
+	TempAdjust_159: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=40714);
+	FilterSign_159: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40715);
+	FilterSignReset_159: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40716);
+	RemoteControlStart_159: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40717);
+	
+	RemoteControlTempAdjust_159: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40720);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_160: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=40961);
+	StartStopStatus_160: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40962);
+	Alarm_160: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40963);
+	MalfunctionCode_160: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=40964);
+	
+	
+	
+	
+	RoomTemp_160: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=40969);
+	TempAdjust_160: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=40970);
+	FilterSign_160: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=40971);
+	FilterSignReset_160: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40972);
+	RemoteControlStart_160: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40973);
+	
+	RemoteControlTempAdjust_160: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=40976);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_161: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=41217);
+	StartStopStatus_161: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41218);
+	Alarm_161: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41219);
+	MalfunctionCode_161: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=41220);
+	
+	
+	
+	
+	RoomTemp_161: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=41225);
+	TempAdjust_161: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=41226);
+	FilterSign_161: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41227);
+	FilterSignReset_161: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41228);
+	RemoteControlStart_161: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41229);
+	
+	RemoteControlTempAdjust_161: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41232);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_162: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=41473);
+	StartStopStatus_162: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41474);
+	Alarm_162: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41475);
+	MalfunctionCode_162: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=41476);
+	
+	
+	
+	
+	RoomTemp_162: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=41481);
+	TempAdjust_162: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=41482);
+	FilterSign_162: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41483);
+	FilterSignReset_162: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41484);
+	RemoteControlStart_162: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41485);
+	
+	RemoteControlTempAdjust_162: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41488);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_163: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=41729);
+	StartStopStatus_163: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41730);
+	Alarm_163: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41731);
+	MalfunctionCode_163: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=41732);
+	
+	
+	
+	
+	RoomTemp_163: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=41737);
+	TempAdjust_163: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=41738);
+	FilterSign_163: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41739);
+	FilterSignReset_163: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41740);
+	RemoteControlStart_163: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41741);
+	
+	RemoteControlTempAdjust_163: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41744);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_164: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=41985);
+	StartStopStatus_164: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41986);
+	Alarm_164: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41987);
+	MalfunctionCode_164: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=41988);
+	
+	
+	
+	
+	RoomTemp_164: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=41993);
+	TempAdjust_164: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=41994);
+	FilterSign_164: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=41995);
+	FilterSignReset_164: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41996);
+	RemoteControlStart_164: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=41997);
+	
+	RemoteControlTempAdjust_164: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=42000);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_165: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=42241);
+	StartStopStatus_165: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=42242);
+	Alarm_165: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=42243);
+	MalfunctionCode_165: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=42244);
+	
+	
+	
+	
+	RoomTemp_165: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=42249);
+	TempAdjust_165: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=42250);
+	FilterSign_165: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=42251);
+	FilterSignReset_165: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=42252);
+	RemoteControlStart_165: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=42253);
+	
+	RemoteControlTempAdjust_165: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=42256);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_166: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=42497);
+	StartStopStatus_166: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=42498);
+	Alarm_166: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=42499);
+	MalfunctionCode_166: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=42500);
+	
+	
+	
+	
+	RoomTemp_166: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=42505);
+	TempAdjust_166: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=42506);
+	FilterSign_166: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=42507);
+	FilterSignReset_166: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=42508);
+	RemoteControlStart_166: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=42509);
+	
+	RemoteControlTempAdjust_166: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=42512);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_167: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=42753);
+	StartStopStatus_167: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=42754);
+	Alarm_167: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=42755);
+	MalfunctionCode_167: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=42756);
+	
+	
+	
+	
+	RoomTemp_167: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=42761);
+	TempAdjust_167: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=42762);
+	FilterSign_167: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=42763);
+	FilterSignReset_167: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=42764);
+	RemoteControlStart_167: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=42765);
+	
+	RemoteControlTempAdjust_167: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=42768);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_168: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=43009);
+	StartStopStatus_168: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43010);
+	Alarm_168: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43011);
+	MalfunctionCode_168: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=43012);
+	
+	
+	
+	
+	RoomTemp_168: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=43017);
+	TempAdjust_168: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=43018);
+	FilterSign_168: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43019);
+	FilterSignReset_168: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43020);
+	RemoteControlStart_168: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43021);
+	
+	RemoteControlTempAdjust_168: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43024);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_169: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=43265);
+	StartStopStatus_169: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43266);
+	Alarm_169: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43267);
+	MalfunctionCode_169: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=43268);
+	
+	
+	
+	
+	RoomTemp_169: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=43273);
+	TempAdjust_169: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=43274);
+	FilterSign_169: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43275);
+	FilterSignReset_169: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43276);
+	RemoteControlStart_169: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43277);
+	
+	RemoteControlTempAdjust_169: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43280);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_170: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=43521);
+	StartStopStatus_170: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43522);
+	Alarm_170: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43523);
+	MalfunctionCode_170: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=43524);
+	
+	
+	
+	
+	RoomTemp_170: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=43529);
+	TempAdjust_170: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=43530);
+	FilterSign_170: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43531);
+	FilterSignReset_170: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43532);
+	RemoteControlStart_170: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43533);
+	
+	RemoteControlTempAdjust_170: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43536);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_171: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=43777);
+	StartStopStatus_171: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43778);
+	Alarm_171: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43779);
+	MalfunctionCode_171: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=43780);
+	
+	
+	
+	
+	RoomTemp_171: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=43785);
+	TempAdjust_171: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=43786);
+	FilterSign_171: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=43787);
+	FilterSignReset_171: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43788);
+	RemoteControlStart_171: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43789);
+	
+	RemoteControlTempAdjust_171: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=43792);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_172: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=44033);
+	StartStopStatus_172: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=44034);
+	Alarm_172: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=44035);
+	MalfunctionCode_172: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=44036);
+	
+	
+	
+	
+	RoomTemp_172: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=44041);
+	TempAdjust_172: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=44042);
+	FilterSign_172: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=44043);
+	FilterSignReset_172: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=44044);
+	RemoteControlStart_172: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=44045);
+	
+	RemoteControlTempAdjust_172: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=44048);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_173: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=44289);
+	StartStopStatus_173: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=44290);
+	Alarm_173: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=44291);
+	MalfunctionCode_173: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=44292);
+	
+	
+	
+	
+	RoomTemp_173: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=44297);
+	TempAdjust_173: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=44298);
+	FilterSign_173: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=44299);
+	FilterSignReset_173: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=44300);
+	RemoteControlStart_173: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=44301);
+	
+	RemoteControlTempAdjust_173: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=44304);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_192: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=49153);
+	StartStopStatus_192: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49154);
+	Alarm_192: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49155);
+	MalfunctionCode_192: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=49156);
+	
+	
+	
+	
+	RoomTemp_192: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=49161);
+	TempAdjust_192: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=49162);
+	FilterSign_192: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49163);
+	FilterSignReset_192: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49164);
+	RemoteControlStart_192: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49165);
+	
+	RemoteControlTempAdjust_192: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49168);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_193: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=49409);
+	StartStopStatus_193: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49410);
+	Alarm_193: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49411);
+	MalfunctionCode_193: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=49412);
+	
+	
+	
+	
+	RoomTemp_193: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=49417);
+	TempAdjust_193: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=49418);
+	FilterSign_193: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49419);
+	FilterSignReset_193: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49420);
+	RemoteControlStart_193: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49421);
+	
+	RemoteControlTempAdjust_193: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49424);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_194: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=49665);
+	StartStopStatus_194: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49666);
+	Alarm_194: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49667);
+	MalfunctionCode_194: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=49668);
+	
+	
+	
+	
+	RoomTemp_194: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=49673);
+	TempAdjust_194: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=49674);
+	FilterSign_194: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49675);
+	FilterSignReset_194: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49676);
+	RemoteControlStart_194: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49677);
+	
+	RemoteControlTempAdjust_194: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49680);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_195: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=49921);
+	StartStopStatus_195: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49922);
+	Alarm_195: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49923);
+	MalfunctionCode_195: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=49924);
+	
+	
+	
+	
+	RoomTemp_195: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=49929);
+	TempAdjust_195: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=49930);
+	FilterSign_195: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=49931);
+	FilterSignReset_195: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49932);
+	RemoteControlStart_195: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49933);
+	
+	RemoteControlTempAdjust_195: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49936);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_196: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=50177);
+	StartStopStatus_196: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50178);
+	Alarm_196: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50179);
+	MalfunctionCode_196: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=50180);
+	
+	
+	
+	
+	RoomTemp_196: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=50185);
+	TempAdjust_196: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=50186);
+	FilterSign_196: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50187);
+	FilterSignReset_196: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50188);
+	RemoteControlStart_196: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50189);
+	
+	RemoteControlTempAdjust_196: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50192);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_197: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=50433);
+	StartStopStatus_197: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50434);
+	Alarm_197: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50435);
+	MalfunctionCode_197: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=50436);
+	
+	
+	
+	
+	RoomTemp_197: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=50441);
+	TempAdjust_197: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=50442);
+	FilterSign_197: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50443);
+	FilterSignReset_197: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50444);
+	RemoteControlStart_197: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50445);
+	
+	RemoteControlTempAdjust_197: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50448);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_198: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=50689);
+	StartStopStatus_198: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50690);
+	Alarm_198: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50691);
+	MalfunctionCode_198: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=50692);
+	
+	
+	
+	
+	RoomTemp_198: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=50697);
+	TempAdjust_198: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=50698);
+	FilterSign_198: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50699);
+	FilterSignReset_198: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50700);
+	RemoteControlStart_198: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50701);
+	
+	RemoteControlTempAdjust_198: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50704);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_199: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=50945);
+	StartStopStatus_199: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50946);
+	Alarm_199: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50947);
+	MalfunctionCode_199: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=50948);
+	
+	
+	
+	
+	RoomTemp_199: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=50953);
+	TempAdjust_199: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=50954);
+	FilterSign_199: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=50955);
+	FilterSignReset_199: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50956);
+	RemoteControlStart_199: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50957);
+	
+	RemoteControlTempAdjust_199: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=50960);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//StartStopCommand_200: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=51201);
+	//StartStopStatus_200: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51202);
+	//Alarm_200: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51203);
+	//MalfunctionCode_200: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=51204);
+	
+	
+	
+	
+	//RoomTemp_200: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=51209);
+	//TempAdjust_200: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=51210);
+	//FilterSign_200: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51211);
+	//FilterSignReset_200: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51212);
+	//RemoteControlStart_200: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51213);
+	//
+	//RemoteControlTempAdjust_200: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51216);
+	
+	//
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_201: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=51457);
+	StartStopStatus_201: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51458);
+	Alarm_201: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51459);
+	MalfunctionCode_201: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=51460);
+	
+	
+	
+	
+	RoomTemp_201: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=51465);
+	TempAdjust_201: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=51466);
+	FilterSign_201: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51467);
+	FilterSignReset_201: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51468);
+	RemoteControlStart_201: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51469);
+	
+	RemoteControlTempAdjust_201: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51472);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_202: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=51713);
+	StartStopStatus_202: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51714);
+	Alarm_202: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51715);
+	MalfunctionCode_202: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=51716);
+	
+	
+	
+	
+	RoomTemp_202: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=51721);
+	TempAdjust_202: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=51722);
+	FilterSign_202: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51723);
+	FilterSignReset_202: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51724);
+	RemoteControlStart_202: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51725);
+	
+	RemoteControlTempAdjust_202: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51728);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_203: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=51969);
+	StartStopStatus_203: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51970);
+	Alarm_203: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51971);
+	MalfunctionCode_203: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=51972);
+	
+	
+	
+	
+	RoomTemp_203: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=51977);
+	TempAdjust_203: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=51978);
+	FilterSign_203: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=51979);
+	FilterSignReset_203: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51980);
+	RemoteControlStart_203: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51981);
+	
+	RemoteControlTempAdjust_203: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=51984);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_204: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=52225);
+	StartStopStatus_204: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52226);
+	Alarm_204: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52227);
+	MalfunctionCode_204: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=52228);
+	
+	
+	
+	
+	RoomTemp_204: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=52233);
+	TempAdjust_204: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=52234);
+	FilterSign_204: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52235);
+	FilterSignReset_204: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=52236);
+	RemoteControlStart_204: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=52237);
+	
+	RemoteControlTempAdjust_204: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=52240);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_205: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=52481);
+	StartStopStatus_205: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52482);
+	Alarm_205: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52483);
+	MalfunctionCode_205: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=52484);
+	
+	
+	
+	
+	RoomTemp_205: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=52489);
+	TempAdjust_205: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=52490);
+	FilterSign_205: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52491);
+	FilterSignReset_205: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=52492);
+	RemoteControlStart_205: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=52493);
+	
+	RemoteControlTempAdjust_205: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=52496);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_206: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=52737);
+	StartStopStatus_206: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52738);
+	Alarm_206: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52739);
+	MalfunctionCode_206: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=52740);
+	
+	
+	
+	
+	RoomTemp_206: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=52745);
+	TempAdjust_206: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=52746);
+	FilterSign_206: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52747);
+	FilterSignReset_206: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=52748);
+	RemoteControlStart_206: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=52749);
+	
+	RemoteControlTempAdjust_206: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=52752);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_207: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=52993);
+	StartStopStatus_207: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52994);
+	Alarm_207: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=52995);
+	MalfunctionCode_207: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=52996);
+	
+	
+	
+	
+	RoomTemp_207: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=53001);
+	TempAdjust_207: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=53002);
+	FilterSign_207: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=53003);
+	FilterSignReset_207: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53004);
+	RemoteControlStart_207: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53005);
+	
+	RemoteControlTempAdjust_207: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53008);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_208: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=53249);
+	StartStopStatus_208: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=53250);
+	Alarm_208: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=53251);
+	MalfunctionCode_208: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=53252);
+	
+	
+	
+	
+	RoomTemp_208: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=53257);
+	TempAdjust_208: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=53258);
+	FilterSign_208: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=53259);
+	FilterSignReset_208: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53260);
+	RemoteControlStart_208: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53261);
+	
+	RemoteControlTempAdjust_208: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53264);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_209: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=53505);
+	StartStopStatus_209: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=53506);
+	Alarm_209: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=53507);
+	MalfunctionCode_209: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=53508);
+	
+	
+	
+	
+	RoomTemp_209: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=53513);
+	TempAdjust_209: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=53514);
+	FilterSign_209: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=53515);
+	FilterSignReset_209: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53516);
+	RemoteControlStart_209: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53517);
+	
+	RemoteControlTempAdjust_209: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53520);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_210: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=53761);
+	StartStopStatus_210: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=53762);
+	Alarm_210: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=53763);
+	MalfunctionCode_210: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=53764);
+	
+	
+	
+	
+	RoomTemp_210: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=53769);
+	TempAdjust_210: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=53770);
+	FilterSign_210: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=53771);
+	FilterSignReset_210: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53772);
+	RemoteControlStart_210: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53773);
+	
+	RemoteControlTempAdjust_210: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=53776);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_211: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=54017);
+	StartStopStatus_211: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54018);
+	Alarm_211: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54019);
+	MalfunctionCode_211: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=54020);
+	
+	
+	
+	
+	RoomTemp_211: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=54025);
+	TempAdjust_211: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=54026);
+	FilterSign_211: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54027);
+	FilterSignReset_211: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54028);
+	RemoteControlStart_211: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54029);
+	
+	RemoteControlTempAdjust_211: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54032);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_212: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=54273);
+	StartStopStatus_212: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54274);
+	Alarm_212: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54275);
+	MalfunctionCode_212: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=54276);
+	
+	
+	
+	
+	RoomTemp_212: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=54281);
+	TempAdjust_212: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=54282);
+	FilterSign_212: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54283);
+	FilterSignReset_212: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54284);
+	RemoteControlStart_212: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54285);
+	
+	RemoteControlTempAdjust_212: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54288);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_213: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=54529);
+	StartStopStatus_213: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54530);
+	Alarm_213: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54531);
+	MalfunctionCode_213: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=54532);
+	
+	
+	
+	
+	RoomTemp_213: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=54537);
+	TempAdjust_213: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=54538);
+	FilterSign_213: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54539);
+	FilterSignReset_213: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54540);
+	RemoteControlStart_213: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54541);
+	
+	RemoteControlTempAdjust_213: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54544);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_214: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=54785);
+	StartStopStatus_214: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54786);
+	Alarm_214: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54787);
+	MalfunctionCode_214: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=54788);
+	
+	
+	
+	
+	RoomTemp_214: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=54793);
+	TempAdjust_214: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=54794);
+	FilterSign_214: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=54795);
+	FilterSignReset_214: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54796);
+	RemoteControlStart_214: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54797);
+	
+	RemoteControlTempAdjust_214: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=54800);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_215: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=55041);
+	StartStopStatus_215: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55042);
+	Alarm_215: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55043);
+	MalfunctionCode_215: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=55044);
+	
+	
+	
+	
+	RoomTemp_215: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=55049);
+	TempAdjust_215: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=55050);
+	FilterSign_215: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55051);
+	FilterSignReset_215: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55052);
+	RemoteControlStart_215: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55053);
+	
+	RemoteControlTempAdjust_215: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55056);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_216: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=55297);
+	StartStopStatus_216: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55298);
+	Alarm_216: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55299);
+	MalfunctionCode_216: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=55300);
+	
+	
+	
+	
+	RoomTemp_216: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=55305);
+	TempAdjust_216: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=55306);
+	FilterSign_216: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55307);
+	FilterSignReset_216: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55308);
+	RemoteControlStart_216: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55309);
+	
+	RemoteControlTempAdjust_216: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55312);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_217: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=55553);
+	StartStopStatus_217: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55554);
+	Alarm_217: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55555);
+	MalfunctionCode_217: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=55556);
+	
+	
+	
+	
+	RoomTemp_217: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=55561);
+	TempAdjust_217: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=55562);
+	FilterSign_217: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55563);
+	FilterSignReset_217: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55564);
+	RemoteControlStart_217: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55565);
+	
+	RemoteControlTempAdjust_217: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55568);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_218: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=55809);
+	StartStopStatus_218: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55810);
+	Alarm_218: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55811);
+	MalfunctionCode_218: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=55812);
+	
+	
+	
+	
+	RoomTemp_218: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=55817);
+	TempAdjust_218: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=55818);
+	FilterSign_218: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=55819);
+	FilterSignReset_218: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55820);
+	RemoteControlStart_218: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55821);
+	
+	RemoteControlTempAdjust_218: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=55824);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_219: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=56065);
+	StartStopStatus_219: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56066);
+	Alarm_219: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56067);
+	MalfunctionCode_219: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=56068);
+	
+	
+	
+	
+	RoomTemp_219: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=56073);
+	TempAdjust_219: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=56074);
+	FilterSign_219: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56075);
+	FilterSignReset_219: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56076);
+	RemoteControlStart_219: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56077);
+	
+	RemoteControlTempAdjust_219: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56080);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_220: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=56321);
+	StartStopStatus_220: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56322);
+	Alarm_220: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56323);
+	MalfunctionCode_220: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=56324);
+	
+	
+	
+	
+	RoomTemp_220: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=56329);
+	TempAdjust_220: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=56330);
+	FilterSign_220: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56331);
+	FilterSignReset_220: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56332);
+	RemoteControlStart_220: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56333);
+	
+	RemoteControlTempAdjust_220: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56336);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_221: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=56577);
+	StartStopStatus_221: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56578);
+	Alarm_221: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56579);
+	MalfunctionCode_221: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=56580);
+	
+	
+	
+	
+	RoomTemp_221: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=56585);
+	TempAdjust_221: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=56586);
+	FilterSign_221: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56587);
+	FilterSignReset_221: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56588);
+	RemoteControlStart_221: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56589);
+	
+	RemoteControlTempAdjust_221: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56592);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_222: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=56833);
+	StartStopStatus_222: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56834);
+	Alarm_222: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56835);
+	MalfunctionCode_222: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=56836);
+	
+	
+	
+	
+	RoomTemp_222: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=56841);
+	TempAdjust_222: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=56842);
+	FilterSign_222: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=56843);
+	FilterSignReset_222: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56844);
+	RemoteControlStart_222: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56845);
+	
+	RemoteControlTempAdjust_222: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=56848);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_223: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=57089);
+	StartStopStatus_223: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57090);
+	Alarm_223: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57091);
+	MalfunctionCode_223: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=57092);
+	
+	
+	
+	
+	RoomTemp_223: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=57097);
+	TempAdjust_223: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=57098);
+	FilterSign_223: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57099);
+	FilterSignReset_223: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57100);
+	RemoteControlStart_223: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57101);
+	
+	RemoteControlTempAdjust_223: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57104);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_224: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=57345);
+	StartStopStatus_224: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57346);
+	Alarm_224: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57347);
+	MalfunctionCode_224: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=57348);
+	
+	
+	
+	
+	RoomTemp_224: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=57353);
+	TempAdjust_224: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=57354);
+	FilterSign_224: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57355);
+	FilterSignReset_224: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57356);
+	RemoteControlStart_224: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57357);
+	
+	RemoteControlTempAdjust_224: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57360);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_225: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=57601);
+	StartStopStatus_225: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57602);
+	Alarm_225: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57603);
+	MalfunctionCode_225: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=57604);
+	
+	
+	
+	
+	RoomTemp_225: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=57609);
+	TempAdjust_225: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=57610);
+	FilterSign_225: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57611);
+	FilterSignReset_225: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57612);
+	RemoteControlStart_225: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57613);
+	
+	RemoteControlTempAdjust_225: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57616);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_226: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=57857);
+	StartStopStatus_226: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57858);
+	Alarm_226: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57859);
+	MalfunctionCode_226: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=57860);
+	
+	
+	
+	
+	RoomTemp_226: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=57865);
+	TempAdjust_226: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=57866);
+	FilterSign_226: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=57867);
+	FilterSignReset_226: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57868);
+	RemoteControlStart_226: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57869);
+	
+	RemoteControlTempAdjust_226: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=57872);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_227: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=58113);
+	StartStopStatus_227: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58114);
+	Alarm_227: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58115);
+	MalfunctionCode_227: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=58116);
+	
+	
+	
+	
+	RoomTemp_227: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=58121);
+	TempAdjust_227: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=58122);
+	FilterSign_227: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58123);
+	FilterSignReset_227: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58124);
+	RemoteControlStart_227: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58125);
+	
+	RemoteControlTempAdjust_227: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58128);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_228: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=58369);
+	StartStopStatus_228: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58370);
+	Alarm_228: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58371);
+	MalfunctionCode_228: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=58372);
+	
+	
+	
+	
+	RoomTemp_228: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=58377);
+	TempAdjust_228: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=58378);
+	FilterSign_228: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58379);
+	FilterSignReset_228: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58380);
+	RemoteControlStart_228: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58381);
+	
+	RemoteControlTempAdjust_228: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58384);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_229: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=58625);
+	StartStopStatus_229: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58626);
+	Alarm_229: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58627);
+	MalfunctionCode_229: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=58628);
+	
+	
+	
+	
+	RoomTemp_229: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=58633);
+	TempAdjust_229: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=58634);
+	FilterSign_229: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58635);
+	FilterSignReset_229: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58636);
+	RemoteControlStart_229: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58637);
+	
+	RemoteControlTempAdjust_229: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58640);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_230: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=58881);
+	StartStopStatus_230: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58882);
+	Alarm_230: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58883);
+	MalfunctionCode_230: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=58884);
+	
+	
+	
+	
+	RoomTemp_230: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=58889);
+	TempAdjust_230: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=58890);
+	FilterSign_230: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=58891);
+	FilterSignReset_230: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58892);
+	RemoteControlStart_230: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58893);
+	
+	RemoteControlTempAdjust_230: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=58896);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_231: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=59137);
+	StartStopStatus_231: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59138);
+	Alarm_231: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59139);
+	MalfunctionCode_231: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=59140);
+	
+	
+	
+	
+	RoomTemp_231: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=59145);
+	TempAdjust_231: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=59146);
+	FilterSign_231: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59147);
+	FilterSignReset_231: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59148);
+	RemoteControlStart_231: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59149);
+	
+	RemoteControlTempAdjust_231: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59152);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_232: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=59393);
+	StartStopStatus_232: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59394);
+	Alarm_232: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59395);
+	MalfunctionCode_232: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=59396);
+	
+	
+	
+	
+	RoomTemp_232: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=59401);
+	TempAdjust_232: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=59402);
+	FilterSign_232: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59403);
+	FilterSignReset_232: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59404);
+	RemoteControlStart_232: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59405);
+	
+	RemoteControlTempAdjust_232: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59408);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_233: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=59649);
+	StartStopStatus_233: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59650);
+	Alarm_233: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59651);
+	MalfunctionCode_233: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=59652);
+	
+	
+	
+	
+	RoomTemp_233: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=59657);
+	TempAdjust_233: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=59658);
+	FilterSign_233: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59659);
+	FilterSignReset_233: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59660);
+	RemoteControlStart_233: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59661);
+	
+	RemoteControlTempAdjust_233: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59664);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_234: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=59905);
+	StartStopStatus_234: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59906);
+	Alarm_234: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59907);
+	MalfunctionCode_234: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=59908);
+	
+	
+	
+	
+	RoomTemp_234: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=59913);
+	TempAdjust_234: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=59914);
+	FilterSign_234: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=59915);
+	FilterSignReset_234: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59916);
+	RemoteControlStart_234: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59917);
+	
+	RemoteControlTempAdjust_234: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=59920);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_235: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=60161);
+	StartStopStatus_235: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60162);
+	Alarm_235: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60163);
+	MalfunctionCode_235: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=60164);
+	
+	
+	
+	
+	RoomTemp_235: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=60169);
+	TempAdjust_235: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=60170);
+	FilterSign_235: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60171);
+	FilterSignReset_235: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60172);
+	RemoteControlStart_235: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60173);
+	
+	RemoteControlTempAdjust_235: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60176);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_236: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=60417);
+	StartStopStatus_236: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60418);
+	Alarm_236: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60419);
+	MalfunctionCode_236: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=60420);
+	
+	
+	
+	
+	RoomTemp_236: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=60425);
+	TempAdjust_236: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=60426);
+	FilterSign_236: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60427);
+	FilterSignReset_236: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60428);
+	RemoteControlStart_236: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60429);
+	
+	RemoteControlTempAdjust_236: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60432);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_237: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=60673);
+	StartStopStatus_237: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60674);
+	Alarm_237: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60675);
+	MalfunctionCode_237: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=60676);
+	
+	
+	
+	
+	RoomTemp_237: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=60681);
+	TempAdjust_237: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=60682);
+	FilterSign_237: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60683);
+	FilterSignReset_237: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60684);
+	RemoteControlStart_237: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60685);
+	
+	RemoteControlTempAdjust_237: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60688);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_238: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=60929);
+	StartStopStatus_238: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60930);
+	Alarm_238: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60931);
+	MalfunctionCode_238: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=60932);
+	
+	
+	
+	
+	RoomTemp_238: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=60937);
+	TempAdjust_238: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=60938);
+	FilterSign_238: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=60939);
+	FilterSignReset_238: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60940);
+	RemoteControlStart_238: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60941);
+	
+	RemoteControlTempAdjust_238: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=60944);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_241: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=61697);
+	StartStopStatus_241: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=61698);
+	Alarm_241: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=61699);
+	MalfunctionCode_241: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=61700);
+	
+	
+	
+	
+	RoomTemp_241: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=61705);
+	TempAdjust_241: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=61706);
+	FilterSign_241: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=61707);
+	FilterSignReset_241: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=61708);
+	RemoteControlStart_241: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=61709);
+	
+	RemoteControlTempAdjust_241: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=61712);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_242: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=61953);
+	StartStopStatus_242: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=61954);
+	Alarm_242: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=61955);
+	MalfunctionCode_242: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=61956);
+	
+	
+	
+	
+	RoomTemp_242: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=61961);
+	TempAdjust_242: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=61962);
+	FilterSign_242: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=61963);
+	FilterSignReset_242: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=61964);
+	RemoteControlStart_242: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=61965);
+	
+	RemoteControlTempAdjust_242: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=61968);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	StartStopCommand_243: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=62209);
+	StartStopStatus_243: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=62210);
+	Alarm_243: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=62211);
+	MalfunctionCode_243: FB_BACnetRM_MI := (Client:=Client,nObjectInstance:=62212);
+	
+	
+	
+	
+	RoomTemp_243: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=62217);
+	TempAdjust_243: FB_BACnetRM_AV := (Client:=Client,nObjectInstance:=62218);
+	FilterSign_243: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=62219);
+	FilterSignReset_243: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=62220);
+	RemoteControlStart_243: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=62221);
+	
+	RemoteControlTempAdjust_243: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=62224);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	CL_Rejection_000: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=17);
+	SystemForcedOff_000: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=21);
+	CL_Rejection_064: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16401);
+	SystemForcedOff_064: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=16405);
+	CL_Rejection_128: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=32785);
+	SystemForcedOff_128: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=32789);
+	CL_Rejection_192: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49169);
+	SystemForcedOff_192: FB_BACnetRM_BV := (Client:=Client,nObjectInstance:=49173);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Client();
+DAIKIN_MasterStation_III_No_10();
+StartStopCommand_000();
+StartStopStatus_000();
+Alarm_000();
+MalfunctionCode_000();
+
+
+
+
+RoomTemp_000();
+TempAdjust_000();
+FilterSign_000();
+FilterSignReset_000();
+RemoteControlStart_000();
+
+RemoteControlTempAdjust_000();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_001();
+StartStopStatus_001();
+Alarm_001();
+MalfunctionCode_001();
+
+
+
+
+RoomTemp_001();
+TempAdjust_001();
+FilterSign_001();
+FilterSignReset_001();
+RemoteControlStart_001();
+
+RemoteControlTempAdjust_001();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_002();
+StartStopStatus_002();
+Alarm_002();
+MalfunctionCode_002();
+
+
+
+
+RoomTemp_002();
+TempAdjust_002();
+FilterSign_002();
+FilterSignReset_002();
+RemoteControlStart_002();
+
+RemoteControlTempAdjust_002();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_003();
+StartStopStatus_003();
+Alarm_003();
+MalfunctionCode_003();
+
+
+
+
+RoomTemp_003();
+TempAdjust_003();
+FilterSign_003();
+FilterSignReset_003();
+RemoteControlStart_003();
+
+RemoteControlTempAdjust_003();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_004();
+StartStopStatus_004();
+Alarm_004();
+MalfunctionCode_004();
+
+
+
+
+RoomTemp_004();
+TempAdjust_004();
+FilterSign_004();
+FilterSignReset_004();
+RemoteControlStart_004();
+
+RemoteControlTempAdjust_004();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_005();
+StartStopStatus_005();
+Alarm_005();
+MalfunctionCode_005();
+
+
+
+
+RoomTemp_005();
+TempAdjust_005();
+FilterSign_005();
+FilterSignReset_005();
+RemoteControlStart_005();
+
+RemoteControlTempAdjust_005();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_006();
+StartStopStatus_006();
+Alarm_006();
+MalfunctionCode_006();
+
+
+
+
+RoomTemp_006();
+TempAdjust_006();
+FilterSign_006();
+FilterSignReset_006();
+RemoteControlStart_006();
+
+RemoteControlTempAdjust_006();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_007();
+StartStopStatus_007();
+Alarm_007();
+MalfunctionCode_007();
+
+
+
+
+RoomTemp_007();
+TempAdjust_007();
+FilterSign_007();
+FilterSignReset_007();
+RemoteControlStart_007();
+
+RemoteControlTempAdjust_007();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_008();
+StartStopStatus_008();
+Alarm_008();
+MalfunctionCode_008();
+
+
+
+
+RoomTemp_008();
+TempAdjust_008();
+FilterSign_008();
+FilterSignReset_008();
+RemoteControlStart_008();
+
+RemoteControlTempAdjust_008();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_009();
+StartStopStatus_009();
+Alarm_009();
+MalfunctionCode_009();
+
+
+
+
+RoomTemp_009();
+TempAdjust_009();
+FilterSign_009();
+FilterSignReset_009();
+RemoteControlStart_009();
+
+RemoteControlTempAdjust_009();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_010();
+StartStopStatus_010();
+Alarm_010();
+MalfunctionCode_010();
+
+
+
+
+RoomTemp_010();
+TempAdjust_010();
+FilterSign_010();
+FilterSignReset_010();
+RemoteControlStart_010();
+
+RemoteControlTempAdjust_010();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_011();
+StartStopStatus_011();
+Alarm_011();
+MalfunctionCode_011();
+
+
+
+
+RoomTemp_011();
+TempAdjust_011();
+FilterSign_011();
+FilterSignReset_011();
+RemoteControlStart_011();
+
+RemoteControlTempAdjust_011();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_012();
+StartStopStatus_012();
+Alarm_012();
+MalfunctionCode_012();
+
+
+
+
+RoomTemp_012();
+TempAdjust_012();
+FilterSign_012();
+FilterSignReset_012();
+RemoteControlStart_012();
+
+RemoteControlTempAdjust_012();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_013();
+StartStopStatus_013();
+Alarm_013();
+MalfunctionCode_013();
+
+
+
+
+RoomTemp_013();
+TempAdjust_013();
+FilterSign_013();
+FilterSignReset_013();
+RemoteControlStart_013();
+
+RemoteControlTempAdjust_013();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_014();
+StartStopStatus_014();
+Alarm_014();
+MalfunctionCode_014();
+
+
+
+
+RoomTemp_014();
+TempAdjust_014();
+FilterSign_014();
+FilterSignReset_014();
+RemoteControlStart_014();
+
+RemoteControlTempAdjust_014();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_015();
+StartStopStatus_015();
+Alarm_015();
+MalfunctionCode_015();
+
+
+
+
+RoomTemp_015();
+TempAdjust_015();
+FilterSign_015();
+FilterSignReset_015();
+RemoteControlStart_015();
+
+RemoteControlTempAdjust_015();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_016();
+StartStopStatus_016();
+Alarm_016();
+MalfunctionCode_016();
+
+
+
+
+RoomTemp_016();
+TempAdjust_016();
+FilterSign_016();
+FilterSignReset_016();
+RemoteControlStart_016();
+
+RemoteControlTempAdjust_016();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_017();
+StartStopStatus_017();
+Alarm_017();
+MalfunctionCode_017();
+
+
+
+
+RoomTemp_017();
+TempAdjust_017();
+FilterSign_017();
+FilterSignReset_017();
+RemoteControlStart_017();
+
+RemoteControlTempAdjust_017();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_018();
+StartStopStatus_018();
+Alarm_018();
+MalfunctionCode_018();
+
+
+
+
+RoomTemp_018();
+TempAdjust_018();
+FilterSign_018();
+FilterSignReset_018();
+RemoteControlStart_018();
+
+RemoteControlTempAdjust_018();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_019();
+StartStopStatus_019();
+Alarm_019();
+MalfunctionCode_019();
+
+
+
+
+RoomTemp_019();
+TempAdjust_019();
+FilterSign_019();
+FilterSignReset_019();
+RemoteControlStart_019();
+
+RemoteControlTempAdjust_019();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_020();
+StartStopStatus_020();
+Alarm_020();
+MalfunctionCode_020();
+
+
+
+
+RoomTemp_020();
+TempAdjust_020();
+FilterSign_020();
+FilterSignReset_020();
+RemoteControlStart_020();
+
+RemoteControlTempAdjust_020();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_021();
+StartStopStatus_021();
+Alarm_021();
+MalfunctionCode_021();
+
+
+
+
+RoomTemp_021();
+TempAdjust_021();
+FilterSign_021();
+FilterSignReset_021();
+RemoteControlStart_021();
+
+RemoteControlTempAdjust_021();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_048();
+StartStopStatus_048();
+Alarm_048();
+MalfunctionCode_048();
+
+
+
+
+RoomTemp_048();
+TempAdjust_048();
+FilterSign_048();
+FilterSignReset_048();
+RemoteControlStart_048();
+
+RemoteControlTempAdjust_048();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_049();
+StartStopStatus_049();
+Alarm_049();
+MalfunctionCode_049();
+
+
+
+
+RoomTemp_049();
+TempAdjust_049();
+FilterSign_049();
+FilterSignReset_049();
+RemoteControlStart_049();
+
+RemoteControlTempAdjust_049();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_064();
+StartStopStatus_064();
+Alarm_064();
+MalfunctionCode_064();
+
+
+
+
+RoomTemp_064();
+TempAdjust_064();
+FilterSign_064();
+FilterSignReset_064();
+RemoteControlStart_064();
+
+RemoteControlTempAdjust_064();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_065();
+StartStopStatus_065();
+Alarm_065();
+MalfunctionCode_065();
+
+
+
+
+RoomTemp_065();
+TempAdjust_065();
+FilterSign_065();
+FilterSignReset_065();
+RemoteControlStart_065();
+
+RemoteControlTempAdjust_065();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_066();
+StartStopStatus_066();
+Alarm_066();
+MalfunctionCode_066();
+
+
+
+
+RoomTemp_066();
+TempAdjust_066();
+FilterSign_066();
+FilterSignReset_066();
+RemoteControlStart_066();
+
+RemoteControlTempAdjust_066();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_067();
+StartStopStatus_067();
+Alarm_067();
+MalfunctionCode_067();
+
+
+
+
+RoomTemp_067();
+TempAdjust_067();
+FilterSign_067();
+FilterSignReset_067();
+RemoteControlStart_067();
+
+RemoteControlTempAdjust_067();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_068();
+StartStopStatus_068();
+Alarm_068();
+MalfunctionCode_068();
+
+
+
+
+RoomTemp_068();
+TempAdjust_068();
+FilterSign_068();
+FilterSignReset_068();
+RemoteControlStart_068();
+
+RemoteControlTempAdjust_068();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_069();
+StartStopStatus_069();
+Alarm_069();
+MalfunctionCode_069();
+
+
+
+
+RoomTemp_069();
+TempAdjust_069();
+FilterSign_069();
+FilterSignReset_069();
+RemoteControlStart_069();
+
+RemoteControlTempAdjust_069();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_070();
+StartStopStatus_070();
+Alarm_070();
+MalfunctionCode_070();
+
+
+
+
+RoomTemp_070();
+TempAdjust_070();
+FilterSign_070();
+FilterSignReset_070();
+RemoteControlStart_070();
+
+RemoteControlTempAdjust_070();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_071();
+StartStopStatus_071();
+Alarm_071();
+MalfunctionCode_071();
+
+
+
+
+RoomTemp_071();
+TempAdjust_071();
+FilterSign_071();
+FilterSignReset_071();
+RemoteControlStart_071();
+
+RemoteControlTempAdjust_071();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_072();
+StartStopStatus_072();
+Alarm_072();
+MalfunctionCode_072();
+
+
+
+
+RoomTemp_072();
+TempAdjust_072();
+FilterSign_072();
+FilterSignReset_072();
+RemoteControlStart_072();
+
+RemoteControlTempAdjust_072();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_073();
+StartStopStatus_073();
+Alarm_073();
+MalfunctionCode_073();
+
+
+
+
+RoomTemp_073();
+TempAdjust_073();
+FilterSign_073();
+FilterSignReset_073();
+RemoteControlStart_073();
+
+RemoteControlTempAdjust_073();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_074();
+StartStopStatus_074();
+Alarm_074();
+MalfunctionCode_074();
+
+
+
+
+RoomTemp_074();
+TempAdjust_074();
+FilterSign_074();
+FilterSignReset_074();
+RemoteControlStart_074();
+
+RemoteControlTempAdjust_074();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_075();
+StartStopStatus_075();
+Alarm_075();
+MalfunctionCode_075();
+
+
+
+
+RoomTemp_075();
+TempAdjust_075();
+FilterSign_075();
+FilterSignReset_075();
+RemoteControlStart_075();
+
+RemoteControlTempAdjust_075();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_076();
+StartStopStatus_076();
+Alarm_076();
+MalfunctionCode_076();
+
+
+
+
+RoomTemp_076();
+TempAdjust_076();
+FilterSign_076();
+FilterSignReset_076();
+RemoteControlStart_076();
+
+RemoteControlTempAdjust_076();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_077();
+StartStopStatus_077();
+Alarm_077();
+MalfunctionCode_077();
+
+
+
+
+RoomTemp_077();
+TempAdjust_077();
+FilterSign_077();
+FilterSignReset_077();
+RemoteControlStart_077();
+
+RemoteControlTempAdjust_077();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_078();
+StartStopStatus_078();
+Alarm_078();
+MalfunctionCode_078();
+
+
+
+
+RoomTemp_078();
+TempAdjust_078();
+FilterSign_078();
+FilterSignReset_078();
+RemoteControlStart_078();
+
+RemoteControlTempAdjust_078();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_079();
+StartStopStatus_079();
+Alarm_079();
+MalfunctionCode_079();
+
+
+
+
+RoomTemp_079();
+TempAdjust_079();
+FilterSign_079();
+FilterSignReset_079();
+RemoteControlStart_079();
+
+RemoteControlTempAdjust_079();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_080();
+StartStopStatus_080();
+Alarm_080();
+MalfunctionCode_080();
+
+
+
+
+RoomTemp_080();
+TempAdjust_080();
+FilterSign_080();
+FilterSignReset_080();
+RemoteControlStart_080();
+
+RemoteControlTempAdjust_080();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_081();
+StartStopStatus_081();
+Alarm_081();
+MalfunctionCode_081();
+
+
+
+
+RoomTemp_081();
+TempAdjust_081();
+FilterSign_081();
+FilterSignReset_081();
+RemoteControlStart_081();
+
+RemoteControlTempAdjust_081();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_082();
+StartStopStatus_082();
+Alarm_082();
+MalfunctionCode_082();
+
+
+
+
+RoomTemp_082();
+TempAdjust_082();
+FilterSign_082();
+FilterSignReset_082();
+RemoteControlStart_082();
+
+RemoteControlTempAdjust_082();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_083();
+StartStopStatus_083();
+Alarm_083();
+MalfunctionCode_083();
+
+
+
+
+RoomTemp_083();
+TempAdjust_083();
+FilterSign_083();
+FilterSignReset_083();
+RemoteControlStart_083();
+
+RemoteControlTempAdjust_083();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_084();
+StartStopStatus_084();
+Alarm_084();
+MalfunctionCode_084();
+
+
+
+
+RoomTemp_084();
+TempAdjust_084();
+FilterSign_084();
+FilterSignReset_084();
+RemoteControlStart_084();
+
+RemoteControlTempAdjust_084();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_085();
+StartStopStatus_085();
+Alarm_085();
+MalfunctionCode_085();
+
+
+
+
+RoomTemp_085();
+TempAdjust_085();
+FilterSign_085();
+FilterSignReset_085();
+RemoteControlStart_085();
+
+RemoteControlTempAdjust_085();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_096();
+StartStopStatus_096();
+Alarm_096();
+MalfunctionCode_096();
+
+
+
+
+RoomTemp_096();
+TempAdjust_096();
+FilterSign_096();
+FilterSignReset_096();
+RemoteControlStart_096();
+
+RemoteControlTempAdjust_096();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_097();
+StartStopStatus_097();
+Alarm_097();
+MalfunctionCode_097();
+
+
+
+
+RoomTemp_097();
+TempAdjust_097();
+FilterSign_097();
+FilterSignReset_097();
+RemoteControlStart_097();
+
+RemoteControlTempAdjust_097();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_112();
+StartStopStatus_112();
+Alarm_112();
+MalfunctionCode_112();
+
+
+
+
+RoomTemp_112();
+TempAdjust_112();
+FilterSign_112();
+FilterSignReset_112();
+RemoteControlStart_112();
+
+RemoteControlTempAdjust_112();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_128();
+StartStopStatus_128();
+Alarm_128();
+MalfunctionCode_128();
+
+
+
+
+RoomTemp_128();
+TempAdjust_128();
+FilterSign_128();
+FilterSignReset_128();
+RemoteControlStart_128();
+
+RemoteControlTempAdjust_128();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_129();
+StartStopStatus_129();
+Alarm_129();
+MalfunctionCode_129();
+
+
+
+
+RoomTemp_129();
+TempAdjust_129();
+FilterSign_129();
+FilterSignReset_129();
+RemoteControlStart_129();
+
+RemoteControlTempAdjust_129();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_130();
+StartStopStatus_130();
+Alarm_130();
+MalfunctionCode_130();
+
+
+
+
+RoomTemp_130();
+TempAdjust_130();
+FilterSign_130();
+FilterSignReset_130();
+RemoteControlStart_130();
+
+RemoteControlTempAdjust_130();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_131();
+StartStopStatus_131();
+Alarm_131();
+MalfunctionCode_131();
+
+
+
+
+RoomTemp_131();
+TempAdjust_131();
+FilterSign_131();
+FilterSignReset_131();
+RemoteControlStart_131();
+
+RemoteControlTempAdjust_131();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_132();
+StartStopStatus_132();
+Alarm_132();
+MalfunctionCode_132();
+
+
+
+
+RoomTemp_132();
+TempAdjust_132();
+FilterSign_132();
+FilterSignReset_132();
+RemoteControlStart_132();
+
+RemoteControlTempAdjust_132();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_133();
+StartStopStatus_133();
+Alarm_133();
+MalfunctionCode_133();
+
+
+
+
+RoomTemp_133();
+TempAdjust_133();
+FilterSign_133();
+FilterSignReset_133();
+RemoteControlStart_133();
+
+RemoteControlTempAdjust_133();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_134();
+StartStopStatus_134();
+Alarm_134();
+MalfunctionCode_134();
+
+
+
+
+RoomTemp_134();
+TempAdjust_134();
+FilterSign_134();
+FilterSignReset_134();
+RemoteControlStart_134();
+
+RemoteControlTempAdjust_134();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_135();
+StartStopStatus_135();
+Alarm_135();
+MalfunctionCode_135();
+
+
+
+
+RoomTemp_135();
+TempAdjust_135();
+FilterSign_135();
+FilterSignReset_135();
+RemoteControlStart_135();
+
+RemoteControlTempAdjust_135();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_136();
+StartStopStatus_136();
+Alarm_136();
+MalfunctionCode_136();
+
+
+
+
+RoomTemp_136();
+TempAdjust_136();
+FilterSign_136();
+FilterSignReset_136();
+RemoteControlStart_136();
+
+RemoteControlTempAdjust_136();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_137();
+StartStopStatus_137();
+Alarm_137();
+MalfunctionCode_137();
+
+
+
+
+RoomTemp_137();
+TempAdjust_137();
+FilterSign_137();
+FilterSignReset_137();
+RemoteControlStart_137();
+
+RemoteControlTempAdjust_137();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_138();
+StartStopStatus_138();
+Alarm_138();
+MalfunctionCode_138();
+
+
+
+
+RoomTemp_138();
+TempAdjust_138();
+FilterSign_138();
+FilterSignReset_138();
+RemoteControlStart_138();
+
+RemoteControlTempAdjust_138();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_139();
+StartStopStatus_139();
+Alarm_139();
+MalfunctionCode_139();
+
+
+
+
+RoomTemp_139();
+TempAdjust_139();
+FilterSign_139();
+FilterSignReset_139();
+RemoteControlStart_139();
+
+RemoteControlTempAdjust_139();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_140();
+StartStopStatus_140();
+Alarm_140();
+MalfunctionCode_140();
+
+
+
+
+RoomTemp_140();
+TempAdjust_140();
+FilterSign_140();
+FilterSignReset_140();
+RemoteControlStart_140();
+
+RemoteControlTempAdjust_140();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_141();
+StartStopStatus_141();
+Alarm_141();
+MalfunctionCode_141();
+
+
+
+
+RoomTemp_141();
+TempAdjust_141();
+FilterSign_141();
+FilterSignReset_141();
+RemoteControlStart_141();
+
+RemoteControlTempAdjust_141();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_142();
+StartStopStatus_142();
+Alarm_142();
+MalfunctionCode_142();
+
+
+
+
+RoomTemp_142();
+TempAdjust_142();
+FilterSign_142();
+FilterSignReset_142();
+RemoteControlStart_142();
+
+RemoteControlTempAdjust_142();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_143();
+StartStopStatus_143();
+Alarm_143();
+MalfunctionCode_143();
+
+
+
+
+RoomTemp_143();
+TempAdjust_143();
+FilterSign_143();
+FilterSignReset_143();
+RemoteControlStart_143();
+
+RemoteControlTempAdjust_143();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_144();
+StartStopStatus_144();
+Alarm_144();
+MalfunctionCode_144();
+
+
+
+
+RoomTemp_144();
+TempAdjust_144();
+FilterSign_144();
+FilterSignReset_144();
+RemoteControlStart_144();
+
+RemoteControlTempAdjust_144();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_145();
+StartStopStatus_145();
+Alarm_145();
+MalfunctionCode_145();
+
+
+
+
+RoomTemp_145();
+TempAdjust_145();
+FilterSign_145();
+FilterSignReset_145();
+RemoteControlStart_145();
+
+RemoteControlTempAdjust_145();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_146();
+StartStopStatus_146();
+Alarm_146();
+MalfunctionCode_146();
+
+
+
+
+RoomTemp_146();
+TempAdjust_146();
+FilterSign_146();
+FilterSignReset_146();
+RemoteControlStart_146();
+
+RemoteControlTempAdjust_146();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_147();
+StartStopStatus_147();
+Alarm_147();
+MalfunctionCode_147();
+
+
+
+
+RoomTemp_147();
+TempAdjust_147();
+FilterSign_147();
+FilterSignReset_147();
+RemoteControlStart_147();
+
+RemoteControlTempAdjust_147();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_148();
+StartStopStatus_148();
+Alarm_148();
+MalfunctionCode_148();
+
+
+
+
+RoomTemp_148();
+TempAdjust_148();
+FilterSign_148();
+FilterSignReset_148();
+RemoteControlStart_148();
+
+RemoteControlTempAdjust_148();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_149();
+StartStopStatus_149();
+Alarm_149();
+MalfunctionCode_149();
+
+
+
+
+RoomTemp_149();
+TempAdjust_149();
+FilterSign_149();
+FilterSignReset_149();
+RemoteControlStart_149();
+
+RemoteControlTempAdjust_149();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_150();
+StartStopStatus_150();
+Alarm_150();
+MalfunctionCode_150();
+
+
+
+
+RoomTemp_150();
+TempAdjust_150();
+FilterSign_150();
+FilterSignReset_150();
+RemoteControlStart_150();
+
+RemoteControlTempAdjust_150();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_151();
+StartStopStatus_151();
+Alarm_151();
+MalfunctionCode_151();
+
+
+
+
+RoomTemp_151();
+TempAdjust_151();
+FilterSign_151();
+FilterSignReset_151();
+RemoteControlStart_151();
+
+RemoteControlTempAdjust_151();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_152();
+StartStopStatus_152();
+Alarm_152();
+MalfunctionCode_152();
+
+
+
+
+RoomTemp_152();
+TempAdjust_152();
+FilterSign_152();
+FilterSignReset_152();
+RemoteControlStart_152();
+
+RemoteControlTempAdjust_152();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_153();
+StartStopStatus_153();
+Alarm_153();
+MalfunctionCode_153();
+
+
+
+
+RoomTemp_153();
+TempAdjust_153();
+FilterSign_153();
+FilterSignReset_153();
+RemoteControlStart_153();
+
+RemoteControlTempAdjust_153();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_154();
+StartStopStatus_154();
+Alarm_154();
+MalfunctionCode_154();
+
+
+
+
+RoomTemp_154();
+TempAdjust_154();
+FilterSign_154();
+FilterSignReset_154();
+RemoteControlStart_154();
+
+RemoteControlTempAdjust_154();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_155();
+StartStopStatus_155();
+Alarm_155();
+MalfunctionCode_155();
+
+
+
+
+RoomTemp_155();
+TempAdjust_155();
+FilterSign_155();
+FilterSignReset_155();
+RemoteControlStart_155();
+
+RemoteControlTempAdjust_155();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_156();
+StartStopStatus_156();
+Alarm_156();
+MalfunctionCode_156();
+
+
+
+
+RoomTemp_156();
+TempAdjust_156();
+FilterSign_156();
+FilterSignReset_156();
+RemoteControlStart_156();
+
+RemoteControlTempAdjust_156();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_157();
+StartStopStatus_157();
+Alarm_157();
+MalfunctionCode_157();
+
+
+
+
+RoomTemp_157();
+TempAdjust_157();
+FilterSign_157();
+FilterSignReset_157();
+RemoteControlStart_157();
+
+RemoteControlTempAdjust_157();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_158();
+StartStopStatus_158();
+Alarm_158();
+MalfunctionCode_158();
+
+
+
+
+RoomTemp_158();
+TempAdjust_158();
+FilterSign_158();
+FilterSignReset_158();
+RemoteControlStart_158();
+
+RemoteControlTempAdjust_158();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_159();
+StartStopStatus_159();
+Alarm_159();
+MalfunctionCode_159();
+
+
+
+
+RoomTemp_159();
+TempAdjust_159();
+FilterSign_159();
+FilterSignReset_159();
+RemoteControlStart_159();
+
+RemoteControlTempAdjust_159();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_160();
+StartStopStatus_160();
+Alarm_160();
+MalfunctionCode_160();
+
+
+
+
+RoomTemp_160();
+TempAdjust_160();
+FilterSign_160();
+FilterSignReset_160();
+RemoteControlStart_160();
+
+RemoteControlTempAdjust_160();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_161();
+StartStopStatus_161();
+Alarm_161();
+MalfunctionCode_161();
+
+
+
+
+RoomTemp_161();
+TempAdjust_161();
+FilterSign_161();
+FilterSignReset_161();
+RemoteControlStart_161();
+
+RemoteControlTempAdjust_161();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_162();
+StartStopStatus_162();
+Alarm_162();
+MalfunctionCode_162();
+
+
+
+
+RoomTemp_162();
+TempAdjust_162();
+FilterSign_162();
+FilterSignReset_162();
+RemoteControlStart_162();
+
+RemoteControlTempAdjust_162();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_163();
+StartStopStatus_163();
+Alarm_163();
+MalfunctionCode_163();
+
+
+
+
+RoomTemp_163();
+TempAdjust_163();
+FilterSign_163();
+FilterSignReset_163();
+RemoteControlStart_163();
+
+RemoteControlTempAdjust_163();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_164();
+StartStopStatus_164();
+Alarm_164();
+MalfunctionCode_164();
+
+
+
+
+RoomTemp_164();
+TempAdjust_164();
+FilterSign_164();
+FilterSignReset_164();
+RemoteControlStart_164();
+
+RemoteControlTempAdjust_164();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_165();
+StartStopStatus_165();
+Alarm_165();
+MalfunctionCode_165();
+
+
+
+
+RoomTemp_165();
+TempAdjust_165();
+FilterSign_165();
+FilterSignReset_165();
+RemoteControlStart_165();
+
+RemoteControlTempAdjust_165();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_166();
+StartStopStatus_166();
+Alarm_166();
+MalfunctionCode_166();
+
+
+
+
+RoomTemp_166();
+TempAdjust_166();
+FilterSign_166();
+FilterSignReset_166();
+RemoteControlStart_166();
+
+RemoteControlTempAdjust_166();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_167();
+StartStopStatus_167();
+Alarm_167();
+MalfunctionCode_167();
+
+
+
+
+RoomTemp_167();
+TempAdjust_167();
+FilterSign_167();
+FilterSignReset_167();
+RemoteControlStart_167();
+
+RemoteControlTempAdjust_167();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_168();
+StartStopStatus_168();
+Alarm_168();
+MalfunctionCode_168();
+
+
+
+
+RoomTemp_168();
+TempAdjust_168();
+FilterSign_168();
+FilterSignReset_168();
+RemoteControlStart_168();
+
+RemoteControlTempAdjust_168();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_169();
+StartStopStatus_169();
+Alarm_169();
+MalfunctionCode_169();
+
+
+
+
+RoomTemp_169();
+TempAdjust_169();
+FilterSign_169();
+FilterSignReset_169();
+RemoteControlStart_169();
+
+RemoteControlTempAdjust_169();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_170();
+StartStopStatus_170();
+Alarm_170();
+MalfunctionCode_170();
+
+
+
+
+RoomTemp_170();
+TempAdjust_170();
+FilterSign_170();
+FilterSignReset_170();
+RemoteControlStart_170();
+
+RemoteControlTempAdjust_170();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_171();
+StartStopStatus_171();
+Alarm_171();
+MalfunctionCode_171();
+
+
+
+
+RoomTemp_171();
+TempAdjust_171();
+FilterSign_171();
+FilterSignReset_171();
+RemoteControlStart_171();
+
+RemoteControlTempAdjust_171();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_172();
+StartStopStatus_172();
+Alarm_172();
+MalfunctionCode_172();
+
+
+
+
+RoomTemp_172();
+TempAdjust_172();
+FilterSign_172();
+FilterSignReset_172();
+RemoteControlStart_172();
+
+RemoteControlTempAdjust_172();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_173();
+StartStopStatus_173();
+Alarm_173();
+MalfunctionCode_173();
+
+
+
+
+RoomTemp_173();
+TempAdjust_173();
+FilterSign_173();
+FilterSignReset_173();
+RemoteControlStart_173();
+
+RemoteControlTempAdjust_173();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_192();
+StartStopStatus_192();
+Alarm_192();
+MalfunctionCode_192();
+
+
+
+
+RoomTemp_192();
+TempAdjust_192();
+FilterSign_192();
+FilterSignReset_192();
+RemoteControlStart_192();
+
+RemoteControlTempAdjust_192();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_193();
+StartStopStatus_193();
+Alarm_193();
+MalfunctionCode_193();
+
+
+
+
+RoomTemp_193();
+TempAdjust_193();
+FilterSign_193();
+FilterSignReset_193();
+RemoteControlStart_193();
+
+RemoteControlTempAdjust_193();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_194();
+StartStopStatus_194();
+Alarm_194();
+MalfunctionCode_194();
+
+
+
+
+RoomTemp_194();
+TempAdjust_194();
+FilterSign_194();
+FilterSignReset_194();
+RemoteControlStart_194();
+
+RemoteControlTempAdjust_194();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_195();
+StartStopStatus_195();
+Alarm_195();
+MalfunctionCode_195();
+
+
+
+
+RoomTemp_195();
+TempAdjust_195();
+FilterSign_195();
+FilterSignReset_195();
+RemoteControlStart_195();
+
+RemoteControlTempAdjust_195();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_196();
+StartStopStatus_196();
+Alarm_196();
+MalfunctionCode_196();
+
+
+
+
+RoomTemp_196();
+TempAdjust_196();
+FilterSign_196();
+FilterSignReset_196();
+RemoteControlStart_196();
+
+RemoteControlTempAdjust_196();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_197();
+StartStopStatus_197();
+Alarm_197();
+MalfunctionCode_197();
+
+
+
+
+RoomTemp_197();
+TempAdjust_197();
+FilterSign_197();
+FilterSignReset_197();
+RemoteControlStart_197();
+
+RemoteControlTempAdjust_197();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_198();
+StartStopStatus_198();
+Alarm_198();
+MalfunctionCode_198();
+
+
+
+
+RoomTemp_198();
+TempAdjust_198();
+FilterSign_198();
+FilterSignReset_198();
+RemoteControlStart_198();
+
+RemoteControlTempAdjust_198();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_199();
+StartStopStatus_199();
+Alarm_199();
+MalfunctionCode_199();
+
+
+
+
+RoomTemp_199();
+TempAdjust_199();
+FilterSign_199();
+FilterSignReset_199();
+RemoteControlStart_199();
+
+RemoteControlTempAdjust_199();
+
+
+
+
+
+
+
+
+
+
+
+
+//StartStopCommand_200();
+//StartStopStatus_200();
+//Alarm_200();
+//MalfunctionCode_200();
+
+
+
+
+//RoomTemp_200();
+//TempAdjust_200();
+//FilterSign_200();
+//FilterSignReset_200();
+//RemoteControlStart_200();
+//
+//RemoteControlTempAdjust_200();
+
+//
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_201();
+StartStopStatus_201();
+Alarm_201();
+MalfunctionCode_201();
+
+
+
+
+RoomTemp_201();
+TempAdjust_201();
+FilterSign_201();
+FilterSignReset_201();
+RemoteControlStart_201();
+
+RemoteControlTempAdjust_201();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_202();
+StartStopStatus_202();
+Alarm_202();
+MalfunctionCode_202();
+
+
+
+
+RoomTemp_202();
+TempAdjust_202();
+FilterSign_202();
+FilterSignReset_202();
+RemoteControlStart_202();
+
+RemoteControlTempAdjust_202();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_203();
+StartStopStatus_203();
+Alarm_203();
+MalfunctionCode_203();
+
+
+
+
+RoomTemp_203();
+TempAdjust_203();
+FilterSign_203();
+FilterSignReset_203();
+RemoteControlStart_203();
+
+RemoteControlTempAdjust_203();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_204();
+StartStopStatus_204();
+Alarm_204();
+MalfunctionCode_204();
+
+
+
+
+RoomTemp_204();
+TempAdjust_204();
+FilterSign_204();
+FilterSignReset_204();
+RemoteControlStart_204();
+
+RemoteControlTempAdjust_204();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_205();
+StartStopStatus_205();
+Alarm_205();
+MalfunctionCode_205();
+
+
+
+
+RoomTemp_205();
+TempAdjust_205();
+FilterSign_205();
+FilterSignReset_205();
+RemoteControlStart_205();
+
+RemoteControlTempAdjust_205();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_206();
+StartStopStatus_206();
+Alarm_206();
+MalfunctionCode_206();
+
+
+
+
+RoomTemp_206();
+TempAdjust_206();
+FilterSign_206();
+FilterSignReset_206();
+RemoteControlStart_206();
+
+RemoteControlTempAdjust_206();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_207();
+StartStopStatus_207();
+Alarm_207();
+MalfunctionCode_207();
+
+
+
+
+RoomTemp_207();
+TempAdjust_207();
+FilterSign_207();
+FilterSignReset_207();
+RemoteControlStart_207();
+
+RemoteControlTempAdjust_207();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_208();
+StartStopStatus_208();
+Alarm_208();
+MalfunctionCode_208();
+
+
+
+
+RoomTemp_208();
+TempAdjust_208();
+FilterSign_208();
+FilterSignReset_208();
+RemoteControlStart_208();
+
+RemoteControlTempAdjust_208();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_209();
+StartStopStatus_209();
+Alarm_209();
+MalfunctionCode_209();
+
+
+
+
+RoomTemp_209();
+TempAdjust_209();
+FilterSign_209();
+FilterSignReset_209();
+RemoteControlStart_209();
+
+RemoteControlTempAdjust_209();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_210();
+StartStopStatus_210();
+Alarm_210();
+MalfunctionCode_210();
+
+
+
+
+RoomTemp_210();
+TempAdjust_210();
+FilterSign_210();
+FilterSignReset_210();
+RemoteControlStart_210();
+
+RemoteControlTempAdjust_210();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_211();
+StartStopStatus_211();
+Alarm_211();
+MalfunctionCode_211();
+
+
+
+
+RoomTemp_211();
+TempAdjust_211();
+FilterSign_211();
+FilterSignReset_211();
+RemoteControlStart_211();
+
+RemoteControlTempAdjust_211();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_212();
+StartStopStatus_212();
+Alarm_212();
+MalfunctionCode_212();
+
+
+
+
+RoomTemp_212();
+TempAdjust_212();
+FilterSign_212();
+FilterSignReset_212();
+RemoteControlStart_212();
+
+RemoteControlTempAdjust_212();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_213();
+StartStopStatus_213();
+Alarm_213();
+MalfunctionCode_213();
+
+
+
+
+RoomTemp_213();
+TempAdjust_213();
+FilterSign_213();
+FilterSignReset_213();
+RemoteControlStart_213();
+
+RemoteControlTempAdjust_213();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_214();
+StartStopStatus_214();
+Alarm_214();
+MalfunctionCode_214();
+
+
+
+
+RoomTemp_214();
+TempAdjust_214();
+FilterSign_214();
+FilterSignReset_214();
+RemoteControlStart_214();
+
+RemoteControlTempAdjust_214();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_215();
+StartStopStatus_215();
+Alarm_215();
+MalfunctionCode_215();
+
+
+
+
+RoomTemp_215();
+TempAdjust_215();
+FilterSign_215();
+FilterSignReset_215();
+RemoteControlStart_215();
+
+RemoteControlTempAdjust_215();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_216();
+StartStopStatus_216();
+Alarm_216();
+MalfunctionCode_216();
+
+
+
+
+RoomTemp_216();
+TempAdjust_216();
+FilterSign_216();
+FilterSignReset_216();
+RemoteControlStart_216();
+
+RemoteControlTempAdjust_216();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_217();
+StartStopStatus_217();
+Alarm_217();
+MalfunctionCode_217();
+
+
+
+
+RoomTemp_217();
+TempAdjust_217();
+FilterSign_217();
+FilterSignReset_217();
+RemoteControlStart_217();
+
+RemoteControlTempAdjust_217();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_218();
+StartStopStatus_218();
+Alarm_218();
+MalfunctionCode_218();
+
+
+
+
+RoomTemp_218();
+TempAdjust_218();
+FilterSign_218();
+FilterSignReset_218();
+RemoteControlStart_218();
+
+RemoteControlTempAdjust_218();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_219();
+StartStopStatus_219();
+Alarm_219();
+MalfunctionCode_219();
+
+
+
+
+RoomTemp_219();
+TempAdjust_219();
+FilterSign_219();
+FilterSignReset_219();
+RemoteControlStart_219();
+
+RemoteControlTempAdjust_219();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_220();
+StartStopStatus_220();
+Alarm_220();
+MalfunctionCode_220();
+
+
+
+
+RoomTemp_220();
+TempAdjust_220();
+FilterSign_220();
+FilterSignReset_220();
+RemoteControlStart_220();
+
+RemoteControlTempAdjust_220();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_221();
+StartStopStatus_221();
+Alarm_221();
+MalfunctionCode_221();
+
+
+
+
+RoomTemp_221();
+TempAdjust_221();
+FilterSign_221();
+FilterSignReset_221();
+RemoteControlStart_221();
+
+RemoteControlTempAdjust_221();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_222();
+StartStopStatus_222();
+Alarm_222();
+MalfunctionCode_222();
+
+
+
+
+RoomTemp_222();
+TempAdjust_222();
+FilterSign_222();
+FilterSignReset_222();
+RemoteControlStart_222();
+
+RemoteControlTempAdjust_222();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_223();
+StartStopStatus_223();
+Alarm_223();
+MalfunctionCode_223();
+
+
+
+
+RoomTemp_223();
+TempAdjust_223();
+FilterSign_223();
+FilterSignReset_223();
+RemoteControlStart_223();
+
+RemoteControlTempAdjust_223();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_224();
+StartStopStatus_224();
+Alarm_224();
+MalfunctionCode_224();
+
+
+
+
+RoomTemp_224();
+TempAdjust_224();
+FilterSign_224();
+FilterSignReset_224();
+RemoteControlStart_224();
+
+RemoteControlTempAdjust_224();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_225();
+StartStopStatus_225();
+Alarm_225();
+MalfunctionCode_225();
+
+
+
+
+RoomTemp_225();
+TempAdjust_225();
+FilterSign_225();
+FilterSignReset_225();
+RemoteControlStart_225();
+
+RemoteControlTempAdjust_225();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_226();
+StartStopStatus_226();
+Alarm_226();
+MalfunctionCode_226();
+
+
+
+
+RoomTemp_226();
+TempAdjust_226();
+FilterSign_226();
+FilterSignReset_226();
+RemoteControlStart_226();
+
+RemoteControlTempAdjust_226();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_227();
+StartStopStatus_227();
+Alarm_227();
+MalfunctionCode_227();
+
+
+
+
+RoomTemp_227();
+TempAdjust_227();
+FilterSign_227();
+FilterSignReset_227();
+RemoteControlStart_227();
+
+RemoteControlTempAdjust_227();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_228();
+StartStopStatus_228();
+Alarm_228();
+MalfunctionCode_228();
+
+
+
+
+RoomTemp_228();
+TempAdjust_228();
+FilterSign_228();
+FilterSignReset_228();
+RemoteControlStart_228();
+
+RemoteControlTempAdjust_228();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_229();
+StartStopStatus_229();
+Alarm_229();
+MalfunctionCode_229();
+
+
+
+
+RoomTemp_229();
+TempAdjust_229();
+FilterSign_229();
+FilterSignReset_229();
+RemoteControlStart_229();
+
+RemoteControlTempAdjust_229();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_230();
+StartStopStatus_230();
+Alarm_230();
+MalfunctionCode_230();
+
+
+
+
+RoomTemp_230();
+TempAdjust_230();
+FilterSign_230();
+FilterSignReset_230();
+RemoteControlStart_230();
+
+RemoteControlTempAdjust_230();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_231();
+StartStopStatus_231();
+Alarm_231();
+MalfunctionCode_231();
+
+
+
+
+RoomTemp_231();
+TempAdjust_231();
+FilterSign_231();
+FilterSignReset_231();
+RemoteControlStart_231();
+
+RemoteControlTempAdjust_231();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_232();
+StartStopStatus_232();
+Alarm_232();
+MalfunctionCode_232();
+
+
+
+
+RoomTemp_232();
+TempAdjust_232();
+FilterSign_232();
+FilterSignReset_232();
+RemoteControlStart_232();
+
+RemoteControlTempAdjust_232();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_233();
+StartStopStatus_233();
+Alarm_233();
+MalfunctionCode_233();
+
+
+
+
+RoomTemp_233();
+TempAdjust_233();
+FilterSign_233();
+FilterSignReset_233();
+RemoteControlStart_233();
+
+RemoteControlTempAdjust_233();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_234();
+StartStopStatus_234();
+Alarm_234();
+MalfunctionCode_234();
+
+
+
+
+RoomTemp_234();
+TempAdjust_234();
+FilterSign_234();
+FilterSignReset_234();
+RemoteControlStart_234();
+
+RemoteControlTempAdjust_234();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_235();
+StartStopStatus_235();
+Alarm_235();
+MalfunctionCode_235();
+
+
+
+
+RoomTemp_235();
+TempAdjust_235();
+FilterSign_235();
+FilterSignReset_235();
+RemoteControlStart_235();
+
+RemoteControlTempAdjust_235();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_236();
+StartStopStatus_236();
+Alarm_236();
+MalfunctionCode_236();
+
+
+
+
+RoomTemp_236();
+TempAdjust_236();
+FilterSign_236();
+FilterSignReset_236();
+RemoteControlStart_236();
+
+RemoteControlTempAdjust_236();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_237();
+StartStopStatus_237();
+Alarm_237();
+MalfunctionCode_237();
+
+
+
+
+RoomTemp_237();
+TempAdjust_237();
+FilterSign_237();
+FilterSignReset_237();
+RemoteControlStart_237();
+
+RemoteControlTempAdjust_237();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_238();
+StartStopStatus_238();
+Alarm_238();
+MalfunctionCode_238();
+
+
+
+
+RoomTemp_238();
+TempAdjust_238();
+FilterSign_238();
+FilterSignReset_238();
+RemoteControlStart_238();
+
+RemoteControlTempAdjust_238();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_241();
+StartStopStatus_241();
+Alarm_241();
+MalfunctionCode_241();
+
+
+
+
+RoomTemp_241();
+TempAdjust_241();
+FilterSign_241();
+FilterSignReset_241();
+RemoteControlStart_241();
+
+RemoteControlTempAdjust_241();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_242();
+StartStopStatus_242();
+Alarm_242();
+MalfunctionCode_242();
+
+
+
+
+RoomTemp_242();
+TempAdjust_242();
+FilterSign_242();
+FilterSignReset_242();
+RemoteControlStart_242();
+
+RemoteControlTempAdjust_242();
+
+
+
+
+
+
+
+
+
+
+
+
+StartStopCommand_243();
+StartStopStatus_243();
+Alarm_243();
+MalfunctionCode_243();
+
+
+
+
+RoomTemp_243();
+TempAdjust_243();
+FilterSign_243();
+FilterSignReset_243();
+RemoteControlStart_243();
+
+RemoteControlTempAdjust_243();
+
+
+
+
+
+
+
+
+
+
+
+
+CL_Rejection_000();
+SystemForcedOff_000();
+CL_Rejection_064();
+SystemForcedOff_064();
+CL_Rejection_128();
+SystemForcedOff_128();
+CL_Rejection_192();
+SystemForcedOff_192();
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_BACnet_DAIKIN_MasterStation_III_No_10">
+      <LineId Id="3939" Count="3924" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

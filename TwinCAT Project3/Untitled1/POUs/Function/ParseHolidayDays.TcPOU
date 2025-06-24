@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="ParseHolidayDays" Id="{c1464572-60e1-47cc-8dec-da54f7b99451}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION ParseHolidayDays : BOOL
+VAR_INPUT
+    InputString : STRING(255); // Example: '3,7,12,25'
+END_VAR
+VAR
+    TempString : STRING(255);
+    DayTokens : ARRAY[1..31] OF BYTE;
+    i, tokenIndex, Pos : INT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Initialize variables
+TempString := InputString;
+tokenIndex := 1;
+
+// Loop through and extract values
+WHILE LEN(TempString) > 0 DO
+    // Find the next comma
+    Pos := FIND(TempString,',');
+    
+    IF Pos = 0 THEN
+        // No more commas, take the last value
+        DayTokens[tokenIndex] := STRING_TO_BYTE(TempString);
+        EXIT;
+    ELSE
+        // Extract the value before the comma
+        DayTokens[tokenIndex] := STRING_TO_BYTE(LEFT(TempString, Pos-1));
+
+        // Remove processed value
+        TempString := RIGHT(TempString, LEN(TempString) - Pos);
+    END_IF
+    
+    // Increment index
+    tokenIndex := tokenIndex + 1;
+END_WHILE
+
+// Store parsed days into global variable
+FOR i := 1 TO tokenIndex DO
+    IF DayTokens[i] >= 1 AND DayTokens[i] <= 31 THEN
+        GVL.HolidayDays[i] := DayTokens[i]; // Store valid days
+    END_IF
+END_FOR
+
+RETURN;
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="ParseHolidayDays">
+      <LineId Id="334" Count="33" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

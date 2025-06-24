@@ -1,0 +1,2922 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="MAIN" Id="{63cb2349-8f5b-425a-a192-076fffe94ffb}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	//Bacnet adapter
+	BACnet_Adapter2 : FB_BACnet_Adapter;
+	fbSCSII_2_GRAHA_ENERGY : FB_BACnet_SCSII_2_GRAHA_ENERGY :=(Client:=(Adapter := BACnet_Adapter2, nDeviceInstance := 356)); 
+					 
+	//syncs device 4 ethercat
+    nEtherCATVar AT %I* : UINT; (* EtherCAT device variable *)
+	bRestart : BOOL;
+	rtTimeout : TIME := DEFAULT_ADS_TIMEOUT;
+	amsid : T_AmsNetId;
+	bBusy: BOOL;
+	bErr : BOOL;
+	iErrid : UINT;
+	
+	InputHolidays : STRING(200);
+	Result : BOOL;
+	
+	FB_BACnet_DAIKIN_MasterStation_III_No_1: FB_BACnet_DAIKIN_MasterStation_III_No_1:=(Client:=(nDeviceInstance := 1));
+	FB_BACnet_DAIKIN_MasterStation_III_No_2: FB_BACnet_DAIKIN_MasterStation_III_No_2:=(Client:=(nDeviceInstance := 2));
+	FB_BACnet_DAIKIN_MasterStation_III_No_3: FB_BACnet_DAIKIN_MasterStation_III_No_3:=(Client:=(nDeviceInstance := 3));
+	FB_BACnet_DAIKIN_MasterStation_III_No_4: FB_BACnet_DAIKIN_MasterStation_III_No_4:=(Client:=(nDeviceInstance := 4));
+	FB_BACnet_DAIKIN_MasterStation_III_No_5: FB_BACnet_DAIKIN_MasterStation_III_No_5:=(Client:=(nDeviceInstance := 5));
+	FB_BACnet_DAIKIN_MasterStation_III_No_6: FB_BACnet_DAIKIN_MasterStation_III_No_6:=(Client:=(nDeviceInstance := 6));
+	FB_BACnet_DAIKIN_MasterStation_III_No_7: FB_BACnet_DAIKIN_MasterStation_III_No_7:=(Client:=(nDeviceInstance := 7));
+	FB_BACnet_DAIKIN_MasterStation_III_No_8: FB_BACnet_DAIKIN_MasterStation_III_No_8:=(Client:=(nDeviceInstance := 8));
+	FB_BACnet_DAIKIN_MasterStation_III_No_9: FB_BACnet_DAIKIN_MasterStation_III_No_9:=(Client:=(nDeviceInstance := 9));
+	FB_BACnet_DAIKIN_MasterStation_III_No_10: FB_BACnet_DAIKIN_MasterStation_III_No_10:=(Client:=(nDeviceInstance := 10));
+	
+	
+	
+	tc_restart : TC_Restart;
+	//fbStartStopAll : FB_CommandStartStopAll;
+	
+	fbEventF10 : FB_EventF10;
+	
+	fbtime : FB_CurrentTime;
+	fbSchedFG : FB_Scheduler_FG;
+	fbSchedB2 : FB_Scheduler_FB2;
+	fbSchedB1 : FB_Scheduler_FB1;
+	fbSchedMZ : FB_Scheduler_FMZ;
+	fbSchedMZ2 : FB_Scheduler_FMZ2;
+	fbSched2 : FB_Scheduler_F2;
+	fbSched3 : FB_Scheduler_F3;
+	fbSched5 : FB_Scheduler_F5;
+	fbSched6 : FB_Scheduler_F6;
+	fbSched7 : FB_Scheduler_F7;
+	fbSched8 : FB_Scheduler_F8;
+	fbSched9 : FB_Scheduler_F9;
+	fbSched10 : FB_Scheduler_F10;
+	fbSched11 : FB_Scheduler_F11;
+	fbSched12 : FB_Scheduler_F12;
+	fbSched15 : FB_Scheduler_F15;
+	fbSched16 : FB_Scheduler_F16;
+	fbSched17 : FB_Scheduler_F17;
+	fbSched18 : FB_Scheduler_F18;
+	fbSched19 : FB_Scheduler_F19;
+	fbSched20 : FB_Scheduler_F20;
+	fbSched21 : FB_Scheduler_F21;
+	fbSched22 : FB_Scheduler_F22;
+	fbSched23 : FB_Scheduler_F23;
+	fbSched25 : FB_Scheduler_F25;
+	fbSched26 : FB_Scheduler_F26;
+	fbSched27 : FB_Scheduler_F27;
+	fbSched28 : FB_Scheduler_F28;
+	fbSched29 : FB_Scheduler_F29;
+	fbSched30 : FB_Scheduler_F30;
+	fbSched31 : FB_Scheduler_F31;
+	fbSched32 : FB_Scheduler_F32;
+	fbSched33 : FB_Scheduler_F33;
+	fbSched35 : FB_Scheduler_F35;
+	fbSched36 : FB_Scheduler_F36;
+	fbSched37 : FB_Scheduler_F37;
+	fbSched38 : FB_Scheduler_F38;
+	fbSched39 : FB_Scheduler_F39;
+	fbSched50 : FB_Scheduler_F50;
+	fbSched51 : FB_Scheduler_F51;
+	fbSched52 : FB_Scheduler_F52;
+	fbSched53 : FB_Scheduler_F53;
+	fbSched55 : FB_Scheduler_F55;
+	fbSchedT3 : FB_Scheduler_FPH1;
+	fbSchedT2 : FB_Scheduler_FPH2;
+	fbSchedT1 : FB_Scheduler_FPH3;
+
+	nFloorStatusB2	: INT;
+	nFloorStatusB1	: INT;
+	nFloorStatusGF	: INT;
+	nFloorStatusMZ	: INT;
+	nFloorStatusMZ2 : INT;
+	nFloorStatus2	: INT;
+	nFloorStatus3	: INT;
+	nFloorStatus5	: INT;
+	nFloorStatus6	: INT;
+	nFloorStatus7	: INT;
+	nFloorStatus8	: INT;
+	nFloorStatus9	: INT;
+	nFloorStatus10	: INT;
+	nFloorStatus11	: INT;
+	nFloorStatus12	: INT;
+	nFloorStatus15	: INT;
+	nFloorStatus16	: INT;
+	nFloorStatus17	: INT;
+	nFloorStatus18	: INT;
+	nFloorStatus19	: INT;
+	nFloorStatus20	: INT;
+	nFloorStatus21	: INT;
+	nFloorStatus22	: INT;
+	nFloorStatus23	: INT;
+	nFloorStatus24	: INT;
+	nFloorStatus25	: INT;
+	nFloorStatus26	: INT;
+	nFloorStatus27	: INT;
+	nFloorStatus28	: INT;
+	nFloorStatus29	: INT;
+	nFloorStatus30	: INT;
+	nFloorStatus31	: INT;
+	nFloorStatus32	: INT;
+	nFloorStatus33	: INT;
+	nFloorStatus35	: INT;
+	nFloorStatus36	: INT;
+	nFloorStatus37	: INT;
+	nFloorStatus38	: INT;
+	nFloorStatus39	: INT;
+	nFloorStatus50	: INT;
+	nFloorStatus51	: INT;
+	nFloorStatus52	: INT;
+	nFloorStatus53	: INT;
+	nFloorStatus55	: INT;
+	nFloorStatusPH1	: INT;
+	nFloorStatusPH2	: INT;
+	nFloorStatusPH3	: INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//twincat restart
+tc_restart(NETID:= '10.7.2.14.1.1',RESTART := bRestart,TMOUT := rtTimeout);
+
+//Bacnet Adapter
+BACnet_Adapter2();
+
+//Bacnet Init
+
+fbSCSII_2_GRAHA_ENERGY();
+FB_BACnet_DAIKIN_MasterStation_III_No_1();
+FB_BACnet_DAIKIN_MasterStation_III_No_2();
+FB_BACnet_DAIKIN_MasterStation_III_No_3();
+FB_BACnet_DAIKIN_MasterStation_III_No_4();
+FB_BACnet_DAIKIN_MasterStation_III_No_5();
+FB_BACnet_DAIKIN_MasterStation_III_No_6();
+FB_BACnet_DAIKIN_MasterStation_III_No_7();
+FB_BACnet_DAIKIN_MasterStation_III_No_8();
+FB_BACnet_DAIKIN_MasterStation_III_No_9();
+FB_BACnet_DAIKIN_MasterStation_III_No_10();
+
+//EventLogger
+fbEventF10(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_3, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_2);
+//Scheduler init
+Result := parseHolidayDays(InputString := InputHolidays);
+fbtime();
+fbSchedB2(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbSchedB1(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbSchedFG(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbSchedMZ(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbSchedMZ2(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbSched2(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbSched3(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbSched5(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_2, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbSched6(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_2, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbSched7(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_2, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbSched8(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_2);
+fbSched9(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_3, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_2);
+fbSched10(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, currDate := fbtime.currDate, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_3, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_2);
+fbSched11(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_3, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_2);
+fbSched12(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_3);
+fbSched15(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_4, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_5);
+fbSched16(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_4, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_5);
+fbSched17(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_4, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_5);
+fbSched18(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_5);
+fbSched19(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_5, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_6);
+fbSched20(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_5, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_6);
+fbSched21(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_5, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_6);
+fbSched22(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_6);
+fbSched23(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_6);
+fbSched25(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_6);
+fbSched26(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_6);
+fbSched27(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_7);
+fbSched28(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_7);
+fbSched29(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_7);	
+fbSched30(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_7);
+fbSched31(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_8);
+fbSched32(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_8);
+fbSched33(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_8);
+fbSched35(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_8);
+fbSched36(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_9);
+fbSched37(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_9);
+fbSched38(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_9);
+fbSched39(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_9);
+fbSched50(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbSched51(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbSched52(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbSched53(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbSched55(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbSchedT3(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbSchedT2(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbSchedT1(currH := fbtime.currH, currM := fbtime.currM, currD := fbtime.currD, FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+
+//Color status for all floor in the building (need to be moved to FB)
+//FloorStats B2
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_037.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_038.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_039.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_040.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_041.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_042.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_043.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_044.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_045.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_046.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_047.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_048.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_049.bPresVal
+THEN
+	nFloorStatusB2 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_037.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_038.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_039.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_040.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_041.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_042.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_043.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_044.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_045.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_046.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_047.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_048.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_049.bPresVal
+THEN
+	nFloorStatusB2 := 0;
+ELSE
+	nFloorStatusB2 := 2;
+END_IF
+
+//FloorStats B1
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_020.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_021.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_022.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_023.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_024.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_025.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_026.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_027.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_028.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_029.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_030.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_031.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_032.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_033.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_034.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_035.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_036.bPresVal
+THEN
+	nFloorStatusB1 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_020.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_021.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_022.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_023.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_024.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_025.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_026.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_027.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_028.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_029.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_030.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_031.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_032.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_033.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_034.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_035.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_036.bPresVal
+THEN
+	nFloorStatusB1 := 0;
+ELSE
+	nFloorStatusB1 := 2;
+END_IF
+
+//FloorStats GF
+IF 
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_000.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_001.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_002.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_003.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_004.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_005.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_006.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_007.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_008.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_009.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_010.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_011.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_012.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_013.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_014.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_015.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_016.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_017.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_018.bPresVal AND
+	FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_019.bPresVal 
+THEN
+	nFloorStatusGF := 1;
+ELSIF
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_000.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_001.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_002.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_003.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_004.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_005.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_006.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_007.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_008.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_009.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_010.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_011.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_012.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_013.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_014.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_015.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_016.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_017.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_018.bPresVal AND
+	NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_019.bPresVal
+THEN
+	nFloorStatusGF := 0;
+ELSE
+	nFloorStatusGF := 2;
+END_IF
+
+//FloorStats MZ
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_064.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_065.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_066.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_067.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_068.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_069.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_070.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_071.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_072.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_073.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_074.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_075.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_076.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_077.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_078.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_079.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_080.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_081.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_082.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_083.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_084.bPresVal
+THEN
+	nFloorStatusMZ := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_064.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_065.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_066.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_067.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_068.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_069.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_070.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_071.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_072.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_073.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_074.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_075.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_076.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_077.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_078.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_079.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_080.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_081.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_082.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_083.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_084.bPresVal
+THEN
+	nFloorStatusMZ := 0;
+ELSE
+	nFloorStatusMZ := 2;
+END_IF
+
+//FloorStats MZ2
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_097.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_098.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_099.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_100.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_101.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_102.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_103.bPresVal
+THEN
+	nFloorStatusMZ2 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_096.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_097.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_098.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_099.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_100.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_101.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_102.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_103.bPresVal
+THEN
+	nFloorStatusMZ2 := 0;
+ELSE
+	nFloorStatusMZ2 := 2;
+END_IF
+
+//FloorStats 2
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_128.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_129.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_130.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_131.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_132.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_133.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_134.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_135.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_136.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_137.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_138.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_139.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_140.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_141.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_142.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_143.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_144.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_145.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_146.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_147.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_148.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_177.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_176.bPresVal
+THEN
+	nFloorStatus2 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_128.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_129.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_130.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_131.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_132.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_133.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_134.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_135.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_136.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_137.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_138.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_139.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_140.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_141.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_142.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_143.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_144.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_145.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_146.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_147.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_148.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_177.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_176.bPresVal
+THEN
+	nFloorStatus2 := 0;
+ELSE
+	nFloorStatus2 := 2;
+END_IF
+
+//FloorStats 3
+IF 
+//FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_192.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_193.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_194.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_195.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_196.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_197.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_198.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_199.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_200.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_201.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_202.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_203.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_204.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_205.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_206.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_207.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_208.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_209.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_210.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_211.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_212.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_224.bPresVal
+THEN
+	nFloorStatus3 := 1;
+ELSIF
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_192.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_193.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_194.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_195.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_196.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_197.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_198.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_199.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_200.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_201.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_202.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_203.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_204.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_205.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_206.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_207.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_208.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_209.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_210.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_211.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_212.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_224.bPresVal
+THEN
+	nFloorStatus3 := 0;
+ELSE
+	nFloorStatus3 := 2;
+END_IF
+
+//FloorStats 5
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_000.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_001.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_002.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_003.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_004.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_005.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_006.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_007.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_008.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_009.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_010.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_011.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_012.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_013.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_014.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_015.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_016.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_017.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_018.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_019.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_020.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_225.bPresVal
+THEN
+	nFloorStatus5 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_000.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_001.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_002.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_003.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_004.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_005.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_006.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_007.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_008.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_009.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_010.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_011.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_012.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_013.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_014.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_015.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_016.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_017.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_018.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_019.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_020.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_225.bPresVal
+THEN
+	nFloorStatus5 := 0;
+ELSE
+	nFloorStatus5 := 2;
+END_IF
+
+//FloorStats 6
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_064.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_065.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_066.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_067.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_068.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_069.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_070.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_071.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_072.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_073.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_074.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_075.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_076.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_077.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_078.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_079.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_080.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_081.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_082.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_083.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_084.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_226.bPresVal
+THEN
+	nFloorStatus6 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_064.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_065.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_066.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_067.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_068.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_069.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_070.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_071.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_072.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_073.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_074.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_075.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_076.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_077.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_078.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_079.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_080.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_081.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_082.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_083.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_084.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_226.bPresVal
+THEN
+	nFloorStatus6 := 0;
+ELSE
+	nFloorStatus6 := 2;
+END_IF
+
+//FloorStats 7
+IF
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_128.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_129.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_130.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_131.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_132.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_133.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_134.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_135.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_136.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_137.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_138.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_139.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_140.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_141.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_142.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_143.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_144.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_145.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_146.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_147.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_148.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_176.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_227.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_241.bPresVal
+THEN
+	nFloorStatus7 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_128.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_129.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_130.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_131.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_132.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_133.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_134.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_135.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_136.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_137.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_138.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_139.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_140.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_141.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_142.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_143.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_144.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_145.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_146.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_147.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_148.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_176.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_227.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_1.StartStopStatus_241.bPresVal
+THEN
+	nFloorStatus7 := 0;
+ELSE
+	nFloorStatus7 := 2;
+END_IF
+
+//FloorStats 8
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_192.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_193.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_194.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_195.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_196.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_197.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_198.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_199.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_200.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_201.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_202.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_203.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_204.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_205.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_206.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_207.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_208.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_209.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_210.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_211.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_212.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_224.bPresVal
+THEN
+	nFloorStatus8 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_192.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_193.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_194.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_195.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_196.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_197.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_198.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_199.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_200.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_201.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_202.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_203.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_204.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_205.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_206.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_207.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_208.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_209.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_210.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_211.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_212.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_224.bPresVal
+THEN
+	nFloorStatus8 := 0;
+ELSE
+	nFloorStatus8 := 2;
+END_IF
+
+//FloorStats 9
+IF
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_000.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_001.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_002.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_003.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_004.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_005.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_006.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_007.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_008.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_009.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_010.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_011.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_012.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_013.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_014.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_015.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_016.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_017.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_018.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_019.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_020.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_225.bPresVal
+THEN
+	nFloorStatus9 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_000.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_001.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_002.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_003.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_004.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_005.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_006.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_007.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_008.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_009.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_010.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_011.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_012.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_013.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_014.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_015.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_016.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_017.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_018.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_019.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_020.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_225.bPresVal
+THEN
+	nFloorStatus9 := 0;
+ELSE
+	nFloorStatus9 := 2;
+END_IF
+
+//FloorStats 10
+IF
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_064.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_065.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_066.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_067.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_068.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_069.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_070.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_071.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_072.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_073.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_074.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_075.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_076.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_077.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_078.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_079.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_080.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_081.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_082.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_083.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_084.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_112.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_226.bPresVal
+//FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_241.bPresVal
+THEN
+	nFloorStatus10 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_064.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_065.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_066.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_067.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_068.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_069.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_070.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_071.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_072.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_073.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_074.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_075.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_076.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_077.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_078.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_079.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_080.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_081.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_082.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_083.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_084.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_112.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_226.bPresVal
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_241.bPresVal
+THEN
+	nFloorStatus10 := 0;
+ELSE
+	nFloorStatus10 := 2;
+END_IF
+
+//FloorStats 11
+IF 
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_128.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_129.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_130.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_131.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_132.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_133.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_134.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_135.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_136.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_137.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_138.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_139.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_140.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_141.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_142.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_143.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_144.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_145.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_146.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_147.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_148.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_227.bPresVal
+THEN
+	nFloorStatus11 := 1;
+ELSIF
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_128.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_129.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_130.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_131.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_132.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_133.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_134.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_135.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_136.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_137.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_138.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_139.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_140.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_141.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_142.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_143.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_144.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_145.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_146.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_147.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_148.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_2.StartStopStatus_227.bPresVal
+THEN
+	nFloorStatus11 := 0;
+ELSE
+	nFloorStatus11 := 2;
+END_IF
+
+//FloorStats 12
+IF 
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_192.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_193.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_194.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_195.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_196.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_197.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_198.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_199.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_200.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_201.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_202.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_203.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_204.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_205.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_206.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_207.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_208.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_209.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_210.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_211.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_212.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_224.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_225.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_226.bPresVal
+THEN
+	nFloorStatus12 := 1;
+ELSIF
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_192.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_193.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_194.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_195.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_196.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_197.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_198.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_199.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_200.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_201.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_202.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_203.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_204.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_205.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_206.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_207.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_208.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_209.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_210.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_211.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_212.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_224.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_225.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_3.StartStopStatus_226.bPresVal
+THEN
+	nFloorStatus12 := 0;
+ELSE
+	nFloorStatus12 := 2;
+END_IF
+
+//FloorStats 15
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_000.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_001.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_002.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_003.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_004.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_005.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_006.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_007.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_008.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_009.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_010.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_011.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_012.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_013.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_014.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_015.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_016.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_017.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_018.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_019.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_048.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_032.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_049.bPresVal
+THEN
+	nFloorStatus15 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_000.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_001.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_002.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_003.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_004.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_005.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_006.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_007.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_008.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_009.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_010.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_011.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_012.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_013.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_014.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_015.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_016.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_017.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_018.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_019.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_048.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_032.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_049.bPresVal
+THEN
+	nFloorStatus15 := 0;
+ELSE
+	nFloorStatus15 := 2;
+END_IF
+
+//FloorStats 16
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_064.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_065.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_066.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_067.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_068.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_069.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_070.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_071.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_072.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_073.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_074.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_075.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_076.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_077.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_078.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_079.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_080.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_081.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_082.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_083.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_033.bPresVal
+THEN
+	nFloorStatus16 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_064.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_065.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_066.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_067.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_068.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_069.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_070.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_071.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_072.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_073.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_074.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_075.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_076.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_077.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_078.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_079.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_080.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_081.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_082.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_083.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_033.bPresVal
+THEN
+	nFloorStatus16 := 0;
+ELSE
+	nFloorStatus16 := 2;
+END_IF
+
+//FloorStats 17
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_128.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_129.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_130.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_131.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_132.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_133.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_134.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_135.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_136.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_137.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_138.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_139.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_140.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_141.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_142.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_143.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_144.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_145.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_146.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_147.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_034.bPresVal
+THEN
+	nFloorStatus17 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_128.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_129.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_130.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_131.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_132.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_133.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_134.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_135.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_136.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_137.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_138.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_139.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_140.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_141.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_142.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_143.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_144.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_145.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_146.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_4.StartStopStatus_147.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_034.bPresVal
+THEN
+	nFloorStatus17 := 0;
+ELSE
+	nFloorStatus17 := 2;
+END_IF
+
+//FloorStats 18
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_000.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_001.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_002.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_003.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_004.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_005.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_006.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_007.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_008.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_009.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_010.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_011.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_012.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_013.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_014.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_015.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_016.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_017.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_018.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_019.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_035.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_051.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_050.bPresVal
+THEN
+	nFloorStatus18 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_000.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_001.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_002.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_003.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_004.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_005.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_006.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_007.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_008.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_009.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_010.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_011.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_012.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_013.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_014.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_015.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_016.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_017.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_018.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_019.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_035.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_051.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_050.bPresVal
+THEN
+	nFloorStatus18 := 0;
+ELSE
+	nFloorStatus18 := 2;
+END_IF
+
+//FloorStats 19
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_064.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_065.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_066.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_067.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_068.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_069.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_070.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_071.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_072.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_073.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_074.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_075.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_076.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_077.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_078.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_079.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_080.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_081.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_082.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_083.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_032.bPresVal
+THEN
+	nFloorStatus19 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_064.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_065.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_066.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_067.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_068.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_069.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_070.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_071.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_072.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_073.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_074.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_075.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_076.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_077.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_078.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_079.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_080.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_081.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_082.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_083.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_032.bPresVal
+THEN
+	nFloorStatus19 := 0;
+ELSE
+	nFloorStatus19 := 2;
+END_IF
+
+//FloorStats 20
+IF 
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_128.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_129.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_130.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_131.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_132.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_133.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_134.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_135.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_136.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_137.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_138.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_139.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_140.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_141.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_142.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_143.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_144.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_145.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_146.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_147.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_033.bPresVal
+THEN
+	nFloorStatus20 := 1;
+ELSIF
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_128.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_129.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_130.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_131.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_132.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_133.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_134.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_135.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_136.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_137.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_138.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_139.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_140.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_141.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_142.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_143.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_144.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_145.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_146.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_147.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_033.bPresVal
+THEN
+	nFloorStatus20 := 0;
+ELSE
+	nFloorStatus20 := 2;
+END_IF
+
+//FloorStats 21
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_192.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_193.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_194.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_195.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_196.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_197.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_198.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_199.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_200.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_201.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_202.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_203.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_204.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_205.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_206.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_207.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_208.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_209.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_210.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_211.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_240.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_034.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_049.bPresVal
+THEN
+	nFloorStatus21 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_192.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_193.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_194.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_195.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_196.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_197.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_198.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_199.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_200.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_201.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_202.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_203.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_204.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_205.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_206.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_207.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_208.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_209.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_210.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_211.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_5.StartStopStatus_240.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_034.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_049.bPresVal
+THEN
+	nFloorStatus21 := 0;
+ELSE
+	nFloorStatus21 := 2;
+END_IF
+
+//FloorStats 22
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_000.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_001.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_002.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_003.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_004.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_005.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_006.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_007.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_008.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_009.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_010.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_011.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_012.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_013.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_014.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_015.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_016.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_017.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_018.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_019.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_035.bPresVal
+THEN
+	nFloorStatus22 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_000.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_001.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_002.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_003.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_004.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_005.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_006.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_007.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_008.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_009.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_010.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_011.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_012.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_013.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_014.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_015.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_016.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_017.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_018.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_019.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_035.bPresVal
+THEN
+	nFloorStatus22 := 0;
+ELSE
+	nFloorStatus22 := 2;
+END_IF
+
+//FloorStats 23
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_064.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_065.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_066.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_067.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_068.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_069.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_070.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_071.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_072.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_073.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_074.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_075.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_076.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_077.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_078.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_079.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_080.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_081.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_082.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_083.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_224.bPresVal
+THEN
+	nFloorStatus23 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_064.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_065.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_066.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_067.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_068.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_069.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_070.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_071.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_072.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_073.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_074.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_075.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_076.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_077.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_078.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_079.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_080.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_081.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_082.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_083.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_224.bPresVal
+THEN
+	nFloorStatus23 := 0;
+ELSE
+	nFloorStatus23 := 2;
+END_IF
+
+//FloorStats 25
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_128.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_129.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_130.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_131.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_132.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_133.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_134.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_135.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_136.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_137.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_138.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_139.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_140.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_141.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_142.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_143.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_144.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_145.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_146.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_147.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_225.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_241.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_176.bPresVal
+THEN
+	nFloorStatus25 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_128.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_129.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_130.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_131.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_132.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_133.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_134.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_135.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_136.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_137.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_138.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_139.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_140.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_141.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_142.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_143.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_144.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_145.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_146.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_147.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_225.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_241.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_176.bPresVal
+THEN
+	nFloorStatus25 := 0;
+ELSE
+	nFloorStatus25 := 2;
+END_IF
+
+//FloorStats 26
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_192.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_193.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_194.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_195.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_196.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_197.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_198.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_199.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_200.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_201.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_202.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_203.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_204.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_205.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_206.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_207.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_208.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_209.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_210.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_211.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_226.bPresVal
+THEN
+	nFloorStatus26 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_192.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_193.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_194.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_195.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_196.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_197.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_198.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_199.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_200.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_201.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_202.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_203.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_204.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_205.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_206.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_207.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_208.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_209.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_210.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_211.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_6.StartStopStatus_226.bPresVal
+THEN
+	nFloorStatus26 := 0;
+ELSE
+	nFloorStatus26 := 2;
+END_IF
+
+//FloorStats 27
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_000.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_001.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_002.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_003.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_004.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_005.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_006.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_007.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_008.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_009.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_010.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_011.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_012.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_013.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_014.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_015.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_016.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_017.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_018.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_019.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_224.bPresVal
+THEN
+	nFloorStatus27 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_000.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_001.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_002.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_003.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_004.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_005.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_006.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_007.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_008.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_009.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_010.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_011.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_012.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_013.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_014.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_015.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_016.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_017.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_018.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_019.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_224.bPresVal
+THEN
+	nFloorStatus27 := 0;
+ELSE
+	nFloorStatus27 := 2;
+END_IF
+
+//FloorStats 28
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_064.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_065.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_066.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_067.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_068.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_069.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_070.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_071.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_072.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_073.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_074.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_075.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_076.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_077.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_078.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_079.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_080.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_081.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_082.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_083.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_225.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_241.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_112.bPresVal
+THEN
+	nFloorStatus28 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_064.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_065.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_066.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_067.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_068.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_069.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_070.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_071.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_072.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_073.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_074.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_075.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_076.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_077.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_078.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_079.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_080.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_081.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_082.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_083.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_225.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_241.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_112.bPresVal
+THEN
+	nFloorStatus28 := 0;
+ELSE
+	nFloorStatus28 := 2;
+END_IF
+
+//FloorStats 29
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_128.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_129.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_130.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_131.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_132.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_133.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_134.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_135.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_136.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_137.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_138.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_139.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_140.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_141.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_142.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_143.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_144.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_145.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_146.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_147.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_226.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_148.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_149.bPresVal
+THEN
+	nFloorStatus29 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_128.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_129.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_130.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_131.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_132.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_133.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_134.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_135.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_136.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_137.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_138.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_139.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_140.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_141.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_142.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_143.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_144.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_145.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_146.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_147.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_226.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_148.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_149.bPresVal
+THEN
+	nFloorStatus29 := 0;
+ELSE
+	nFloorStatus29 := 2;
+END_IF
+
+//FloorStats 30
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_192.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_193.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_194.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_195.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_196.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_197.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_198.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_199.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_200.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_201.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_202.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_203.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_204.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_205.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_206.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_207.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_208.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_209.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_210.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_211.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_212.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_227.bPresVal
+THEN
+	nFloorStatus30 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_192.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_193.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_194.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_195.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_196.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_197.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_198.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_199.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_200.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_201.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_202.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_203.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_204.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_205.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_206.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_207.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_208.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_209.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_210.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_211.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_212.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_7.StartStopStatus_227.bPresVal
+THEN
+	nFloorStatus30 := 0;
+ELSE
+	nFloorStatus30 := 2;
+END_IF
+
+//FloorStats 31
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_000.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_001.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_002.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_003.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_004.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_005.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_006.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_007.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_008.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_009.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_010.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_011.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_012.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_013.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_014.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_015.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_016.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_017.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_018.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_019.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_020.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_224.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_241.bPresVal 
+//FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_048.bPresVal
+THEN
+	nFloorStatus31 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_000.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_001.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_002.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_003.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_004.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_005.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_006.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_007.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_008.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_009.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_010.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_011.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_012.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_013.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_014.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_015.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_016.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_017.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_018.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_019.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_020.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_224.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_241.bPresVal
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_048.bPresVal
+THEN
+	nFloorStatus31 := 0;
+ELSE
+	nFloorStatus31 := 2;
+END_IF
+
+//FloorStats 32
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_064.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_065.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_066.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_067.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_068.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_069.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_070.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_071.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_072.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_073.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_074.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_075.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_076.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_077.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_078.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_079.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_080.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_081.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_082.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_083.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_084.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_085.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_225.bPresVal
+THEN
+	nFloorStatus32 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_064.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_065.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_066.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_067.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_068.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_069.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_070.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_071.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_072.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_073.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_074.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_075.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_076.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_077.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_078.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_079.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_080.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_081.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_082.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_083.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_084.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_085.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_225.bPresVal
+THEN
+	nFloorStatus32 := 0;
+ELSE
+	nFloorStatus32 := 2;
+END_IF
+
+//FloorStats 33
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_128.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_129.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_130.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_131.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_132.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_133.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_134.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_135.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_136.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_137.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_138.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_139.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_140.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_141.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_142.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_143.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_144.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_145.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_146.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_147.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_148.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_149.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_226.bPresVal
+THEN
+	nFloorStatus33 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_128.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_129.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_130.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_131.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_132.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_133.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_134.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_135.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_136.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_137.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_138.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_139.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_140.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_141.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_142.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_143.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_144.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_145.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_146.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_147.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_148.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_149.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_226.bPresVal
+THEN
+	nFloorStatus33 := 0;
+ELSE
+	nFloorStatus33 := 2;
+END_IF
+
+//FloorStats 35
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_192.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_193.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_194.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_195.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_196.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_197.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_198.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_199.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_200.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_201.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_202.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_203.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_204.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_205.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_206.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_207.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_208.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_209.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_210.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_211.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_212.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_213.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_227.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_243.bPresVal
+//FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_242.bPresVal
+THEN
+	nFloorStatus35 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_192.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_193.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_194.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_195.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_196.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_197.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_198.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_199.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_200.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_201.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_202.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_203.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_204.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_205.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_206.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_207.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_208.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_209.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_210.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_211.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_212.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_213.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_227.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_243.bPresVal 
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_8.StartStopStatus_242.bPresVal
+THEN
+	nFloorStatus35 := 0;
+ELSE
+	nFloorStatus35 := 2;
+END_IF
+
+//FloorStats 36
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_000.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_001.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_002.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_003.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_004.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_005.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_006.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_007.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_008.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_009.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_010.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_011.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_012.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_013.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_014.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_015.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_016.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_017.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_018.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_019.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_020.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_021.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_224.bPresVal
+THEN
+	nFloorStatus36 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_000.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_001.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_002.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_003.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_004.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_005.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_006.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_007.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_008.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_009.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_010.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_011.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_012.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_013.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_014.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_015.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_016.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_017.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_018.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_019.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_020.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_021.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_224.bPresVal
+THEN
+	nFloorStatus36 := 0;
+ELSE
+	nFloorStatus36 := 2;
+END_IF
+
+//FloorStats 37
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_064.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_065.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_066.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_067.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_068.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_069.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_070.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_071.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_072.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_073.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_074.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_075.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_076.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_077.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_078.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_079.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_080.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_081.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_082.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_083.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_084.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_085.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_225.bPresVal
+THEN
+	nFloorStatus37 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_064.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_065.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_066.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_067.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_068.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_069.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_070.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_071.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_072.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_073.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_074.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_075.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_076.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_077.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_078.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_079.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_080.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_081.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_082.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_083.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_084.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_085.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_225.bPresVal
+THEN
+	nFloorStatus37 := 0;
+ELSE
+	nFloorStatus37 := 2;
+END_IF
+
+//FloorStats 38
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_128.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_129.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_130.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_131.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_132.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_133.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_134.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_135.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_136.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_137.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_138.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_139.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_140.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_141.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_142.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_143.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_144.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_145.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_146.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_147.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_148.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_149.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_226.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_241.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_176.bPresVal
+THEN
+	nFloorStatus38 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_128.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_129.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_130.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_131.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_132.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_133.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_134.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_135.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_136.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_137.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_138.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_139.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_140.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_141.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_142.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_143.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_144.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_145.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_146.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_147.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_148.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_149.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_226.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_241.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_176.bPresVal
+THEN
+	nFloorStatus38 := 0;
+ELSE
+	nFloorStatus38 := 2;
+END_IF
+
+//FloorStats 39
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_192.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_193.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_194.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_195.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_196.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_197.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_198.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_199.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_200.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_201.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_202.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_203.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_204.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_205.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_206.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_207.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_208.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_209.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_210.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_211.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_212.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_213.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_227.bPresVal
+THEN
+	nFloorStatus39 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_192.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_193.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_194.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_195.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_196.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_197.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_198.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_199.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_200.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_201.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_202.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_203.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_204.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_205.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_206.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_207.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_208.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_209.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_210.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_211.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_212.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_213.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_9.StartStopStatus_227.bPresVal
+THEN
+	nFloorStatus39 := 0;
+ELSE
+	nFloorStatus39 := 2;
+END_IF
+
+//FloorStats 50
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_000.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_001.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_002.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_003.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_004.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_005.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_006.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_007.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_008.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_009.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_010.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_011.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_012.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_013.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_014.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_015.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_016.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_017.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_018.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_019.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_020.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_021.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_234.bPresVal
+THEN
+	nFloorStatus50 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_000.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_001.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_002.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_003.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_004.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_005.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_006.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_007.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_008.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_009.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_010.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_011.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_012.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_013.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_014.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_015.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_016.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_017.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_018.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_019.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_020.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_021.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_234.bPresVal
+THEN
+	nFloorStatus50 := 0;
+ELSE
+	nFloorStatus50 := 2;
+END_IF
+
+//FloorStats 51
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_064.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_065.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_066.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_067.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_068.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_069.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_070.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_071.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_072.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_073.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_074.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_075.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_076.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_077.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_078.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_079.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_080.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_081.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_082.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_083.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_084.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_085.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_235.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_241.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_112.bPresVal
+THEN
+	nFloorStatus51 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_064.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_065.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_066.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_067.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_068.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_069.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_070.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_071.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_072.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_073.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_074.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_075.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_076.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_077.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_078.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_079.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_080.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_081.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_082.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_083.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_084.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_085.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_235.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_241.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_112.bPresVal
+THEN
+	nFloorStatus51 := 0;
+ELSE
+	nFloorStatus51 := 2;
+END_IF
+
+//FloorStats 52
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_128.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_129.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_130.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_131.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_132.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_133.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_134.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_135.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_136.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_137.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_138.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_139.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_140.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_141.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_142.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_143.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_144.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_145.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_146.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_147.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_148.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_149.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_236.bPresVal
+THEN
+	nFloorStatus52 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_128.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_129.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_130.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_131.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_132.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_133.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_134.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_135.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_136.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_137.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_138.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_139.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_140.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_141.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_142.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_143.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_144.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_145.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_146.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_147.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_148.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_149.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_236.bPresVal
+THEN
+	nFloorStatus52 := 0;
+ELSE
+	nFloorStatus52 := 2;
+END_IF
+
+//FloorStats 53
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_192.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_193.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_194.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_195.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_196.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_197.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_198.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_199.bPresVal AND
+//FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_200.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_201.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_202.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_203.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_204.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_205.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_206.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_207.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_208.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_209.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_210.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_211.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_212.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_213.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_237.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_243.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_242.bPresVal
+THEN
+	nFloorStatus53 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_192.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_193.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_194.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_195.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_196.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_197.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_198.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_199.bPresVal AND
+//NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_200.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_201.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_202.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_203.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_204.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_205.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_206.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_207.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_208.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_209.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_210.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_211.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_212.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_213.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_237.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_243.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_242.bPresVal
+THEN
+	nFloorStatus53 := 0;
+ELSE
+	nFloorStatus53 := 2;
+END_IF
+
+//FloorStats 55
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_214.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_215.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_216.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_217.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_218.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_219.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_220.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_221.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_222.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_223.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_224.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_225.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_226.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_227.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_228.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_229.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_230.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_231.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_232.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_233.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_238.bPresVal
+THEN
+	nFloorStatus55 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_214.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_215.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_216.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_217.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_218.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_219.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_220.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_221.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_222.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_223.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_224.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_225.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_226.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_227.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_228.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_229.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_230.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_231.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_232.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_233.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_238.bPresVal
+THEN
+	nFloorStatus55 := 0;
+ELSE
+	nFloorStatus55 := 2;
+END_IF
+
+//FloorStats PH1
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_150.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_151.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_152.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_153.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_154.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_155.bPresVal
+THEN
+	nFloorStatusPH1 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_150.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_151.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_152.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_153.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_154.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_155.bPresVal
+THEN
+	nFloorStatusPH1 := 0;
+ELSE
+	nFloorStatusPH1 := 2;
+END_IF
+
+//FloorStats PH2
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_156.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_157.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_158.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_159.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_160.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_161.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_162.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_163.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_164.bPresVal
+THEN
+	nFloorStatusPH2 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_156.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_157.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_158.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_159.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_160.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_161.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_162.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_163.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_164.bPresVal
+THEN
+	nFloorStatusPH2 := 0;
+ELSE
+	nFloorStatusPH2 := 2;
+END_IF
+
+//FloorStats PH1
+IF 
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_165.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_166.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_167.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_168.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_169.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_170.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_171.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_172.bPresVal AND
+FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_173.bPresVal
+THEN
+	nFloorStatusPH3 := 1;
+ELSIF
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_165.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_166.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_167.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_168.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_169.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_170.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_171.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_172.bPresVal AND
+NOT FB_BACnet_DAIKIN_MasterStation_III_No_10.StartStopStatus_173.bPresVal
+THEN
+	nFloorStatusPH3 := 0;
+ELSE
+	nFloorStatusPH3 := 2;
+END_IF
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="10677" Count="0" />
+      <LineId Id="10471" Count="0" />
+      <LineId Id="11226" Count="0" />
+      <LineId Id="11225" Count="0" />
+      <LineId Id="11223" Count="0" />
+      <LineId Id="10678" Count="0" />
+      <LineId Id="9876" Count="0" />
+      <LineId Id="11228" Count="0" />
+      <LineId Id="11227" Count="0" />
+      <LineId Id="2" Count="0" />
+      <LineId Id="16" Count="8" />
+      <LineId Id="11032" Count="0" />
+      <LineId Id="10888" Count="0" />
+      <LineId Id="10681" Count="0" />
+      <LineId Id="10680" Count="0" />
+      <LineId Id="10904" Count="0" />
+      <LineId Id="9104" Count="0" />
+      <LineId Id="9499" Count="3" />
+      <LineId Id="9497" Count="0" />
+      <LineId Id="9493" Count="0" />
+      <LineId Id="9267" Count="0" />
+      <LineId Id="9265" Count="0" />
+      <LineId Id="8403" Count="0" />
+      <LineId Id="5504" Count="0" />
+      <LineId Id="5595" Count="0" />
+      <LineId Id="5507" Count="0" />
+      <LineId Id="9504" Count="0" />
+      <LineId Id="5509" Count="0" />
+      <LineId Id="5533" Count="11" />
+      <LineId Id="10254" Count="2" />
+      <LineId Id="5545" Count="0" />
+      <LineId Id="10257" Count="15" />
+      <LineId Id="5172" Count="1" />
+      <LineId Id="5224" Count="12" />
+      <LineId Id="5194" Count="3" />
+      <LineId Id="47" Count="0" />
+      <LineId Id="5199" Count="0" />
+      <LineId Id="5201" Count="1" />
+      <LineId Id="5254" Count="16" />
+      <LineId Id="5204" Count="2" />
+      <LineId Id="5237" Count="16" />
+      <LineId Id="5208" Count="3" />
+      <LineId Id="5200" Count="0" />
+      <LineId Id="5198" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="164" Count="48" />
+      <LineId Id="214" Count="2" />
+      <LineId Id="264" Count="20" />
+      <LineId Id="237" Count="2" />
+      <LineId Id="285" Count="20" />
+      <LineId Id="260" Count="3" />
+      <LineId Id="213" Count="0" />
+      <LineId Id="359" Count="0" />
+      <LineId Id="308" Count="1" />
+      <LineId Id="955" Count="5" />
+      <LineId Id="330" Count="2" />
+      <LineId Id="961" Count="0" />
+      <LineId Id="963" Count="7" />
+      <LineId Id="355" Count="3" />
+      <LineId Id="307" Count="0" />
+      <LineId Id="971" Count="0" />
+      <LineId Id="1645" Count="1" />
+      <LineId Id="3050" Count="22" />
+      <LineId Id="1648" Count="2" />
+      <LineId Id="3073" Count="22" />
+      <LineId Id="1652" Count="7" />
+      <LineId Id="3096" Count="21" />
+      <LineId Id="1661" Count="2" />
+      <LineId Id="3118" Count="20" />
+      <LineId Id="1664" Count="5" />
+      <LineId Id="1683" Count="2" />
+      <LineId Id="3164" Count="20" />
+      <LineId Id="1686" Count="3" />
+      <LineId Id="3142" Count="20" />
+      <LineId Id="1690" Count="8" />
+      <LineId Id="3186" Count="20" />
+      <LineId Id="1699" Count="3" />
+      <LineId Id="3208" Count="20" />
+      <LineId Id="1703" Count="8" />
+      <LineId Id="3230" Count="20" />
+      <LineId Id="3273" Count="0" />
+      <LineId Id="1712" Count="0" />
+      <LineId Id="3139" Count="0" />
+      <LineId Id="1713" Count="2" />
+      <LineId Id="3252" Count="20" />
+      <LineId Id="3274" Count="0" />
+      <LineId Id="1716" Count="0" />
+      <LineId Id="3140" Count="0" />
+      <LineId Id="1717" Count="7" />
+      <LineId Id="3296" Count="21" />
+      <LineId Id="1726" Count="2" />
+      <LineId Id="3275" Count="20" />
+      <LineId Id="3318" Count="0" />
+      <LineId Id="1730" Count="7" />
+      <LineId Id="3322" Count="20" />
+      <LineId Id="1738" Count="3" />
+      <LineId Id="3344" Count="20" />
+      <LineId Id="1742" Count="8" />
+      <LineId Id="3388" Count="21" />
+      <LineId Id="1751" Count="0" />
+      <LineId Id="3319" Count="0" />
+      <LineId Id="1752" Count="2" />
+      <LineId Id="3366" Count="20" />
+      <LineId Id="3410" Count="0" />
+      <LineId Id="1755" Count="0" />
+      <LineId Id="3320" Count="0" />
+      <LineId Id="1756" Count="7" />
+      <LineId Id="3412" Count="20" />
+      <LineId Id="1764" Count="3" />
+      <LineId Id="3434" Count="20" />
+      <LineId Id="1768" Count="8" />
+      <LineId Id="3547" Count="19" />
+      <LineId Id="3546" Count="0" />
+      <LineId Id="3519" Count="0" />
+      <LineId Id="3521" Count="1" />
+      <LineId Id="1778" Count="2" />
+      <LineId Id="3477" Count="20" />
+      <LineId Id="3520" Count="0" />
+      <LineId Id="3524" Count="0" />
+      <LineId Id="3523" Count="0" />
+      <LineId Id="1782" Count="4" />
+      <LineId Id="1813" Count="2" />
+      <LineId Id="3567" Count="19" />
+      <LineId Id="3607" Count="0" />
+      <LineId Id="3859" Count="1" />
+      <LineId Id="1817" Count="2" />
+      <LineId Id="3587" Count="19" />
+      <LineId Id="3608" Count="0" />
+      <LineId Id="3862" Count="0" />
+      <LineId Id="3861" Count="0" />
+      <LineId Id="1821" Count="7" />
+      <LineId Id="3629" Count="19" />
+      <LineId Id="3866" Count="0" />
+      <LineId Id="1830" Count="2" />
+      <LineId Id="3609" Count="19" />
+      <LineId Id="3867" Count="0" />
+      <LineId Id="1834" Count="7" />
+      <LineId Id="3649" Count="19" />
+      <LineId Id="3863" Count="0" />
+      <LineId Id="1843" Count="2" />
+      <LineId Id="3669" Count="19" />
+      <LineId Id="3865" Count="0" />
+      <LineId Id="1847" Count="7" />
+      <LineId Id="3709" Count="22" />
+      <LineId Id="1856" Count="2" />
+      <LineId Id="3689" Count="19" />
+      <LineId Id="3733" Count="1" />
+      <LineId Id="3732" Count="0" />
+      <LineId Id="1860" Count="7" />
+      <LineId Id="3735" Count="19" />
+      <LineId Id="3775" Count="0" />
+      <LineId Id="1869" Count="2" />
+      <LineId Id="3755" Count="19" />
+      <LineId Id="3776" Count="0" />
+      <LineId Id="1873" Count="7" />
+      <LineId Id="3797" Count="19" />
+      <LineId Id="4059" Count="0" />
+      <LineId Id="1882" Count="2" />
+      <LineId Id="3777" Count="19" />
+      <LineId Id="4060" Count="0" />
+      <LineId Id="1886" Count="7" />
+      <LineId Id="3817" Count="19" />
+      <LineId Id="3857" Count="0" />
+      <LineId Id="4061" Count="0" />
+      <LineId Id="4063" Count="0" />
+      <LineId Id="1895" Count="2" />
+      <LineId Id="3837" Count="19" />
+      <LineId Id="3858" Count="0" />
+      <LineId Id="4062" Count="0" />
+      <LineId Id="4064" Count="0" />
+      <LineId Id="1899" Count="7" />
+      <LineId Id="3888" Count="20" />
+      <LineId Id="1908" Count="2" />
+      <LineId Id="3868" Count="19" />
+      <LineId Id="3909" Count="0" />
+      <LineId Id="1912" Count="7" />
+      <LineId Id="3910" Count="19" />
+      <LineId Id="1920" Count="3" />
+      <LineId Id="3930" Count="20" />
+      <LineId Id="1925" Count="4" />
+      <LineId Id="1943" Count="2" />
+      <LineId Id="3991" Count="20" />
+      <LineId Id="4013" Count="1" />
+      <LineId Id="1947" Count="2" />
+      <LineId Id="3971" Count="19" />
+      <LineId Id="4012" Count="0" />
+      <LineId Id="4015" Count="1" />
+      <LineId Id="1951" Count="7" />
+      <LineId Id="4017" Count="19" />
+      <LineId Id="4057" Count="0" />
+      <LineId Id="1960" Count="2" />
+      <LineId Id="4037" Count="19" />
+      <LineId Id="4058" Count="0" />
+      <LineId Id="1964" Count="7" />
+      <LineId Id="4085" Count="20" />
+      <LineId Id="1973" Count="2" />
+      <LineId Id="4065" Count="19" />
+      <LineId Id="4106" Count="0" />
+      <LineId Id="1977" Count="7" />
+      <LineId Id="4107" Count="19" />
+      <LineId Id="4147" Count="2" />
+      <LineId Id="1986" Count="2" />
+      <LineId Id="4127" Count="19" />
+      <LineId Id="4151" Count="1" />
+      <LineId Id="4150" Count="0" />
+      <LineId Id="1990" Count="7" />
+      <LineId Id="4193" Count="22" />
+      <LineId Id="1999" Count="2" />
+      <LineId Id="4173" Count="19" />
+      <LineId Id="4217" Count="1" />
+      <LineId Id="4216" Count="0" />
+      <LineId Id="2003" Count="7" />
+      <LineId Id="4219" Count="20" />
+      <LineId Id="4261" Count="0" />
+      <LineId Id="2012" Count="2" />
+      <LineId Id="4240" Count="20" />
+      <LineId Id="4262" Count="0" />
+      <LineId Id="2016" Count="7" />
+      <LineId Id="4305" Count="20" />
+      <LineId Id="2024" Count="0" />
+      <LineId Id="4326" Count="1" />
+      <LineId Id="2025" Count="2" />
+      <LineId Id="4284" Count="20" />
+      <LineId Id="4329" Count="1" />
+      <LineId Id="4328" Count="0" />
+      <LineId Id="2029" Count="7" />
+      <LineId Id="4331" Count="21" />
+      <LineId Id="4375" Count="0" />
+      <LineId Id="2038" Count="2" />
+      <LineId Id="4353" Count="21" />
+      <LineId Id="4376" Count="0" />
+      <LineId Id="2042" Count="7" />
+      <LineId Id="4399" Count="21" />
+      <LineId Id="2050" Count="3" />
+      <LineId Id="4377" Count="21" />
+      <LineId Id="2054" Count="5" />
+      <LineId Id="2073" Count="2" />
+      <LineId Id="4421" Count="21" />
+      <LineId Id="4465" Count="0" />
+      <LineId Id="2076" Count="0" />
+      <LineId Id="4466" Count="0" />
+      <LineId Id="2077" Count="2" />
+      <LineId Id="4443" Count="21" />
+      <LineId Id="4468" Count="1" />
+      <LineId Id="5027" Count="0" />
+      <LineId Id="2081" Count="7" />
+      <LineId Id="4492" Count="22" />
+      <LineId Id="2090" Count="2" />
+      <LineId Id="4470" Count="21" />
+      <LineId Id="4515" Count="0" />
+      <LineId Id="2094" Count="7" />
+      <LineId Id="4516" Count="21" />
+      <LineId Id="2102" Count="3" />
+      <LineId Id="4538" Count="22" />
+      <LineId Id="2107" Count="7" />
+      <LineId Id="4605" Count="21" />
+      <LineId Id="2115" Count="0" />
+      <LineId Id="4627" Count="1" />
+      <LineId Id="2116" Count="2" />
+      <LineId Id="4583" Count="21" />
+      <LineId Id="4630" Count="1" />
+      <LineId Id="4629" Count="0" />
+      <LineId Id="2120" Count="7" />
+      <LineId Id="4632" Count="21" />
+      <LineId Id="2128" Count="3" />
+      <LineId Id="4654" Count="21" />
+      <LineId Id="2132" Count="5" />
+      <LineId Id="2268" Count="0" />
+      <LineId Id="8566" Count="367" />
+      <LineId Id="4966" Count="0" />
+      <LineId Id="5087" Count="0" />
+      <LineId Id="5086" Count="0" />
+      <LineId Id="9268" Count="17" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

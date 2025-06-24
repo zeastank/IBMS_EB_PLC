@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_BACnet_SCSII_2_GRAHA_ENERGY" Id="{885878a5-e877-4909-9c2b-6bce7e4816ae}" SpecialFunc="None">
+    <Declaration><![CDATA[(* Usage : 
+fbSCSII_2_GRAHA_ENERGY : FB_BACnet_SCSII_2_GRAHA_ENERGY :=(Client:=(nDeviceInstance := 356)); 
+*)
+FUNCTION_BLOCK  FB_BACnet_SCSII_2_GRAHA_ENERGY
+VAR_INPUT CONSTANT
+	Client : FB_BACnet_Client := (tReadCycleTime:=T#10S,nMaxParallelRequests:=20);
+	SCSII_2_GRAHA_ENERGY: FB_BACnetRM_Device := (Client:=Client);
+	WaterLevel_1: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=132);
+	WaterLevel_2: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=133);
+	WaterLevel_3: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=134);
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Client();
+SCSII_2_GRAHA_ENERGY();
+WaterLevel_1();
+WaterLevel_2();
+WaterLevel_3();
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_BACnet_SCSII_2_GRAHA_ENERGY">
+      <LineId Id="128" Count="4" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
