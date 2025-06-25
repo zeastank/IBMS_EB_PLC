@@ -11,10 +11,11 @@ END_VAR
 VAR
 	fbMsg : FB_TcMessage;
 	aUnits : ARRAY[1..24] OF AC_Unit_Status;
+	stUnit   : AC_Unit_Status;
 	aPrevState : ARRAY[1..24] OF BOOL := [FALSE(*24*)];
-	bInitEvent1: BOOL;
-	bSend: BOOL;
 	i: INT;
+	sMsgText: STRING;
+	triggerTest : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -64,37 +65,27 @@ aUnits[21].sUnitName := 'F10-G3 (2-04)';
 aUnits[22].bPresVal := FB_Bacnet.StartStopStatus_112.bPresVal;
 aUnits[22].sUnitName := 'F10-IT1 (4-00)';
 //aUnits[23].bPresVal := FB_Bacnet.StartStopStatus_241.bPresVal;
-aUnits[23].sUnitName := 'F10-IT2 (4-01)';
+//aUnits[23].sUnitName := 'F10-IT2 (4-01)';
 aUnits[24].bPresVal := FB_Bacnet.StartStopStatus_226.bPresVal;
 aUnits[24].sUnitName := 'F10-Lobi (3-02)';
 
-FOR i := 1 TO 20 DO
+FOR i := 1 TO 24 DO
+	stUnit := aUnits[i]; // extract the structure instance
     IF aUnits[i].bPresVal <> aPrevState[i] THEN
         IF aUnits[i].bPresVal THEN
-            sEventMessage := CONCAT(aUnits[i].sUnitName, ' is turned ON');
+            sMsgText := CONCAT(stUnit.sUnitName, ' is Turned ON');
         ELSE
-            sEventMessage := CONCAT(aUnits[i].sUnitName, ' is turned OFF');
+            sMsgText := CONCAT(stUnit.sUnitName, ' is Turned OFF');
         END_IF
-
-        // Log the event to TwinCAT EventLogger
-        ADSLOGEVENT(ADR(sEventMessage), SIZEOF(sEventMessage), TCEVENTCLASS_ALARM, i, 0);
-
+		fbMsg.CreateEx(TC_EVENTS.UnitF10Status.EventF10, 0);
+		fbMsg.ipArguments.AddString(sMsgText);
+		fbMsg.ipArguments.AddDInt(10);
+		fbMsg.Send(0);
+		
         // Update previous state
         aPrevState[i] := aUnits[i].bPresVal;
     END_IF
-END_FOR
-
-IF bInitEvent1 THEN
-	bInitEvent1 := FALSE;
-	fbMsg.CreateEx(TC_EVENTS.UnitF10Status.EventF10, 0);
-	fbMsg.ipArguments.AddString(aUnits[1].sUnitName + ' is Turned ON');
-	fbMsg.Send(0);
-END_IF
-
-IF bSend THEN
-	bSend := FALSE;
-	fbMsg.Send(0);
-END_IF]]></ST>
+END_FOR]]></ST>
     </Implementation>
     <LineIds Name="FB_EventF10">
       <LineId Id="9" Count="0" />
@@ -109,18 +100,14 @@ END_IF]]></ST>
       <LineId Id="54" Count="1" />
       <LineId Id="21" Count="30" />
       <LineId Id="94" Count="0" />
-      <LineId Id="100" Count="14" />
-      <LineId Id="99" Count="0" />
-      <LineId Id="67" Count="1" />
-      <LineId Id="71" Count="0" />
-      <LineId Id="78" Count="0" />
-      <LineId Id="115" Count="0" />
-      <LineId Id="69" Count="0" />
-      <LineId Id="73" Count="0" />
-      <LineId Id="72" Count="0" />
-      <LineId Id="74" Count="0" />
-      <LineId Id="77" Count="0" />
-      <LineId Id="75" Count="0" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="101" Count="5" />
+      <LineId Id="147" Count="1" />
+      <LineId Id="181" Count="0" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="111" Count="3" />
     </LineIds>
   </POU>
 </TcPlcObject>

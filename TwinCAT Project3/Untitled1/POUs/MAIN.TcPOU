@@ -30,13 +30,15 @@ VAR
 	FB_BACnet_DAIKIN_MasterStation_III_No_9: FB_BACnet_DAIKIN_MasterStation_III_No_9:=(Client:=(nDeviceInstance := 9));
 	FB_BACnet_DAIKIN_MasterStation_III_No_10: FB_BACnet_DAIKIN_MasterStation_III_No_10:=(Client:=(nDeviceInstance := 10));
 	
-	
-	
+	//TWINCAT RESTART FUNCTION
 	tc_restart : TC_Restart;
 	//fbStartStopAll : FB_CommandStartStopAll;
 	
+	//EVENT LOGGER
 	fbEventF10 : FB_EventF10;
+	fbEventFG : FB_EventFG;
 	
+	//SCHEDULER
 	fbtime : FB_CurrentTime;
 	fbSchedFG : FB_Scheduler_FG;
 	fbSchedB2 : FB_Scheduler_FB2;
@@ -85,6 +87,7 @@ VAR
 	fbSchedT2 : FB_Scheduler_FPH2;
 	fbSchedT1 : FB_Scheduler_FPH3;
 
+	//FLOOR STATUS COLOR
 	nFloorStatusB2	: INT;
 	nFloorStatusB1	: INT;
 	nFloorStatusGF	: INT;
@@ -156,6 +159,7 @@ FB_BACnet_DAIKIN_MasterStation_III_No_9();
 FB_BACnet_DAIKIN_MasterStation_III_No_10();
 
 //EventLogger
+fbEventFG(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
 fbEventF10(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_3, FB_Bacnet_b := FB_BACnet_DAIKIN_MasterStation_III_No_2);
 //Scheduler init
 Result := parseHolidayDays(InputString := InputHolidays);
@@ -2657,6 +2661,7 @@ END_IF
       <LineId Id="16" Count="8" />
       <LineId Id="11032" Count="0" />
       <LineId Id="10888" Count="0" />
+      <LineId Id="11361" Count="0" />
       <LineId Id="10681" Count="0" />
       <LineId Id="10680" Count="0" />
       <LineId Id="10904" Count="0" />

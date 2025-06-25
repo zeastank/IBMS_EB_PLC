@@ -64,7 +64,7 @@
     <Compile Include="POUs\FB_EventLogger\FB_EventF10.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\FB_EventLogger\TEST.TcPOU">
+    <Compile Include="POUs\FB_EventLogger\FB_EventFG.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\FB_Scheduler\FB_CurrentTime.TcPOU">
