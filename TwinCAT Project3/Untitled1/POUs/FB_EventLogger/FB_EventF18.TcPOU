@@ -1,67 +1,74 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
-  <POU Name="FB_EventFG" Id="{899766d8-e0e3-4d56-8478-130a4d18054c}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_EventFG
+  <POU Name="FB_EventF18" Id="{9ab1802d-e852-406c-8e28-151679af8ad8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_EventF18
 VAR_INPUT
-	FB_Bacnet : FB_BACnet_DAIKIN_MasterStation_III_No_1;
+	FB_Bacnet : FB_BACnet_DAIKIN_MasterStation_III_No_5;
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
 	fbMsg : FB_TcMessage;
-	aUnits : ARRAY[1..20] OF AC_Unit_Status;
+	aUnits : ARRAY[1..23] OF AC_Unit_Status;
 	stUnit   : AC_Unit_Status;
 	i: INT;
 	sMsgText: STRING;
 	triggerTest : BOOL;
 END_VAR
 VAR RETAIN
-	aPrevState : ARRAY[1..20] OF BOOL := [FALSE(*20*)];
-END_VAR]]></Declaration>
+	aPrevState : ARRAY[1..23] OF BOOL := [FALSE(*23*)];
+END_VAR
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[
 aUnits[1].bPresVal := FB_Bacnet.StartStopStatus_000.bPresVal;
-aUnits[1].sUnitName := 'FG-1 (1-00)';
-aUnits[2].bPresVal := FB_Bacnet.StartStopStatus_001.bPresVal;
-aUnits[2].sUnitName := 'FG-2 (1-01)';
-aUnits[3].bPresVal := FB_Bacnet.StartStopStatus_002.bPresVal;
-aUnits[3].sUnitName := 'FG-3 (1-02)';
-aUnits[4].bPresVal := FB_Bacnet.StartStopStatus_003.bPresVal;
-aUnits[4].sUnitName := 'FG-4 (1-03)';
-aUnits[5].bPresVal := FB_Bacnet.StartStopStatus_004.bPresVal;
-aUnits[5].sUnitName := 'FG-5 (1-04)';
-aUnits[6].bPresVal := FB_Bacnet.StartStopStatus_005.bPresVal;
-aUnits[6].sUnitName := 'FG-6 (1-05)';
+aUnits[1].sUnitName := 'F18-A1 (1-00)';
+//aUnits[2].bPresVal := FB_Bacnet.StartStopStatus_001.bPresVal;
+//aUnits[2].sUnitName := 'F18-A2 (1-01)';
+//aUnits[3].bPresVal := FB_Bacnet.StartStopStatus_002.bPresVal;
+//aUnits[3].sUnitName := 'F18-A3 (1-02)';
+//aUnits[4].bPresVal := FB_Bacnet.StartStopStatus_003.bPresVal;
+//aUnits[4].sUnitName := 'F18-A4 (1-03)';
+//aUnits[5].bPresVal := FB_Bacnet.StartStopStatus_004.bPresVal;
+//aUnits[5].sUnitName := 'F18-B1 (1-04)';
+//aUnits[6].bPresVal := FB_Bacnet.StartStopStatus_005.bPresVal;
+//aUnits[6].sUnitName := 'F18-B2 (1-05)';
 aUnits[7].bPresVal := FB_Bacnet.StartStopStatus_006.bPresVal;
-aUnits[7].sUnitName := 'FG-7 (1-06)';
+aUnits[7].sUnitName := 'F18-C1 (1-06)';
 aUnits[8].bPresVal := FB_Bacnet.StartStopStatus_007.bPresVal;
-aUnits[8].sUnitName := 'FG-8 (1-07)';
+aUnits[8].sUnitName := 'F18-C2 (1-07)';
 aUnits[9].bPresVal := FB_Bacnet.StartStopStatus_008.bPresVal;
-aUnits[9].sUnitName := 'FG-9 (1-08)';
+aUnits[9].sUnitName := 'F18-D1 (1-08)';
 aUnits[10].bPresVal := FB_Bacnet.StartStopStatus_009.bPresVal;
-aUnits[10].sUnitName := 'FG-10 (1-09)';
+aUnits[10].sUnitName := 'F18-D2 (1-09)';
 aUnits[11].bPresVal := FB_Bacnet.StartStopStatus_010.bPresVal;
-aUnits[11].sUnitName := 'FG-11 (1-10)';
+aUnits[11].sUnitName := 'F18-D3 (1-10)';
 aUnits[12].bPresVal := FB_Bacnet.StartStopStatus_011.bPresVal;
-aUnits[12].sUnitName := 'FG-12 (1-11)';
+aUnits[12].sUnitName := 'F18-D4 (1-11)';
 aUnits[13].bPresVal := FB_Bacnet.StartStopStatus_012.bPresVal;
-aUnits[13].sUnitName := 'FG-13 (1-12)';
+aUnits[13].sUnitName := 'F18-E1 (1-12)';
 aUnits[14].bPresVal := FB_Bacnet.StartStopStatus_013.bPresVal;
-aUnits[14].sUnitName := 'FG-14 (1-13)';
+aUnits[14].sUnitName := 'F18-E2 (1-13)';
 aUnits[15].bPresVal := FB_Bacnet.StartStopStatus_014.bPresVal;
-aUnits[15].sUnitName := 'FG-15 (1-14)';
-aUnits[16].bPresVal := FB_Bacnet.StartStopStatus_015.bPresVal;
-aUnits[16].sUnitName := 'FG-16 (1-15)';
-aUnits[17].bPresVal := FB_Bacnet.StartStopStatus_016.bPresVal;
-aUnits[17].sUnitName := 'FG-17 (2-00)';
+aUnits[15].sUnitName := 'F18-E3 (1-14)';
+//aUnits[16].bPresVal := FB_Bacnet.StartStopStatus_015.bPresVal;
+//aUnits[16].sUnitName := 'F18-F1 (1-15)';
+//aUnits[17].bPresVal := FB_Bacnet.StartStopStatus_016.bPresVal;
+//aUnits[17].sUnitName := 'F18-F2 (2-00)';
 aUnits[18].bPresVal := FB_Bacnet.StartStopStatus_017.bPresVal;
-aUnits[18].sUnitName := 'FG-18 (2-01)';
+aUnits[18].sUnitName := 'F18-G1 (2-01)';
 aUnits[19].bPresVal := FB_Bacnet.StartStopStatus_018.bPresVal;
-aUnits[19].sUnitName := 'FG-Lobi-1 (2-02)';
-aUnits[20].bPresVal := FB_Bacnet.StartStopStatus_019.bPresVal;
-aUnits[20].sUnitName := 'FG-Lobi-2 (2-03)';
+aUnits[19].sUnitName := 'F18-G2 (2-02)';
+//aUnits[20].bPresVal := FB_Bacnet.StartStopStatus_019.bPresVal;
+//aUnits[20].sUnitName := 'F18-H (2-03)';
+aUnits[21].bPresVal := FB_Bacnet.StartStopStatus_050.bPresVal;
+aUnits[21].sUnitName := 'F18-IT-1 (4-02)';
+aUnits[22].bPresVal := FB_Bacnet.StartStopStatus_051.bPresVal;
+aUnits[22].sUnitName := 'F18-IT-2 (4-03)';
+aUnits[23].bPresVal := FB_Bacnet.StartStopStatus_035.bPresVal;
+aUnits[23].sUnitName := 'F18-Lobi (3-03)';
 
-FOR i := 1 TO 20 DO
+FOR i := 1 TO 23 DO
 	stUnit := aUnits[i]; // extract the structure instance
     IF aUnits[i].bPresVal <> aPrevState[i] THEN
         IF aUnits[i].bPresVal THEN
@@ -78,7 +85,7 @@ FOR i := 1 TO 20 DO
     END_IF
 END_FOR]]></ST>
     </Implementation>
-    <LineIds Name="FB_EventFG">
+    <LineIds Name="FB_EventF18">
       <LineId Id="9" Count="0" />
       <LineId Id="16" Count="0" />
       <LineId Id="20" Count="0" />
@@ -94,6 +101,9 @@ END_FOR]]></ST>
       <LineId Id="100" Count="0" />
       <LineId Id="155" Count="0" />
       <LineId Id="101" Count="5" />
+      <LineId Id="147" Count="2" />
+      <LineId Id="64" Count="1" />
+      <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

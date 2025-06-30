@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_EventFB2" Id="{c4c8efe4-0b37-4615-acef-c2cb50022c98}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_EventFB2
+VAR_INPUT
+	FB_Bacnet : FB_BACnet_DAIKIN_MasterStation_III_No_1;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbMsg : FB_TcMessage;
+	aUnits : ARRAY[1..13] OF AC_Unit_Status;
+	stUnit   : AC_Unit_Status;
+	i: INT;
+	sMsgText: STRING;
+	triggerTest : BOOL;
+END_VAR
+VAR RETAIN
+	aPrevState : ARRAY[1..13] OF BOOL := [FALSE(*13*)];
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[aUnits[1].bPresVal := FB_Bacnet.StartStopStatus_037.bPresVal;
+aUnits[1].sUnitName := 'FB2-1 (3-05)';
+aUnits[2].bPresVal := FB_Bacnet.StartStopStatus_038.bPresVal;
+aUnits[2].sUnitName := 'FB2-2 (3-06)';
+aUnits[3].bPresVal := FB_Bacnet.StartStopStatus_039.bPresVal;
+aUnits[3].sUnitName := 'FB2-3 (3-07)';
+//aUnits[4].bPresVal := FB_Bacnet.StartStopStatus_040.bPresVal;
+//aUnits[4].sUnitName := 'FB2-4 (3-08)';
+aUnits[5].bPresVal := FB_Bacnet.StartStopStatus_041.bPresVal;
+aUnits[5].sUnitName := 'FB2-5 (3-09)';
+aUnits[6].bPresVal := FB_Bacnet.StartStopStatus_042.bPresVal;
+aUnits[6].sUnitName := 'FB2-6 (3-10)';
+aUnits[7].bPresVal := FB_Bacnet.StartStopStatus_043.bPresVal;
+aUnits[7].sUnitName := 'FB2-7 (3-11)';
+//aUnits[8].bPresVal := FB_Bacnet.StartStopStatus_044.bPresVal;
+//aUnits[8].sUnitName := 'FB2-8 (3-12)';
+aUnits[9].bPresVal := FB_Bacnet.StartStopStatus_045.bPresVal;
+aUnits[9].sUnitName := 'FB2-9 (3-13)';
+aUnits[10].bPresVal := FB_Bacnet.StartStopStatus_046.bPresVal;
+aUnits[10].sUnitName := 'FB2-10 (3-14)';
+//aUnits[11].bPresVal := FB_Bacnet.StartStopStatus_047.bPresVal;
+//aUnits[11].sUnitName := 'FB2-11 (3-15)';
+//aUnits[12].bPresVal := FB_Bacnet.StartStopStatus_048.bPresVal;
+//aUnits[12].sUnitName := 'FB2-IT-1 (4-00)';
+aUnits[13].bPresVal := FB_Bacnet.StartStopStatus_049.bPresVal;
+aUnits[13].sUnitName := 'FB2-IT-2 (4-01)';
+
+FOR i := 1 TO 13 DO
+	stUnit := aUnits[i]; // extract the structure instance
+    IF aUnits[i].bPresVal <> aPrevState[i] THEN
+        IF aUnits[i].bPresVal THEN
+            sMsgText := CONCAT(stUnit.sUnitName, ' is Turned ON');
+        ELSE
+            sMsgText := CONCAT(stUnit.sUnitName, ' is Turned OFF');
+        END_IF
+		fbMsg.CreateEx(TC_EVENTS.UnitPowerStatus.EventPowerStatus, 0);
+		fbMsg.ipArguments.AddString(sMsgText);
+		fbMsg.Send(0);
+		
+        // Update previous state
+        aPrevState[i] := aUnits[i].bPresVal;
+    END_IF
+END_FOR]]></ST>
+    </Implementation>
+    <LineIds Name="FB_EventFB2">
+      <LineId Id="189" Count="41" />
+      <LineId Id="106" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

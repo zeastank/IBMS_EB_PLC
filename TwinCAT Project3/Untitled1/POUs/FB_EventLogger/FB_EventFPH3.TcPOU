@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_EventFPH3" Id="{5a6fca06-ff15-4f63-bcc0-ad5aa0b08349}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_EventFPH3
+VAR_INPUT
+	FB_Bacnet : FB_BACnet_DAIKIN_MasterStation_III_No_10;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbMsg : FB_TcMessage;
+	aUnits : ARRAY[1..9] OF AC_Unit_Status;
+	stUnit   : AC_Unit_Status;
+	i: INT;
+	sMsgText: STRING;
+	triggerTest : BOOL;
+END_VAR
+VAR RETAIN
+	aPrevState : ARRAY[1..9] OF BOOL := [FALSE(*9*)];
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+aUnits[1].bPresVal := FB_Bacnet.StartStopStatus_165.bPresVal;
+aUnits[1].sUnitName := 'FPH3-1 (3-05)';
+aUnits[2].bPresVal := FB_Bacnet.StartStopStatus_166.bPresVal;
+aUnits[2].sUnitName := 'FPH3-2 (3-06)';
+aUnits[3].bPresVal := FB_Bacnet.StartStopStatus_167.bPresVal;
+aUnits[3].sUnitName := 'FPH3-3 (3-07)';
+aUnits[4].bPresVal := FB_Bacnet.StartStopStatus_168.bPresVal;
+aUnits[4].sUnitName := 'FPH3-4 (3-08)';
+aUnits[5].bPresVal := FB_Bacnet.StartStopStatus_169.bPresVal;
+aUnits[5].sUnitName := 'FPH3-5 (3-09)';
+aUnits[6].bPresVal := FB_Bacnet.StartStopStatus_170.bPresVal;
+aUnits[6].sUnitName := 'FPH3-6 (3-10)';
+aUnits[7].bPresVal := FB_Bacnet.StartStopStatus_171.bPresVal;
+aUnits[7].sUnitName := 'FPH3-7 (3-11)';
+aUnits[8].bPresVal := FB_Bacnet.StartStopStatus_172.bPresVal;
+aUnits[8].sUnitName := 'FPH3-8 (3-12)';
+aUnits[9].bPresVal := FB_Bacnet.StartStopStatus_173.bPresVal;
+aUnits[9].sUnitName := 'FPH3-9 (3-13)';
+
+FOR i := 1 TO 9 DO
+	stUnit := aUnits[i]; // extract the structure instance
+    IF aUnits[i].bPresVal <> aPrevState[i] THEN
+        IF aUnits[i].bPresVal THEN
+            sMsgText := CONCAT(stUnit.sUnitName, ' is Turned ON');
+        ELSE
+            sMsgText := CONCAT(stUnit.sUnitName, ' is Turned OFF');
+        END_IF
+		fbMsg.CreateEx(TC_EVENTS.UnitPowerStatus.EventPowerStatus, 0);
+		fbMsg.ipArguments.AddString(sMsgText);
+		fbMsg.Send(0);
+		
+        // Update previous state
+        aPrevState[i] := aUnits[i].bPresVal;
+    END_IF
+END_FOR]]></ST>
+    </Implementation>
+    <LineIds Name="FB_EventFPH3">
+      <LineId Id="189" Count="29" />
+      <LineId Id="33" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

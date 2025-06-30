@@ -8,20 +8,20 @@ FUNCTION_BLOCK  FB_BACnet_SCSII_2_GRAHA_ENERGY
 VAR_INPUT CONSTANT
 	Client : FB_BACnet_Client := (tReadCycleTime:=T#10S,nMaxParallelRequests:=20);
 	SCSII_2_GRAHA_ENERGY: FB_BACnetRM_Device := (Client:=Client);
-	WaterLevel_1: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=132);
-	WaterLevel_2: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=133);
-	WaterLevel_3: FB_BACnetRM_AI := (Client:=Client,nObjectInstance:=134);
+	Intake_Fan_4_1_S_S: FB_BACnetRM_BO := (Client:=Client,nObjectInstance:=127);
+	Intake_Fan_4_1_ST: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=254);
+	Intake_Fan_4_1_TR: FB_BACnetRM_BI := (Client:=Client,nObjectInstance:=255);
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[Client();
 SCSII_2_GRAHA_ENERGY();
-WaterLevel_1();
-WaterLevel_2();
-WaterLevel_3();
+Intake_Fan_4_1_S_S();
+Intake_Fan_4_1_ST();
+Intake_Fan_4_1_TR();
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_BACnet_SCSII_2_GRAHA_ENERGY">
-      <LineId Id="128" Count="4" />
+      <LineId Id="153" Count="4" />
       <LineId Id="8" Count="0" />
     </LineIds>
   </POU>

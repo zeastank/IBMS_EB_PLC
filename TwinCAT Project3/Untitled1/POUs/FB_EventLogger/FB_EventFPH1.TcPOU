@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_EventFPH1" Id="{8e108237-3f60-4f60-9fda-c27cecd520dd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_EventFPH1
+VAR_INPUT
+	FB_Bacnet : FB_BACnet_DAIKIN_MasterStation_III_No_10;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	fbMsg : FB_TcMessage;
+	aUnits : ARRAY[1..6] OF AC_Unit_Status;
+	stUnit   : AC_Unit_Status;
+	i: INT;
+	sMsgText: STRING;
+	triggerTest : BOOL;
+END_VAR
+VAR RETAIN
+	aPrevState : ARRAY[1..6] OF BOOL := [FALSE(*6*)];
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+aUnits[1].bPresVal := FB_Bacnet.StartStopStatus_150.bPresVal;
+aUnits[1].sUnitName := 'FPH1-1 (2-06)';
+aUnits[2].bPresVal := FB_Bacnet.StartStopStatus_151.bPresVal;
+aUnits[2].sUnitName := 'FPH1-2 (2-07)';
+aUnits[3].bPresVal := FB_Bacnet.StartStopStatus_152.bPresVal;
+aUnits[3].sUnitName := 'FPH1-3 (2-08)';
+aUnits[4].bPresVal := FB_Bacnet.StartStopStatus_153.bPresVal;
+aUnits[4].sUnitName := 'FPH1-4 (2-09)';
+aUnits[5].bPresVal := FB_Bacnet.StartStopStatus_154.bPresVal;
+aUnits[5].sUnitName := 'FPH1-5 (2-10)';
+aUnits[6].bPresVal := FB_Bacnet.StartStopStatus_155.bPresVal;
+aUnits[6].sUnitName := 'FPH1-6 (2-11)';
+
+FOR i := 1 TO 6 DO
+	stUnit := aUnits[i]; // extract the structure instance
+    IF aUnits[i].bPresVal <> aPrevState[i] THEN
+        IF aUnits[i].bPresVal THEN
+            sMsgText := CONCAT(stUnit.sUnitName, ' is Turned ON');
+        ELSE
+            sMsgText := CONCAT(stUnit.sUnitName, ' is Turned OFF');
+        END_IF
+		fbMsg.CreateEx(TC_EVENTS.UnitPowerStatus.EventPowerStatus, 0);
+		fbMsg.ipArguments.AddString(sMsgText);
+		fbMsg.Send(0);
+		
+        // Update previous state
+        aPrevState[i] := aUnits[i].bPresVal;
+    END_IF
+END_FOR]]></ST>
+    </Implementation>
+    <LineIds Name="FB_EventFPH1">
+      <LineId Id="189" Count="57" />
+      <LineId Id="148" Count="0" />
+      <LineId Id="62" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
