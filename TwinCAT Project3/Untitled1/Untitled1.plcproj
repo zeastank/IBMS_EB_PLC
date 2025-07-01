@@ -58,6 +58,9 @@
     <Compile Include="POUs\BACnet_FBCode\FB_BACnet_DAIKIN_MasterStation_III_No_9.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\BACnet_FBCode\FB_BACnet_SCSII_1_GRAHA_ENERGY.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\BACnet_FBCode\FB_BACnet_SCSII_2_GRAHA_ENERGY.TcPOU">
       <SubType>Code</SubType>
     </Compile>

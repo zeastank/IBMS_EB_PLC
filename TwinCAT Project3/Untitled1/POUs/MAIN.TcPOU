@@ -5,6 +5,7 @@
 VAR
 	//Bacnet adapter
 	BACnet_Adapter2 : FB_BACnet_Adapter;
+	fbSCSII_1_GRAHA_ENERGY : FB_BACnet_SCSII_1_GRAHA_ENERGY :=(Client:=(Adapter := BACnet_Adapter2, nDeviceInstance := 355));
 	fbSCSII_2_GRAHA_ENERGY : FB_BACnet_SCSII_2_GRAHA_ENERGY :=(Client:=(Adapter := BACnet_Adapter2, nDeviceInstance := 356)); 
 					 
 	//syncs device 4 ethercat
@@ -189,6 +190,7 @@ tc_restart(NETID:= '10.7.2.14.1.1',RESTART := bRestart,TMOUT := rtTimeout);
 BACnet_Adapter2();
 
 //Bacnet Init
+fbSCSII_1_GRAHA_ENERGY();
 fbSCSII_2_GRAHA_ENERGY();
 FB_BACnet_DAIKIN_MasterStation_III_No_1();
 FB_BACnet_DAIKIN_MasterStation_III_No_2();
@@ -2743,6 +2745,7 @@ END_IF
       <LineId Id="11223" Count="0" />
       <LineId Id="10678" Count="0" />
       <LineId Id="9876" Count="0" />
+      <LineId Id="11545" Count="0" />
       <LineId Id="11228" Count="0" />
       <LineId Id="11227" Count="0" />
       <LineId Id="2" Count="0" />
