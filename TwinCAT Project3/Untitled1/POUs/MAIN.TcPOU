@@ -35,6 +35,12 @@ VAR
 	tc_restart : TC_Restart;
 	//fbStartStopAll : FB_CommandStartStopAll;
 	
+	//EVENT LOGGER CLEAR REQUEST
+	fbClearLog : FB_ClearEventLog;
+	bClearRequest   : BOOL := FALSE;          // Trigger from HMI button
+    bClearBusy      : BOOL;                   // Optional: mirror FB output
+    bClearDone      : BOOL;                   // Optional: mirror FB output
+	
 	//EVENT LOGGER
 	fbEventFB2 : FB_EventFB2;
 	fbEventFB1 : FB_EventFB1;
@@ -202,6 +208,11 @@ FB_BACnet_DAIKIN_MasterStation_III_No_7();
 FB_BACnet_DAIKIN_MasterStation_III_No_8();
 FB_BACnet_DAIKIN_MasterStation_III_No_9();
 FB_BACnet_DAIKIN_MasterStation_III_No_10();
+
+//EVENT LOGGER CLEAR
+fbClearLog(bTrigger := bClearRequest);
+bClearBusy := fbClearLog.bBusy;
+bClearDone := fbClearLog.bDone;
 
 //EventLogger
 fbEventFB2(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
@@ -2749,7 +2760,9 @@ END_IF
       <LineId Id="11228" Count="0" />
       <LineId Id="11227" Count="0" />
       <LineId Id="2" Count="0" />
-      <LineId Id="16" Count="8" />
+      <LineId Id="16" Count="7" />
+      <LineId Id="11737" Count="4" />
+      <LineId Id="24" Count="0" />
       <LineId Id="11032" Count="0" />
       <LineId Id="10888" Count="0" />
       <LineId Id="11361" Count="0" />

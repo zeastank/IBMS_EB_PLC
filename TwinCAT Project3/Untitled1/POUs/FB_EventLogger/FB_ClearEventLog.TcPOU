@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_ClearEventLog" Id="{01c317a4-3bdc-4058-a8dc-ac1b50e9e4f6}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ClearEventLog
+VAR_INPUT
+    bTrigger    : BOOL;
+END_VAR
+VAR_OUTPUT
+    bBusy       : BOOL;
+    bDone       : BOOL;
+END_VAR
+VAR
+    fbLogger        : FB_TcEventLogger;
+    bTriggerLast    : BOOL;
+END_VAR
+
+
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Rising edge detection
+IF bTrigger AND NOT bTriggerLast AND NOT bBusy THEN
+    bBusy := TRUE;
+    bDone := FALSE;
+END_IF
+bTriggerLast := bTrigger;
+
+// Async clear logic
+IF bBusy THEN
+    IF NOT fbLogger.ClearLoggedEvents(0) THEN
+        bBusy := FALSE;
+        bDone := TRUE;
+    END_IF
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_ClearEventLog">
+      <LineId Id="91" Count="13" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

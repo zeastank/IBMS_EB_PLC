@@ -64,6 +64,9 @@
     <Compile Include="POUs\BACnet_FBCode\FB_BACnet_SCSII_2_GRAHA_ENERGY.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\FB_EventLogger\FB_ClearEventLog.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\FB_EventLogger\FB_EventF10.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -364,6 +367,7 @@
     <Folder Include="POUs\FB_TurnAll" />
     <Folder Include="POUs\FB_EventLogger" />
     <Folder Include="POUs\Function" />
+    <Folder Include="POUs\FB_Other" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>
