@@ -37,6 +37,7 @@ VAR
 	//EVENT LOGGER
 	fbEventFB2 : FB_EventFB2;
 	fbEventFB1 : FB_EventFB1;
+	fbEventFG : FB_EventFG;
 	fbEventFMZ : FB_EventFMZ;
 	fbEventFMZ2 : FB_EventFMZ2;
 	fbEventF2 : FB_EventF2;
@@ -59,7 +60,27 @@ VAR
 	fbEventF22 : FB_EventF22;
 	fbEventF23 : FB_EventF23;
 	fbEventF25 : FB_EventF25;
-	fbEventFG : FB_EventFG;
+	fbEventF26 : FB_EventF26;
+	fbEventF27 : FB_EventF27;
+	fbEventF28 : FB_EventF28;
+	fbEventF29 : FB_EventF29;
+	fbEventF30 : FB_EventF30;
+	fbEventF31 : FB_EventF31;
+	fbEventF32 : FB_EventF32;
+	fbEventF33 : FB_EventF33;
+	fbEventF35 : FB_EventF35;
+	fbEventF36 : FB_EventF36;
+	fbEventF37 : FB_EventF37;
+	fbEventF38 : FB_EventF38;
+	fbEventF39 : FB_EventF39;
+	fbEventF50 : FB_EventF50;
+	fbEventF51 : FB_EventF51;
+	fbEventF52 : FB_EventF52;
+	fbEventF53 : FB_EventF53;
+	fbEventF55 : FB_EventF55;
+	fbEventT3 : FB_EventFPH1;
+	fbEventT2 : FB_EventFPH2;
+	fbEventT1 : FB_EventFPH3;
 	
 	//SCHEDULER
 	fbtime : FB_CurrentTime;
@@ -181,9 +202,9 @@ FB_BACnet_DAIKIN_MasterStation_III_No_9();
 FB_BACnet_DAIKIN_MasterStation_III_No_10();
 
 //EventLogger
-fbEventFG(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
 fbEventFB2(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
 fbEventFB1(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
+fbEventFG(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
 fbEventFMZ(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
 fbEventFMZ2(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
 fbEventF2(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_1);
@@ -206,6 +227,27 @@ fbEventF21(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_5, FB_Bacnet_b := 
 fbEventF22(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_6);
 fbEventF23(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_6);
 fbEventF25(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_6);
+fbEventF26(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_6);
+fbEventF27(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_7);
+fbEventF28(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_7);
+fbEventF29(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_7);
+fbEventF30(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_7);
+fbEventF31(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_8);
+fbEventF32(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_8);
+fbEventF33(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_8);
+fbEventF35(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_8);
+fbEventF36(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_9);
+fbEventF37(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_9);
+fbEventF38(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_9);
+fbEventF39(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_9);
+fbEventF50(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbEventF51(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbEventF52(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbEventF53(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbEventF55(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbEventT3(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbEventT2(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
+fbEventT1(FB_Bacnet := FB_BACnet_DAIKIN_MasterStation_III_No_10);
 
 //Scheduler init
 Result := parseHolidayDays(InputString := InputHolidays);
@@ -2970,6 +3012,8 @@ END_IF
       <LineId Id="9268" Count="17" />
       <LineId Id="2511" Count="21" />
       <LineId Id="11362" Count="0" />
+      <LineId Id="2534" Count="19" />
+      <LineId Id="11363" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

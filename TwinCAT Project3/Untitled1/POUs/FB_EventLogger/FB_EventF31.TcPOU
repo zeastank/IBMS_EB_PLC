@@ -63,8 +63,8 @@ aUnits[20].bPresVal := FB_Bacnet.StartStopStatus_019.bPresVal;
 aUnits[20].sUnitName := 'F31-G2 (2-03)';
 aUnits[21].bPresVal := FB_Bacnet.StartStopStatus_020.bPresVal;
 aUnits[21].sUnitName := 'F31-G3 (2-04)';
-aUnits[22].bPresVal := FB_Bacnet.StartStopStatus_048.bPresVal;
-aUnits[22].sUnitName := 'F31-IT-1 (4-00)';
+//aUnits[22].bPresVal := FB_Bacnet.StartStopStatus_048.bPresVal;
+//aUnits[22].sUnitName := 'F31-IT-1 (4-00)';
 aUnits[23].bPresVal := FB_Bacnet.StartStopStatus_241.bPresVal;
 aUnits[23].sUnitName := 'F31-IT-2 (4-01)';
 aUnits[24].bPresVal := FB_Bacnet.StartStopStatus_224.bPresVal;
@@ -90,7 +90,8 @@ END_FOR]]></ST>
     <LineIds Name="FB_EventF31">
       <LineId Id="189" Count="57" />
       <LineId Id="148" Count="0" />
-      <LineId Id="62" Count="2" />
+      <LineId Id="62" Count="5" />
+      <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

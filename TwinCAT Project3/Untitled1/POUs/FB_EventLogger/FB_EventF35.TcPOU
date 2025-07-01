@@ -65,8 +65,8 @@ aUnits[21].bPresVal := FB_Bacnet.StartStopStatus_212.bPresVal;
 aUnits[21].sUnitName := 'F35-F5 (2-04)';
 aUnits[22].bPresVal := FB_Bacnet.StartStopStatus_213.bPresVal;
 aUnits[22].sUnitName := 'F35-F6 (2-05)';
-aUnits[23].bPresVal := FB_Bacnet.StartStopStatus_242.bPresVal;
-aUnits[23].sUnitName := 'F35-IT-1 (4-02)';
+//aUnits[23].bPresVal := FB_Bacnet.StartStopStatus_242.bPresVal;
+//aUnits[23].sUnitName := 'F35-IT-1 (4-02)';
 aUnits[24].bPresVal := FB_Bacnet.StartStopStatus_243.bPresVal;
 aUnits[24].sUnitName := 'F35-IT-2 (4-03)';
 aUnits[25].bPresVal := FB_Bacnet.StartStopStatus_227.bPresVal;
@@ -92,7 +92,8 @@ END_FOR]]></ST>
     <LineIds Name="FB_EventF35">
       <LineId Id="189" Count="57" />
       <LineId Id="148" Count="0" />
-      <LineId Id="62" Count="4" />
+      <LineId Id="62" Count="7" />
+      <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
