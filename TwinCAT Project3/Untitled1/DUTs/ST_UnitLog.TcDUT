@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <DUT Name="ST_UnitLog" Id="{61cb841d-f806-4b82-9cbb-6163bfdbf604}">
+    <Declaration><![CDATA[TYPE ST_UnitLog :
+STRUCT
+    sTimestamp : STRING[25];
+    sMessage   : STRING[100];
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

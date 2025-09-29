@@ -15,13 +15,23 @@ VAR
 	i: INT;
 	sMsgText: STRING;
 	triggerTest : BOOL;
+	
+	fbLocalTime : Tc2_Utilities.FB_LocalSystemTime;
+    ts         : TIMESTRUCT;
+    dtNow      : DT;
 END_VAR
 VAR RETAIN
 	aPrevState : ARRAY[1..24] OF BOOL := [FALSE(*24*)];
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[// enable and let it sync periodically; call each cycle
+fbLocalTime(bEnable := TRUE, dwCycle := 1000); // sync interval 1000 ms
+fbLocalTime(); // execute FB
+ts := fbLocalTime.systemTime;
+dtNow := SYSTEMTIME_TO_DT(ts);
+GVL.g_dtNow := dtNow; // optional: expose globally for HMI
+
 aUnits[1].bPresVal := FB_Bacnet.StartStopStatus_064.bPresVal;
 aUnits[1].sUnitName := 'F10-A1 (1-00)';
 aUnits[2].bPresVal := FB_Bacnet.StartStopStatus_065.bPresVal;
@@ -79,17 +89,27 @@ FOR i := 1 TO 24 DO
         ELSE
             sMsgText := CONCAT(stUnit.sUnitName, ' is Turned OFF');
         END_IF
+		
+		//send to Eventlogger
 		fbMsg.CreateEx(TC_EVENTS.UnitPowerStatus.EventPowerStatus, 0);
 		fbMsg.ipArguments.AddString(sMsgText);
 		fbMsg.Send(0);
 		
+		// Add to HMI-visible log
+        GVL.aUnitLog[GVL.nLogIndex].sTimestamp := DT_TO_STRING(dtNow);
+        GVL.aUnitLog[GVL.nLogIndex].sMessage := sMsgText;
+
+        GVL.nLogIndex := (GVL.nLogIndex + 1) MOD 100; // ring buffer wrap
+
         // Update previous state
         aPrevState[i] := aUnits[i].bPresVal;
     END_IF
 END_FOR]]></ST>
     </Implementation>
     <LineIds Name="FB_EventF10">
+      <LineId Id="196" Count="4" />
       <LineId Id="9" Count="0" />
+      <LineId Id="201" Count="0" />
       <LineId Id="16" Count="0" />
       <LineId Id="20" Count="0" />
       <LineId Id="19" Count="0" />
@@ -104,7 +124,10 @@ END_FOR]]></ST>
       <LineId Id="100" Count="0" />
       <LineId Id="155" Count="0" />
       <LineId Id="101" Count="5" />
+      <LineId Id="180" Count="1" />
       <LineId Id="147" Count="2" />
+      <LineId Id="182" Count="0" />
+      <LineId Id="184" Count="4" />
       <LineId Id="161" Count="0" />
       <LineId Id="111" Count="3" />
     </LineIds>
