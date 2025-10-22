@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_CSVWriteMinimal" Id="{86627921-c3f2-4321-ab60-0c079dc6931b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_CSVWriteMinimal
+VAR_INPUT
+    sFilePath   : STRING(255);
+    sCSVLine    : STRING(1024);
+    bTriggerRaw : BOOL;            // raw trigger from MAIN
+END_VAR
+VAR_OUTPUT
+    bBusy       : BOOL;
+    bDone       : BOOL;
+    bError      : BOOL;
+    nErrId      : UDINT;
+    nStep       : UDINT;           // debug: current step
+    bTrigPrevDbg: BOOL;            // debug: previous trigger inside FB
+END_VAR
+VAR
+    fbOpen  : Tc2_System.FB_FileOpen;
+    fbPuts  : Tc2_System.FB_FilePuts;
+    fbClose : Tc2_System.FB_FileClose;
+
+    hFile       : UINT := 0;
+    bTrigPrev   : BOOL := FALSE;   // internal previous state
+    step        : UDINT := 0;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// --- edge detection and start
+IF (bTriggerRaw AND NOT bTrigPrev) THEN
+    // accept pulse only when not already busy
+    IF step = 0 THEN
+        step := 1;
+        bDone := FALSE;
+        bError := FALSE;
+        nErrId := 0;
+    END_IF
+END_IF
+bTrigPrev := bTriggerRaw;
+bTrigPrevDbg := bTrigPrev;
+nStep := step;
+bBusy := (step <> 0);
+
+// --- Step 1: Open file (start)
+IF step = 1 THEN
+    fbOpen(
+        sNetId := '',
+        sPathName := sFilePath,
+        nMode := FOPEN_MODETEXT OR FOPEN_MODEAPPEND,
+        ePath := PATH_GENERIC,
+        bExecute := TRUE
+    );
+    step := 2;
+END_IF
+
+// --- Step 2: Wait for open result
+IF step = 2 THEN
+    fbOpen();
+    IF NOT fbOpen.bBusy THEN
+        fbOpen.bExecute := FALSE;
+        IF fbOpen.bError THEN
+            bError := TRUE;
+            nErrId := fbOpen.nErrId;
+            step := 0;
+            bDone := TRUE; // mark done to allow next attempt
+            // clear internal prev so next rising edge can be detected cleanly
+            bTrigPrev := FALSE;
+            bTrigPrevDbg := FALSE;
+        ELSE
+            hFile := fbOpen.hFile;
+            step := 3;
+        END_IF
+    END_IF
+END_IF
+
+// --- Step 3: Write line
+IF step = 3 THEN
+    fbPuts(
+        sNetId := '',
+        hFile := hFile,
+        sLine := sCSVLine,
+        bExecute := TRUE
+    );
+    step := 4;
+END_IF
+
+// --- Step 4: Wait for write
+IF step = 4 THEN
+    fbPuts();
+    IF NOT fbPuts.bBusy THEN
+        fbPuts.bExecute := FALSE;
+        IF fbPuts.bError THEN
+            bError := TRUE;
+            nErrId := fbPuts.nErrId;
+        END_IF
+        step := 5;
+    END_IF
+END_IF
+
+// --- Step 5: Close file
+IF step = 5 THEN
+    fbClose(
+        sNetId := '',
+        hFile := hFile,
+        bExecute := TRUE
+    );
+    step := 6;
+END_IF
+
+// --- Step 6: Wait for close, finalize and reset
+IF step = 6 THEN
+    fbClose();
+    IF NOT fbClose.bBusy THEN
+        fbClose.bExecute := FALSE;
+        IF fbClose.bError THEN
+            bError := TRUE;
+            nErrId := fbClose.nErrId;
+        END_IF
+        // reset everything to accept next pulse
+        hFile := 0;
+        step := 0;
+        bDone := TRUE;
+        bBusy := FALSE;
+        // important: clear internal prev so rising edge will be seen again
+        bTrigPrev := FALSE;
+        bTrigPrevDbg := FALSE;
+    END_IF
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="FB_CSVWriteMinimal">
+      <LineId Id="357" Count="99" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

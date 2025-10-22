@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="GetLogFileName" Id="{c64b4967-0a00-4b62-9304-cbd23a945a9c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION GetLogFileName : STRING
+VAR_INPUT
+    sUnitName : STRING(50);
+END_VAR
+VAR
+    sPrefix : STRING(10);
+    sFolder : STRING(100);
+    iFloor  : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// --- Extract up to first 5 chars (to capture FMZ-PC or FPH1 etc.)
+sPrefix := LEFT(sUnitName, 6);
+
+// --- Default folder base
+sFolder := 'C:\IBMS\Logs\AC\';
+
+// --- Handle named prefixes first
+IF FIND(sPrefix, 'FB1') = 1 THEN
+    GetLogFileName := CONCAT(sFolder, 'FB1_Log.csv');
+ELSIF FIND(sPrefix, 'FB2') = 1 THEN
+    GetLogFileName := CONCAT(sFolder, 'FB2_Log.csv');
+ELSIF FIND(sPrefix, 'FG') = 1 THEN
+    GetLogFileName := CONCAT(sFolder, 'FG_Log.csv');
+ELSIF FIND(sPrefix, 'FMZ') = 1 THEN
+    GetLogFileName := CONCAT(sFolder, 'FMZ_Log.csv');
+ELSIF FIND(sPrefix, 'FMZ-PC') = 1 THEN
+    GetLogFileName := CONCAT(sFolder, 'FMZ_PC_Log.csv');
+ELSIF FIND(sPrefix, 'FPH1') = 1 THEN
+    GetLogFileName := CONCAT(sFolder, 'FPH1_Log.csv');
+ELSIF FIND(sPrefix, 'FPH2') = 1 THEN
+    GetLogFileName := CONCAT(sFolder, 'FPH2_Log.csv');
+ELSIF FIND(sPrefix, 'FPH3') = 1 THEN
+    GetLogFileName := CONCAT(sFolder, 'FPH3_Log.csv');
+
+// --- Handle floor numbers F2 ... F55 automatically
+ELSIF LEFT(sPrefix, 1) = 'F' THEN
+    // try to extract the numeric part (skip F)
+    iFloor := STRING_TO_INT(MID(sPrefix, 2, 2)); // handles F2, F10, F55
+    IF (iFloor >= 2) AND (iFloor <= 55) THEN
+        GetLogFileName := CONCAT(sFolder, CONCAT('F', CONCAT(INT_TO_STRING(iFloor), '_Log.csv')));
+    ELSE
+        GetLogFileName := CONCAT(sFolder, 'General_Log.csv');
+    END_IF
+
+// --- Fallback
+ELSE
+    GetLogFileName := CONCAT(sFolder, 'General_Log.csv');
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="GetLogFileName">
+      <LineId Id="33" Count="36" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

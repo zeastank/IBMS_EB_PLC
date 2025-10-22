@@ -21,10 +21,11 @@
     <Compile Include="DUTs\AC_Unit_Status.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\ST_UnitLog.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GVLs\GVL.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="GVLs\GVL_CSV.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
@@ -355,10 +356,16 @@
     <Compile Include="POUs\FB_TurnAll\FB_CommandStartStopAll.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Function\GetLogFileName.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\Function\ParseHolidayDays.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\P_CSVWrite_TextMode.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -393,7 +400,6 @@
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_EventLogger">
       <DefaultResolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</DefaultResolution>
-      <Namespace>Tc3_EventLogger</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>

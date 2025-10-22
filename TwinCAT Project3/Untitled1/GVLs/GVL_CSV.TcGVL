@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <GVL Name="GVL_CSV" Id="{c63a10c4-85a3-478a-a91f-f2ce699fe15f}">
+    <Declaration><![CDATA[VAR_GLOBAL
+    // Circular buffer config
+    g_CSV_BUF_SIZE : INT := 64; // power-of-two not required, just capacity
+
+    // Buffer storage
+    g_aUnitName : ARRAY[1..1500] OF STRING(50);
+    g_aState    : ARRAY[1..1500] OF BOOL;
+
+    // Buffer pointers / counters
+    g_iWriteIdx : INT := 1; // next write position (1..g_CSV_BUF_SIZE)
+    g_iReadIdx  : INT := 1; // next read position
+    g_iCount    : INT := 0; // number of queued entries
+
+    // Triggers & debug for MAIN → CSV program (not the per-entry fields)
+    g_bWritePulse : BOOL := FALSE;   // NOT used to carry data — kept for compatibility if you want
+    g_sDebugGVL   : STRING(200) := ''; // optional
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

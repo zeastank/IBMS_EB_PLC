@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="FB_CSVLogger" Id="{bc524b34-3bce-4d58-a228-5cbb4d6a4027}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_CSVLogger
+VAR_INPUT
+    sUnitName  : STRING(50); // e.g. "F10-A1 (1-00)"
+    bState     : BOOL;       // TRUE = ON, FALSE = OFF
+	sFloorName : STRING(20);
+	bTrigger : BOOL := FALSE;
+END_VAR
+
+VAR_OUTPUT
+    bBusy       : BOOL := FALSE;
+    bDone       : BOOL := FALSE;
+    bError      : BOOL := FALSE;
+    nErrId      : UDINT := 0;
+    bFileExists : BOOL := FALSE;
+    sDebug      : STRING(100);
+END_VAR
+
+VAR
+    // Constants
+    FOPEN_MODEAPPEND     : UDINT := 16#0004;
+    FOPEN_MODETEXT       : UDINT := 16#0020;
+    FOPEN_MODEREAD       : UDINT := 16#0001;
+    ERR_FILE_NOT_FOUND   : UDINT := 16#70C;
+
+    // Time
+    fbGetTime    : Tc2_Utilities.NT_GetTime;
+    tsCycleTime  : Tc2_Utilities.TIMESTRUCT;
+    sTimestamp   : STRING(30);
+    sTemp        : STRING(6);
+    bStartTime   : BOOL := FALSE;
+
+    // File
+    sNetId       : T_AmsNetId := '';
+    sFilePath    : STRING(200) := 'C:\IBMS\Logs\';
+    sFilePrefix  : STRING(20)  := 'EventLog_';
+    sFileName    : T_MaxString;
+    sDatePart    : STRING(12);
+    hFile        : UINT := 0;
+
+    // FB instances
+    fbFileOpen   : FB_FileOpen;
+    fbFilePuts   : FB_FilePuts;
+    fbFileClose  : FB_FileClose;
+    fbCheck      : FB_FileOpen;
+
+    // CSV
+    fbWriter     : FB_CSVMemBufferWriter;
+    sCSVLine     : T_MaxString := '';
+    sCSVField    : T_MaxString := '';
+    sStateText   : STRING := '';
+
+    // Control
+    step         : DWORD := 0;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bTrigger AND NOT bBusy THEN
+    bStartTime := TRUE;
+    bBusy := TRUE;
+    bError := FALSE;
+    nErrId := 0;	
+    hFile := 0;
+    step := 0;
+END_IF
+
+// Time latch
+fbGetTime(NETID := '', START := bStartTime, TMOUT := T#1S);
+IF (NOT fbGetTime.BUSY) AND (NOT fbGetTime.ERR) AND bStartTime THEN
+    tsCycleTime := fbGetTime.TIMESTR;
+    bStartTime := FALSE;
+END_IF
+
+CASE step OF
+0:
+    fbGetTime(NETID := '', START := bStartTime, TMOUT := T#1S);
+    IF NOT fbGetTime.BUSY AND NOT fbGetTime.ERR AND bStartTime THEN
+        tsCycleTime := fbGetTime.TIMESTR;
+        bStartTime := FALSE;
+        step := 1000;
+    END_IF
+
+    1000:
+        sDatePart := INT_TO_STRING(tsCycleTime.wYear);
+        sTemp := INT_TO_STRING(tsCycleTime.wMonth); IF tsCycleTime.wMonth < 10 THEN sTemp := CONCAT('0', sTemp); END_IF;
+        sDatePart := CONCAT(sDatePart, '-'); sDatePart := CONCAT(sDatePart, sTemp);
+        sTemp := INT_TO_STRING(tsCycleTime.wDay); IF tsCycleTime.wDay < 10 THEN sTemp := CONCAT('0', sTemp); END_IF;
+        sDatePart := CONCAT(sDatePart, '-'); sDatePart := CONCAT(sDatePart, sTemp);
+        sFileName := CONCAT(sFilePath, CONCAT(sFilePrefix, CONCAT(sDatePart, '.csv')));
+
+        fbCheck(
+            sNetId := '', sPathName := sFileName,
+            nMode := FOPEN_MODEREAD OR FOPEN_MODETEXT,
+            ePath := PATH_GENERIC, bExecute := TRUE
+        );
+        fbCheck(bExecute := FALSE);
+        IF fbCheck.bBusy THEN RETURN; END_IF
+
+        IF fbCheck.bError THEN
+            IF fbCheck.nErrId = ERR_FILE_NOT_FOUND THEN
+                bFileExists := FALSE;
+                sDebug := CONCAT('File not found: ', sFileName);
+            ELSE
+                bFileExists := FALSE;
+                sDebug := CONCAT('Open error ', UDINT_TO_STRING(fbCheck.nErrId));
+            END_IF
+        ELSE
+            bFileExists := TRUE;
+            sDebug := CONCAT('File exists: ', sFileName);
+        END_IF
+
+        fbFileOpen(bExecute := FALSE);
+        fbFileOpen(
+            sNetId := sNetId, sPathName := sFileName,
+            nMode := FOPEN_MODEAPPEND OR FOPEN_MODETEXT,
+            ePath := PATH_GENERIC, bExecute := TRUE
+        );
+        step := 2;
+
+2:
+    IF fbFileOpen.bBusy THEN RETURN; END_IF
+
+    fbFileOpen(bExecute := FALSE, bError => bError, nErrID => nErrId, hFile => hFile);
+    IF fbFileOpen.bError THEN step := 900; RETURN; END_IF
+
+    IF hFile = 0 THEN
+        // If file handle is still zero, something went wrong
+        step := 900;
+        RETURN;
+    END_IF
+
+    step := 30;
+	
+    30:
+        sCSVLine := '';
+        fbWriter.eCmd := eEnumCmd_First;
+
+        IF NOT bFileExists THEN
+            sCSVField := STRING_TO_CSVFIELD('Timestamp', FALSE);
+            fbWriter(pBuffer := ADR(sCSVLine), cbBuffer := SIZEOF(sCSVLine), putValue := sCSVField, bCRLF := FALSE);
+            fbWriter.eCmd := eEnumCmd_Next;
+
+            sCSVField := STRING_TO_CSVFIELD('Unit', FALSE);
+            fbWriter(pBuffer := ADR(sCSVLine), cbBuffer := SIZEOF(sCSVLine), putValue := sCSVField, bCRLF := FALSE);
+            fbWriter.eCmd := eEnumCmd_Next;
+
+            sCSVField := STRING_TO_CSVFIELD('State', FALSE);
+            fbWriter(pBuffer := ADR(sCSVLine), cbBuffer := SIZEOF(sCSVLine), putValue := sCSVField, bCRLF := FALSE);
+
+            sCSVLine := CONCAT(sCSVLine, '$L');
+            step := 31;
+        ELSE
+            step := 33;
+        END_IF
+
+	31:
+    	fbFilePuts(sNetId := sNetId, hFile := hFile, sLine := sCSVLine, bExecute := TRUE);
+    	step := 32;
+
+
+	32:
+    	fbFilePuts(bExecute := FALSE, bError => bError, nErrID => nErrId);
+    	IF fbFilePuts.bBusy THEN RETURN; END_IF
+    	IF fbFilePuts.bError THEN step := 900; RETURN; END_IF
+
+    	step := 33;
+
+	33:
+        sTimestamp := INT_TO_STRING(tsCycleTime.wYear);
+        sTemp := INT_TO_STRING(tsCycleTime.wMonth); IF tsCycleTime.wMonth < 10 THEN sTemp := CONCAT('0', sTemp); END_IF;
+        sTimestamp := CONCAT(sTimestamp, '-'); sTimestamp := CONCAT(sTimestamp, sTemp);
+        sTemp := INT_TO_STRING(tsCycleTime.wDay); IF tsCycleTime.wDay < 10 THEN sTemp := CONCAT('0', sTemp); END_IF;
+        sTimestamp := CONCAT(sTimestamp, '-'); sTimestamp := CONCAT(sTimestamp, sTemp);
+        sTemp := INT_TO_STRING(tsCycleTime.wHour); IF tsCycleTime.wHour < 10 THEN sTemp := CONCAT('0', sTemp); END_IF;
+        sTimestamp := CONCAT(sTimestamp, ' '); sTimestamp := CONCAT(sTimestamp, sTemp);
+        sTemp := INT_TO_STRING(tsCycleTime.wMinute); IF tsCycleTime.wMinute < 10 THEN sTemp := CONCAT('0', sTemp); END_IF;
+        sTimestamp := CONCAT(sTimestamp, ':'); sTimestamp := CONCAT(sTimestamp, sTemp);
+        sTemp := INT_TO_STRING(tsCycleTime.wSecond); IF tsCycleTime.wSecond < 10 THEN sTemp := CONCAT('0', sTemp); END_IF;
+        sTimestamp := CONCAT(sTimestamp, ':'); sTimestamp := CONCAT(sTimestamp, sTemp);
+
+        sCSVLine := '';
+        fbWriter.eCmd := eEnumCmd_First;
+
+        sCSVField := STRING_TO_CSVFIELD(sTimestamp, FALSE);
+        fbWriter(pBuffer := ADR(sCSVLine), cbBuffer := SIZEOF(sCSVLine), putValue := sCSVField, bCRLF := FALSE);
+        fbWriter.eCmd := eEnumCmd_Next;
+
+        sCSVField := STRING_TO_CSVFIELD(sUnitName, FALSE);
+        fbWriter(pBuffer := ADR(sCSVLine), cbBuffer := SIZEOF(sCSVLine), putValue := sCSVField, bCRLF := FALSE);
+        fbWriter.eCmd := eEnumCmd_Next;
+
+        IF bState THEN sStateText := 'ON'; ELSE sStateText := 'OFF'; END_IF;
+        sCSVField := STRING_TO_CSVFIELD(sStateText, FALSE);
+        fbWriter(pBuffer := ADR(sCSVLine), cbBuffer := SIZEOF(sCSVLine), putValue := sCSVField, bCRLF := FALSE);
+
+        sCSVLine := CONCAT(sCSVLine, '$L');
+        step := 40;
+
+    40:
+        fbFilePuts(bExecute := FALSE);
+        fbFilePuts(sNetId := sNetId, hFile := hFile, sLine := sCSVLine, bExecute := TRUE);
+        step := 41;
+
+    41:
+        fbFilePuts(bExecute := FALSE, bError => bError, nErrID => nErrId);
+        IF fbFilePuts.bBusy THEN RETURN; END_IF
+        IF fbFilePuts.bError THEN step := 900; RETURN; END_IF
+
+        fbFileClose(bExecute := FALSE);
+        fbFileClose(sNetId := sNetId, hFile := hFile, bExecute := TRUE);
+        step := 50;
+
+    50:
+        fbFileClose(bExecute := FALSE, bError => bError, nErrID => nErrId);
+        IF fbFileClose.bBusy THEN RETURN; END_IF
+        IF fbFileClose.bError THEN step := 900; RETURN; END_IF
+
+        hFile := 0;
+        bDone := TRUE;
+        bBusy := FALSE;
+        step := 0;
+		bTrigger := FALSE; // reset trigger after completion
+
+    900:
+        bBusy := FALSE;
+        bError := TRUE;
+        step := 0;
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="FB_CSVLogger">
+      <LineId Id="878" Count="6" />
+      <LineId Id="877" Count="0" />
+      <LineId Id="885" Count="0" />
+      <LineId Id="590" Count="7" />
+      <LineId Id="840" Count="5" />
+      <LineId Id="604" Count="38" />
+      <LineId Id="854" Count="12" />
+      <LineId Id="868" Count="0" />
+      <LineId Id="649" Count="21" />
+      <LineId Id="799" Count="2" />
+      <LineId Id="677" Count="1" />
+      <LineId Id="802" Count="5" />
+      <LineId Id="685" Count="28" />
+      <LineId Id="715" Count="25" />
+      <LineId Id="887" Count="0" />
+      <LineId Id="741" Count="5" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

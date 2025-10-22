@@ -7,6 +7,9 @@
     <PouCall>
       <Name>MAIN</Name>
     </PouCall>
+    <PouCall>
+      <Name>P_CSVWrite_TextMode</Name>
+    </PouCall>
     <TaskFBGuid>{b7a6a044-1a9a-43a6-82c7-d6dcaf5db49d}</TaskFBGuid>
     <Fb_init>{d7681731-8b46-40b7-b04b-98b335d55569}</Fb_init>
     <Fb_exit>{42c424d3-05b7-4fba-80ef-da7018db5763}</Fb_exit>

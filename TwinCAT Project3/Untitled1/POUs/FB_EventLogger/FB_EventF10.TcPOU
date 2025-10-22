@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.15">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
   <POU Name="FB_EventF10" Id="{cad9348f-c567-4fd3-ada1-86b0e603bb63}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_EventF10
 VAR_INPUT
@@ -7,6 +7,7 @@ VAR_INPUT
     FB_Bacnet_b : FB_BACnet_DAIKIN_MasterStation_III_No_2;
 END_VAR
 VAR_OUTPUT
+	sDebug : STRING(200);
 END_VAR
 VAR
 	fbMsg : FB_TcMessage;
@@ -14,42 +15,15 @@ VAR
 	stUnit   : AC_Unit_Status;
 	i: INT;
 	sMsgText: STRING;
-	
-	fbLocalTime : Tc2_Utilities.FB_LocalSystemTime;
-    ts         : TIMESTRUCT;
-    dtNow      : DT;
-	
-    fbCsvWriter : Tc2_Utilities.FB_CSVMemBufferWriter;
-    csvBuffer   : T_MaxString := ''; // same type used in Beckhoff sample
-
-    fbFileOpen  : Tc2_System.FB_FileOpen;
-    fbFilePuts  : Tc2_System.FB_FilePuts;
-    fbFileClose : Tc2_System.FB_FileClose;
-    hFile       : UINT := 0;
-	nFileOpenErrId : UDINT := 0;
-	nFileCloseErrId : UDINT := 0;
-	nFilePutsErrId: UDINT := 0;
-    sCsvPath    : T_MaxString := '';
-	
-	unitChanged : BOOL := FALSE;
-	
-	stepOpen    : BYTE := 0; // internal state for file sequence per event
-	idxToLog : INT := 0;
 END_VAR
 VAR RETAIN
 	aPrevState : ARRAY[1..24] OF BOOL := [FALSE(*24*)];
-	aChangedUnits : ARRAY[1..24] OF BOOL := [FALSE(*24*)];
-    nChangedIndex : INT := 1;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// enable and let it sync periodically; call each cycle
-fbLocalTime(bEnable := TRUE, dwCycle := 1000); // sync interval 1000 ms
-fbLocalTime(); // execute FB
-ts := fbLocalTime.systemTime;
-dtNow := SYSTEMTIME_TO_DT(ts);
-GVL.g_dtNow := dtNow; // optional: expose globally for HMI
-
+      <ST><![CDATA[// ============================================================
+// 1) Map BACnet StartStopStatus points → aUnits
+// ============================================================
 aUnits[1].bPresVal := FB_Bacnet.StartStopStatus_064.bPresVal;
 aUnits[1].sUnitName := 'F10-A1 (1-00)';
 aUnits[2].bPresVal := FB_Bacnet.StartStopStatus_065.bPresVal;
@@ -99,22 +73,19 @@ aUnits[22].sUnitName := 'F10-IT1 (4-00)';
 aUnits[24].bPresVal := FB_Bacnet.StartStopStatus_226.bPresVal;
 aUnits[24].sUnitName := 'F10-Lobi (3-02)';
 
-// --- Detect all changes
+// ============================================================
+// 2) Detect changes & handle events
+// ============================================================
+
 FOR i := 1 TO 24 DO
+    stUnit := aUnits[i];
+
+    // Detect ON/OFF state change
     IF aUnits[i].bPresVal <> aPrevState[i] THEN
-        aChangedUnits[i] := TRUE;
-    END_IF
-END_FOR
-
-// --- Process one change per cycle
-FOR i := idxToLog TO 24 DO
-    IF aChangedUnits[i] THEN
-        stUnit := aUnits[i];
-        aChangedUnits[i] := FALSE;
-        idxToLog := i + 1;
-
-        // --- Build message
-        IF stUnit.bPresVal THEN
+        // --------------------------------------------------------
+        // (a) Send TwinCAT message as before
+        // --------------------------------------------------------
+        IF aUnits[i].bPresVal THEN
             sMsgText := CONCAT(stUnit.sUnitName, ' is Turned ON');
         ELSE
             sMsgText := CONCAT(stUnit.sUnitName, ' is Turned OFF');
@@ -124,114 +95,33 @@ FOR i := idxToLog TO 24 DO
         fbMsg.ipArguments.AddString(sMsgText);
         fbMsg.Send(0);
 
-        GVL.aUnitLog[GVL.nLogIndex].sTimestamp := DT_TO_STRING(dtNow);
-        GVL.aUnitLog[GVL.nLogIndex].sMessage := sMsgText;
-        GVL.nLogIndex := (GVL.nLogIndex + 1) MOD 100;
+        // --------------------------------------------------------
+        // (b) Push event to global CSV queue (for P_CSVWrite_TextMode)
+        // --------------------------------------------------------
+        IF g_iCount < g_CSV_BUF_SIZE THEN
+            g_aUnitName[g_iWriteIdx] := stUnit.sUnitName;
+            g_aState[g_iWriteIdx]    := aUnits[i].bPresVal;
+            g_iWriteIdx := g_iWriteIdx + 1;
+            IF g_iWriteIdx > g_CSV_BUF_SIZE THEN g_iWriteIdx := 1; END_IF
+            g_iCount := g_iCount + 1;
+        END_IF
 
-        sCsvPath := CONCAT('C:\IBMS\Logs\F10_', DATE_TO_STRING(DT_TO_DATE(dtNow)));
-        sCsvPath := CONCAT(sCsvPath, '.csv');
-
-        CASE stepOpen OF
-            0:
-                fbFileOpen(sNetId := '', sPathName := sCsvPath, nMode := FOPEN_MODEWRITE OR FOPEN_MODETEXT, ePath := PATH_GENERIC, bExecute := TRUE);
-                stepOpen := 1;
-
-            1:
-                fbFileOpen();
-                IF NOT fbFileOpen.bBusy THEN
-                    fbFileOpen.bExecute := FALSE;
-                    IF fbFileOpen.bError THEN
-                        nFileOpenErrId := fbFileOpen.nErrId;
-                        stepOpen := 99;
-                    ELSE
-                        hFile := fbFileOpen.hFile;
-                        stepOpen := 2;
-                    END_IF
-                END_IF
-
-            2:
-                csvBuffer := '';
-                fbCsvWriter(pBuffer := ADR(csvBuffer), cbBuffer := SIZEOF(csvBuffer) - 1);
-                fbCsvWriter.eCmd := eEnumCmd_First;
-                fbCsvWriter.putValue := DT_TO_STRING(dtNow);
-                fbCsvWriter.bCRLF := FALSE;
-                fbCsvWriter();
-
-                fbCsvWriter.eCmd := eEnumCmd_Next;
-                fbCsvWriter.putValue := stUnit.sUnitName;
-                fbCsvWriter.bCRLF := FALSE;
-                fbCsvWriter();
-				
-				fbCsvWriter.eCmd := eEnumCmd_Next;
-                IF stUnit.bPresVal THEN
-                    fbCsvWriter.putValue := 'ON';
-                ELSE
-                    fbCsvWriter.putValue := 'OFF';
-                END_IF;
-                fbCsvWriter.bCRLF := TRUE;
-                fbCsvWriter();
-
-                IF fbCsvWriter.bOk THEN
-                    stepOpen := 3;
-                ELSE
-                    stepOpen := 99;
-                END_IF
-
-            3: // Write line
-                fbFilePuts(sNetId := '', hFile := hFile, sLine := csvBuffer, bExecute := TRUE);
-                stepOpen := 4;
-
-            4: // Wait for write
-                fbFilePuts();
-                IF NOT fbFilePuts.bBusy THEN
-                    fbFilePuts.bExecute := FALSE;
-                    IF fbFilePuts.bError THEN
-                        nFilePutsErrId := fbFilePuts.nErrId;
-                    END_IF
-                    stepOpen := 5;
-                END_IF
-
-            5: // Close file
-                fbFileClose(sNetId := '', hFile := hFile, bExecute := TRUE);
-                stepOpen := 6;
-
-            6: // Wait for close
-                fbFileClose();
-                IF NOT fbFileClose.bBusy THEN
-                    fbFileClose.bExecute := FALSE;
-                    IF fbFileClose.bError THEN
-                        nFileCloseErrId := fbFileClose.nErrId;
-                    ELSE
-                        hFile := 0;
-                        aPrevState[i] := stUnit.bPresVal;
-                    END_IF
-                    stepOpen := 255;
-                END_IF
-
-            99: // Error cleanup
-                fbFileClose(sNetId := '', hFile := hFile, bExecute := TRUE);
-                stepOpen := 6;
-
-            255: // Done
-                stepOpen := 0;
-        END_CASE
-
-        EXIT; // only process one unit per cycle
+        // --------------------------------------------------------
+        // (c) Update previous state
+        // --------------------------------------------------------
+        aPrevState[i] := aUnits[i].bPresVal;
     END_IF
 END_FOR
 
-// Reset index if all units processed
-IF idxToLog > 24 THEN
-    idxToLog := 1;
-END_IF
-
-
+// ------------------------------------------------------------
+// Optional debug info
+// ------------------------------------------------------------
+sDebug := CONCAT('Queued=', INT_TO_STRING(g_iCount));
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_EventF10">
-      <LineId Id="196" Count="4" />
-      <LineId Id="9" Count="0" />
-      <LineId Id="201" Count="0" />
+      <LineId Id="245" Count="1" />
+      <LineId Id="244" Count="0" />
       <LineId Id="16" Count="0" />
       <LineId Id="20" Count="0" />
       <LineId Id="19" Count="0" />
@@ -242,15 +132,13 @@ END_IF
       <LineId Id="17" Count="1" />
       <LineId Id="54" Count="1" />
       <LineId Id="21" Count="30" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="249" Count="1" />
+      <LineId Id="248" Count="0" />
       <LineId Id="94" Count="0" />
-      <LineId Id="786" Count="5" />
-      <LineId Id="669" Count="0" />
-      <LineId Id="792" Count="54" />
-      <LineId Id="909" Count="0" />
-      <LineId Id="847" Count="61" />
-      <LineId Id="772" Count="0" />
-      <LineId Id="569" Count="0" />
-      <LineId Id="460" Count="0" />
+      <LineId Id="251" Count="38" />
+      <LineId Id="191" Count="0" />
+      <LineId Id="114" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

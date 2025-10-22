@@ -6,6 +6,7 @@ VAR_INPUT
 	FB_Bacnet : FB_BACnet_DAIKIN_MasterStation_III_No_10;
 END_VAR
 VAR_OUTPUT
+	sDebug : STRING(200);
 END_VAR
 VAR
 	fbMsg : FB_TcMessage;
@@ -13,7 +14,7 @@ VAR
 	stUnit   : AC_Unit_Status;
 	i: INT;
 	sMsgText: STRING;
-	triggerTest : BOOL;
+
 END_VAR
 VAR RETAIN
 	aPrevState : ARRAY[1..9] OF BOOL := [FALSE(*9*)];
@@ -41,21 +42,46 @@ aUnits[9].bPresVal := FB_Bacnet.StartStopStatus_173.bPresVal;
 aUnits[9].sUnitName := 'FPH3-9 (3-13)';
 
 FOR i := 1 TO 9 DO
-	stUnit := aUnits[i]; // extract the structure instance
+    stUnit := aUnits[i];
+
+    // Detect ON/OFF state change
     IF aUnits[i].bPresVal <> aPrevState[i] THEN
+        // --------------------------------------------------------
+        // (a) Send TwinCAT message as before
+        // --------------------------------------------------------
         IF aUnits[i].bPresVal THEN
             sMsgText := CONCAT(stUnit.sUnitName, ' is Turned ON');
         ELSE
             sMsgText := CONCAT(stUnit.sUnitName, ' is Turned OFF');
         END_IF
-		fbMsg.CreateEx(TC_EVENTS.UnitPowerStatus.EventPowerStatus, 0);
-		fbMsg.ipArguments.AddString(sMsgText);
-		fbMsg.Send(0);
-		
-        // Update previous state
+
+        fbMsg.CreateEx(TC_EVENTS.UnitPowerStatus.EventPowerStatus, 0);
+        fbMsg.ipArguments.AddString(sMsgText);
+        fbMsg.Send(0);
+
+        // --------------------------------------------------------
+        // (b) Push event to global CSV queue (for P_CSVWrite_TextMode)
+        // --------------------------------------------------------
+        IF g_iCount < g_CSV_BUF_SIZE THEN
+            g_aUnitName[g_iWriteIdx] := stUnit.sUnitName;
+            g_aState[g_iWriteIdx]    := aUnits[i].bPresVal;
+            g_iWriteIdx := g_iWriteIdx + 1;
+            IF g_iWriteIdx > g_CSV_BUF_SIZE THEN g_iWriteIdx := 1; END_IF
+            g_iCount := g_iCount + 1;
+        END_IF
+
+        // --------------------------------------------------------
+        // (c) Update previous state
+        // --------------------------------------------------------
         aPrevState[i] := aUnits[i].bPresVal;
     END_IF
-END_FOR]]></ST>
+END_FOR
+
+// ------------------------------------------------------------
+// Optional debug info
+// ------------------------------------------------------------
+sDebug := CONCAT('Queued=', INT_TO_STRING(g_iCount));
+]]></ST>
     </Implementation>
     <LineIds Name="FB_EventFPH3">
       <LineId Id="189" Count="29" />

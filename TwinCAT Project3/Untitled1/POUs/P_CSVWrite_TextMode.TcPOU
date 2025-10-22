@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.14">
+  <POU Name="P_CSVWrite_TextMode" Id="{e1e7ec2f-6f6e-4482-9b7e-997359049b4e}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM P_CSVWrite_TextMode
+VAR
+    // --- time ---
+    fbLocalTime : FB_LocalSystemTime := (bEnable := TRUE);
+    tsNow       : TIMESTRUCT;
+    sTimestamp  : STRING(30);
+    bTimeValid  : BOOL := FALSE;
+
+    // --- file access blocks ---
+    fbFileOpen  : FB_FileOpen;
+    fbFilePuts  : FB_FilePuts;
+    fbFileClose : FB_FileClose;
+    fbFileCheck : FB_FileOpen; // used to check file existence
+    fbWriter    : FB_CSVMemBufferWriter;
+
+    // --- file & data locals ---
+    sNetId   : T_AmsNetId := '';
+    sFile    : T_MaxString := 'C:\IBMS\Logs\AC\Other.csv';
+    sLine    : T_MaxString := '';
+    sField   : T_MaxString := '';
+    hFile    : UINT := 0;
+    bFileExists : BOOL := FALSE;
+
+    // --- state machine ---
+    step     : DWORD := 0;
+    bBusy    : BOOL := FALSE;
+    bError   : BOOL := FALSE;
+    nErrId   : UDINT := 0;
+
+    // --- current entry being written ---
+    sUnitLocal : STRING(50) := '';
+    bStateLocal: BOOL := FALSE;
+
+    // --- debug ---
+    sDebugOut : STRING(200) := '';
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// ===================================================
+// Always keep timestamp up to date
+// ===================================================
+fbLocalTime();
+IF fbLocalTime.bValid THEN
+    tsNow := fbLocalTime.systemTime;
+    bTimeValid := TRUE;
+END_IF
+
+// ===================================================
+// Start write when queue has data and not busy
+// ===================================================
+IF (NOT bBusy) AND (g_iCount > 0) THEN
+    // Pop one entry from buffer
+    sUnitLocal := g_aUnitName[g_iReadIdx];
+    bStateLocal := g_aState[g_iReadIdx];
+    g_iReadIdx := g_iReadIdx + 1;
+    IF g_iReadIdx > g_CSV_BUF_SIZE THEN g_iReadIdx := 1; END_IF
+    g_iCount := g_iCount - 1;
+
+    // Init write
+    bBusy := TRUE;
+    bError := FALSE;
+    nErrId := 0;
+    step := 5; // new step: check file existence
+END_IF
+
+// ===================================================
+// State machine
+// ===================================================
+CASE step OF
+    0:
+        sDebugOut := 'Idle';
+        RETURN;
+
+    // ------------------------------------------------
+    // 5) Check if file already exists
+    // ------------------------------------------------
+5: // Check if this specific file exists
+    // Pick correct file by unit name before checking
+    sFile := GetLogFileName(sUnitLocal);
+
+    // Reset state
+    bFileExists := FALSE;
+
+    // Check file existence
+    fbFileCheck(bExecute := FALSE);
+    fbFileCheck(
+        sNetId := sNetId,
+        sPathName := sFile,
+        nMode := FOPEN_MODEREAD OR FOPEN_MODETEXT,
+        ePath := PATH_GENERIC,
+        bExecute := TRUE
+    );
+    step := 6;
+
+6: // Wait for check to complete
+    fbFileCheck(bExecute := FALSE, bError => bError, nErrId => nErrId);
+    IF fbFileCheck.bBusy THEN RETURN; END_IF
+
+    IF (NOT fbFileCheck.bError) THEN
+        // File opened successfully → it already exists
+        bFileExists := TRUE;
+    ELSE
+        // nErrId 1800_70C = "file not found" → safe to write header
+        bFileExists := FALSE;
+    END_IF
+
+    // Continue to build line next
+    step := 10;
+
+    // ------------------------------------------------
+    // 10) Build CSV line (timestamp, unit, state)
+    // ------------------------------------------------
+    10:
+        // Build timestamp string
+        IF bTimeValid THEN
+            sTimestamp := '';
+            sTimestamp := CONCAT(sTimestamp, INT_TO_STRING(tsNow.wYear));
+            sTimestamp := CONCAT(sTimestamp, '-');
+            IF tsNow.wMonth < 10 THEN sTimestamp := CONCAT(sTimestamp, '0'); END_IF
+            sTimestamp := CONCAT(sTimestamp, INT_TO_STRING(tsNow.wMonth));
+            sTimestamp := CONCAT(sTimestamp, '-');
+            IF tsNow.wDay < 10 THEN sTimestamp := CONCAT(sTimestamp, '0'); END_IF
+            sTimestamp := CONCAT(sTimestamp, INT_TO_STRING(tsNow.wDay));
+            sTimestamp := CONCAT(sTimestamp, ' ');
+            IF tsNow.wHour < 10 THEN sTimestamp := CONCAT(sTimestamp, '0'); END_IF
+            sTimestamp := CONCAT(sTimestamp, INT_TO_STRING(tsNow.wHour));
+            sTimestamp := CONCAT(sTimestamp, ':');
+            IF tsNow.wMinute < 10 THEN sTimestamp := CONCAT(sTimestamp, '0'); END_IF
+            sTimestamp := CONCAT(sTimestamp, INT_TO_STRING(tsNow.wMinute));
+            sTimestamp := CONCAT(sTimestamp, ':');
+            IF tsNow.wSecond < 10 THEN sTimestamp := CONCAT(sTimestamp, '0'); END_IF
+            sTimestamp := CONCAT(sTimestamp, INT_TO_STRING(tsNow.wSecond));
+        ELSE
+            sTimestamp := '0000-00-00 00:00:00';
+        END_IF
+
+        // Build CSV line
+        sLine := '';
+        fbWriter.eCmd := eEnumCmd_First;
+
+        // 1. timestamp
+        sField := STRING_TO_CSVFIELD(sTimestamp, FALSE);
+        fbWriter(pBuffer := ADR(sLine), cbBuffer := SIZEOF(sLine), putValue := sField, bCRLF := FALSE);
+        fbWriter.eCmd := eEnumCmd_Next;
+
+        // 2. unit name
+        sField := STRING_TO_CSVFIELD(sUnitLocal, FALSE);
+        fbWriter(pBuffer := ADR(sLine), cbBuffer := SIZEOF(sLine), putValue := sField, bCRLF := FALSE);
+        fbWriter.eCmd := eEnumCmd_Next;
+
+        // 3. ON/OFF state
+        IF bStateLocal THEN
+            sField := STRING_TO_CSVFIELD('ON', FALSE);
+        ELSE
+            sField := STRING_TO_CSVFIELD('OFF', FALSE);
+        END_IF
+        fbWriter(pBuffer := ADR(sLine), cbBuffer := SIZEOF(sLine), putValue := sField, bCRLF := TRUE);
+
+        IF RIGHT(sLine, 2) = '$R$L' THEN
+            sLine := REPLACE(sLine, '$L', 2, LEN(sLine) - 1);
+        END_IF
+
+        step := 20;
+
+    // ------------------------------------------------
+    // 20) Open file (append mode)
+    // ------------------------------------------------
+    20:
+	// Choose the correct file name by unit prefix
+		sFile := GetLogFileName(sUnitLocal);
+		
+        fbFileOpen(bExecute := FALSE);
+        fbFileOpen(
+            sNetId := sNetId,
+            sPathName := sFile,
+            nMode := FOPEN_MODEAPPEND OR FOPEN_MODETEXT,
+            ePath := PATH_GENERIC,
+            bExecute := TRUE
+        );
+        step := 21;
+
+    21:
+        fbFileOpen(bExecute := FALSE, bError => bError, nErrId => nErrId, hFile => hFile);
+        IF fbFileOpen.bBusy THEN RETURN; END_IF
+        IF fbFileOpen.bError THEN step := 100; ELSE step := 25; END_IF
+
+    // ------------------------------------------------
+    // 25) Write header if file is new
+    // ------------------------------------------------
+    25:
+        IF NOT bFileExists THEN
+            fbFilePuts(bExecute := FALSE);
+            fbFilePuts(
+                sNetId := sNetId,
+                hFile := hFile,
+                sLine := 'Timestamp;Unit;Status$L',
+                bExecute := TRUE
+            );
+            bFileExists := TRUE; // prevent reheadering
+            step := 26;
+        ELSE
+            step := 30; // skip header
+        END_IF
+
+    26:
+        fbFilePuts(bExecute := FALSE, bError => bError, nErrId => nErrId);
+        IF fbFilePuts.bBusy THEN RETURN; END_IF
+        step := 30;
+
+    // ------------------------------------------------
+    // 30) Write data line
+    // ------------------------------------------------
+    30:
+        fbFilePuts(bExecute := FALSE);
+        fbFilePuts(sNetId := sNetId, hFile := hFile, sLine := sLine, bExecute := TRUE);
+        step := 31;
+
+    31:
+        fbFilePuts(bExecute := FALSE, bError => bError, nErrId => nErrId);
+        IF fbFilePuts.bBusy THEN RETURN; END_IF
+        IF fbFilePuts.bError THEN step := 100; ELSE step := 40; END_IF
+
+    // ------------------------------------------------
+    // 40) Close file
+    // ------------------------------------------------
+    40:
+        fbFileClose(bExecute := FALSE);
+        fbFileClose(sNetId := sNetId, hFile := hFile, bExecute := TRUE);
+        step := 41;
+
+    41:
+        fbFileClose(bExecute := FALSE, bError => bError, nErrId => nErrId);
+        IF fbFileClose.bBusy THEN RETURN; END_IF
+
+        bBusy := FALSE;
+        step := 0;
+        sDebugOut := CONCAT('Wrote ', sUnitLocal);
+
+    // ------------------------------------------------
+    // 100) Error cleanup
+    // ------------------------------------------------
+    100:
+        bBusy := FALSE;
+        fbFileClose(bExecute := FALSE);
+        fbFileClose(sNetId := sNetId, hFile := hFile, bExecute := TRUE);
+        fbFileClose(bExecute := FALSE);
+        step := 0;
+END_CASE]]></ST>
+    </Implementation>
+    <LineIds Name="P_CSVWrite_TextMode">
+      <LineId Id="41" Count="208" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
